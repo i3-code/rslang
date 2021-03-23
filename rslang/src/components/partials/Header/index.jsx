@@ -41,7 +41,7 @@ const additionalIcons = {
 };
 
 const getNameByPath = (path) => {
-  return mainIcons[path] || additionalIcons[path] || '404';
+  return mainIcons[path] || additionalIcons[path] || ['404'];
 };
 
 export default function Header() {
@@ -80,7 +80,7 @@ export default function Header() {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap>
-          {pageName[0] || pageName}
+          {pageName[0]}
         </Typography>
       </Toolbar>
       </AppBar>

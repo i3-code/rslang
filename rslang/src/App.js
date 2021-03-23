@@ -8,6 +8,8 @@ import Home from './app/Home';
 import Book from './app/Book';
 import Games from './app/Games';
 import Stats from './app/Stats';
+import Settings from './app/Settings';
+import About from './app/About';
 
 import useStyles from './styles';
 
@@ -32,6 +34,12 @@ function App() {
               </Route>
               <Route path="/stats">
                 <Stats />
+              </Route>
+              <Route path="/settings">
+                <Settings />
+              </Route>
+              <Route path="/about">
+                <About />
               </Route>
             </Switch>
           </main>

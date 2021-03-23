@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 export default function Book() {
   return (
     <div>
+      <Typography variant="h4">Book</Typography>
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
