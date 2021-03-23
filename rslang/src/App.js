@@ -7,6 +7,7 @@ import Home from './app/Home';
 import Book from './app/Book';
 import Games from './app/Games';
 import Stats from './app/Stats';
+import Savannah from "./app/Games/Savannah/Savannah";
 
 function App() {
   return (
@@ -14,6 +15,9 @@ function App() {
       <Router>
         <div>
           <Switch>
+            <Route path="/games/savannah">
+              <Savannah />
+            </Route>
             <Route exact path="/">
               <Home />
             </Route>
