@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
-
+import Footer from '../../components/partials/Footer';
 import Menu from '../../components/Menu';
 
 export default function Home() {
@@ -9,6 +9,7 @@ export default function Home() {
       <Container>
         <Typography variant="h2">Home</Typography>
         <Menu />
+        <Footer/>
       </Container>
     </Grid>
   );
