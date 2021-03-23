@@ -3,6 +3,7 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Loading from './components/partials/Loading';
 
+import Header from './components/partials/Header';
 import Home from './app/Home';
 import Book from './app/Book';
 import Games from './app/Games';
@@ -13,6 +14,7 @@ function App() {
     <Suspense fallback={<Loading fullScreen />}>
       <Router>
         <div>
+          <Header/>
           <Switch>
             <Route exact path="/">
               <Home />
