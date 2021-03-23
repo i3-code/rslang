@@ -4,7 +4,6 @@ import useStyles from './styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Grid, Button, IconButton, Typography } from '@material-ui/core';
-import GitHubIcon from '@material-ui/icons/GitHub';
 
 export default function Footer() {
   const classes = useStyles();
@@ -18,11 +17,11 @@ export default function Footer() {
           <Grid>
             {gitHubs.map((git) => (
               <Button
-                variant="text"         
+                variant="text"
                 component="a"
                 href={`https://github.com/${git}`}
                 target="blank"
-                rel="noreferrer noopener"             
+                rel="noreferrer noopener"
                 key={git}
                 className={classes.button}
               >

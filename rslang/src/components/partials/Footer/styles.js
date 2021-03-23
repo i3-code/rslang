@@ -11,7 +11,7 @@ const theme = createMuiTheme({
       xl: 1920,
     },
   },
-})
+});
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   text: {
     fontSize: 14,
     [theme.breakpoints.down('xs')]: {
-        fontSize: 8,
+      fontSize: 8,
     },
     [theme.breakpoints.down('sm')]: {
       fontSize: 10,
@@ -29,11 +29,11 @@ const useStyles = makeStyles(() => ({
       fontSize: 12,
     },
   },
-  appBar:{
+  appBar: {
     width: '100%',
-    background: '#848484'
+    background: theme.palette.action.active,
   },
-  toolbar:{
+  toolbar: {
     display: 'flex',
     justifyContent: 'space-between',
   },
@@ -42,14 +42,14 @@ const useStyles = makeStyles(() => ({
     width: 'auto',
   },
   year: {
-    color: '#F0EFEF',
+    color: theme.palette.background.default,
     [theme.breakpoints.down('md')]: {
-      paddingLeft: 12,
+      paddingLeft: theme.spacing(1.5),
     },
   },
-  button:{
-    color: '#F0EFEF',
-  }
+  button: {
+    color: theme.palette.background.default,
+  },
 }));
 
 export default useStyles;
