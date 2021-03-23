@@ -1,18 +1,21 @@
 import React from 'react';
 import useStyles from './styles';
+import { useLocation } from 'react-router-dom';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Grid, Button, IconButton, Typography } from '@material-ui/core';
 
-export default function Footer() {
-  const classes = useStyles();
+const gitHubs = ['volha010892', 'DrD1esel', 'Christina-Kashevar', 'i3-code', 'dzianiskor', 'Heliken'];
 
-  const gitHubs = ['volha010892', 'DrD1esel', 'Christina-Kashevar', 'i3-code', 'dzianiskor', 'Heliken'];
+export default function Footer() {
+  const location = useLocation();
+  const classes = useStyles();
+  if (location.pathname === '/games') return <div />;
 
   return (
     <Grid className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Grid>
             {gitHubs.map((git) => (
