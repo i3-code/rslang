@@ -68,7 +68,7 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
         if (response.response.status === 409) {
           setSignError('Такой пользователь уже существует');
         } else {
-          setSignError('Что-то пошло не так, попробуте позже');
+          setSignError('Что-то пошло не так, попробуйте позже');
         }
       } else {
         onSignIn(response.data);

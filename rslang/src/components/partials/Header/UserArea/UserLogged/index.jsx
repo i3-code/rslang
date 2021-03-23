@@ -11,7 +11,7 @@ export default function SignIn({ user, handleLogout}) {
     <Grid container direction="column" alignItems="center" className={classes.profile}>
       <img className={classes.avatar} src={user.avatar} alt="avatar" />
       <Typography className={classes.username}>{user.username}</Typography>
-      <Button onClick={handleLogout} fullWidth variant="contained" color="primary">{'USER_PANEL.LOGOUT'}</Button>
+      <Button onClick={handleLogout} fullWidth variant="contained" color="primary">Выйти</Button>
     </Grid>
   );
 }

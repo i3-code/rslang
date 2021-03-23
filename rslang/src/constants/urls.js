@@ -1,18 +1,10 @@
-const baseUrl = 'https://travel-app-rs.herokuapp.com';
+const baseUrl = 'https://react-rslang.herokuapp.com';
 
 const urls = {
   auth: {
-    signup: `${baseUrl}/signup`,
-    login: `${baseUrl}/users/login`,
+    signup: `${baseUrl}/users`,
+    login: `${baseUrl}/signin`,
     whoAmI: `${baseUrl}/whoAmI`,
-  },
-  countries: {
-    all: `${baseUrl}/countries`,
-    byCode: (code) => `${baseUrl}/countries/${code}`,
-  },
-  scores: {
-    all: `${baseUrl}/scores`,
-    byId: (id) => `${baseUrl}/scores/${id}`,
   },
 };
 

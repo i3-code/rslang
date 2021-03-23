@@ -18,7 +18,7 @@ import useStyles from './styles';
 export default function SignIn({ callBack, onClose, onSignIn }) {
   const classes = useStyles();
 
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
@@ -40,7 +40,7 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
       if (result.response.status === 401) {
         setError('Имя пользователя или пароль неверны');
       } else {
-        setError('Что-то пошло не так, попробуте позже');
+        setError('Что-то пошло не так, попробуйте позже');
       }
     } else {
       onSignIn(result.data);
@@ -70,9 +70,9 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
             margin="normal"
             required
             fullWidth
-            name="username"
+            name="email"
             onChange={handleChangeCredentials}
-            label="Имя пользователя"
+            label="E-mail"
             autoFocus
           />
           <TextField
