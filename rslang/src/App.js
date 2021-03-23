@@ -3,6 +3,7 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Loading from './components/partials/Loading';
 import Header from './components/partials/Header';
+import Footer from './components/partials/Footer';
 
 import Home from './app/Home';
 import Book from './app/Book';
@@ -44,6 +45,7 @@ function App() {
             </Switch>
           </main>
         </div>
+        <Footer />
       </Router>
     </Suspense>
   );
