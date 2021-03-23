@@ -55,6 +55,13 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+  selected: {
+    color: 'red',
+  },
 }));
 
 export default useStyles;

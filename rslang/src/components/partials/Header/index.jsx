@@ -25,17 +25,18 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import InfoIcon from '@material-ui/icons/Info';
 
 import useStyles from './styles';
+import { NavLink } from 'react-router-dom';
 
 const mainIcons = [
-  ['Главная', <HomeIcon />],
-  ['Учебник', <LibraryBooksIcon />],
-  ['Игры', <SportsEsportsIcon />],
-  ['Статистика', <AssessmentIcon />],
+  ['Главная', <HomeIcon />, '/'],
+  ['Учебник', <LibraryBooksIcon />, '/book'],
+  ['Игры', <SportsEsportsIcon />, '/games'],
+  ['Статистика', <AssessmentIcon />, '/stats'],
 ]
 
 const additionalIcons = [
-  ['Настройки', <SettingsIcon />],
-  ['О проекте', <InfoIcon />],
+  ['Настройки', <SettingsIcon />, '/settings'],
+  ['О проекте', <InfoIcon />, '/about'],
 ];
 
 export default function Header() {
@@ -96,20 +97,24 @@ export default function Header() {
       </div>
       <Divider />
       <List>
-        {mainIcons.map(([text, icon], index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {mainIcons.map(([text, icon, link], index) => (
+          <NavLink to={link} className={classes.link} activeClassName={classes.selected} exact={true}>
+            <ListItem button key={text}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </NavLink>
         ))}
       </List>
       <Divider />
       <List>
-        {additionalIcons.map(([text, icon], index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {additionalIcons.map(([text, icon, link], index) => (
+          <NavLink to={link} className={classes.link} activeClassName={classes.selected} exact={true}>
+            <ListItem button key={text}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </NavLink>
         ))}
       </List>
       </Drawer>
