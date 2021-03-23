@@ -1,4 +1,6 @@
 import React from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+
 import clsx from 'clsx';
 import { useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -25,32 +27,37 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import InfoIcon from '@material-ui/icons/Info';
 
 import useStyles from './styles';
-import { NavLink } from 'react-router-dom';
 
-const mainIcons = [
-  ['Главная', <HomeIcon />, '/'],
-  ['Учебник', <LibraryBooksIcon />, '/book'],
-  ['Игры', <SportsEsportsIcon />, '/games'],
-  ['Статистика', <AssessmentIcon />, '/stats'],
-]
+const mainIcons = {
+  '/': ['Главная', <HomeIcon />],
+  '/book': ['Учебник', <LibraryBooksIcon />],
+  '/games': ['Игры', <SportsEsportsIcon />],
+  '/stats': ['Статистика', <AssessmentIcon />],
+};
 
-const additionalIcons = [
-  ['Настройки', <SettingsIcon />, '/settings'],
-  ['О проекте', <InfoIcon />, '/about'],
-];
+const additionalIcons = {
+  '/settings': ['Настройки', <SettingsIcon />],
+  '/about': ['О проекте', <InfoIcon />],
+};
+
+const getNameByPath = (path) => {
+  return mainIcons[path] || additionalIcons[path] || '404';
+};
 
 export default function Header() {
+  const location = useLocation();
+  const [pageName, setPageName] = React.useState(getNameByPath(location.pathname));
+
+  React.useEffect(() => {
+    setPageName(getNameByPath(location.pathname));
+  }, [location]);
+
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
 
   return (
     <Grid>
@@ -73,7 +80,7 @@ export default function Header() {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap>
-          Главная
+          {pageName[0] || pageName}
         </Typography>
       </Toolbar>
       </AppBar>
@@ -97,9 +104,16 @@ export default function Header() {
       </div>
       <Divider />
       <List>
-        {mainIcons.map(([text, icon, link], index) => (
-          <NavLink to={link} className={classes.link} activeClassName={classes.selected} exact={true}>
-            <ListItem button key={text}>
+        {Object.entries(mainIcons).map(([link, [text, icon]]) => (
+          <NavLink
+            key={text}
+            to={link}
+            className={classes.link}
+            activeClassName={classes.selected}
+            exact={true}
+            replace={true}
+          >
+            <ListItem button>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -108,9 +122,16 @@ export default function Header() {
       </List>
       <Divider />
       <List>
-        {additionalIcons.map(([text, icon, link], index) => (
-          <NavLink to={link} className={classes.link} activeClassName={classes.selected} exact={true}>
-            <ListItem button key={text}>
+        {Object.entries(additionalIcons).map(([link, [text, icon]]) => (
+          <NavLink
+            key={text}
+            to={link}
+            className={classes.link}
+            activeClassName={classes.selected}
+            exact={true}
+            replace={true}
+          >
+            <ListItem button>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
