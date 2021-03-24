@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, Grid, IconButton, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -8,6 +9,8 @@ import UserLogged from './UserLogged';
 
 import useStyles from './styles';
 import { AuthService } from '../../../../services/auth.service';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, setUser } from '../../../../redux/userSlice';
 
 const UserPanel = ({ type, ...props }) => {
   const { callBack, onClose, onSignIn, user, handleLogout } = props;
@@ -17,11 +20,12 @@ const UserPanel = ({ type, ...props }) => {
 };
 
 export default function UserArea() {
-  const [user, setUser] = useState(null);
+  const user = useSelector(getUser);
   const panelType = user ? 'userLogged' : 'signIn';
   const [type, setType] = useState(panelType);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleSetType = (newType) => (event) => setType(newType);
   const toggleDrawer = (open) => (event) => setIsDrawerOpened(open);
@@ -30,7 +34,7 @@ export default function UserArea() {
     const checkAuthorization = async () => {
       const userData = await AuthService.checkAuthorization();
       if (userData && !(userData instanceof Error)) {
-        setUser(userData.data);
+        dispatch(setUser(userData.data));
         setType('userLogged');
       }
     };
@@ -40,12 +44,12 @@ export default function UserArea() {
 
   const handleLogout = () => {
     AuthService.logout();
-    setUser(null);
+    dispatch(setUser(null));
     setType('signIn');
   };
 
   const handleSignIn = (userData) => {
-    setUser(userData);
+    dispatch(setUser(userData));
     setType('userLogged');
   };
 
@@ -61,7 +65,10 @@ export default function UserArea() {
         </IconButton>
         <Typography>{user ? user.username : 'Войти'}</Typography>
       </Grid>
-      <Drawer width="30%" anchor="right" open={isDrawerOpened} onClose={toggleDrawer(false)}>
+      <Drawer classes={{paper: classes.drawer}} width="30%" anchor="right" open={isDrawerOpened} onClose={toggleDrawer(false)}>        
+        <IconButton className={classes.closeButton}  onClick={toggleDrawer(false)}>         
+            <ArrowForwardIcon />
+        </IconButton>
         <UserPanel
           type={type}
           callBack={handleSetType}

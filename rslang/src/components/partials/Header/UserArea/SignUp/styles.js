@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   avatarImg: {
     width: '100%',
     objectFit: 'contain',
+    maxHeight: 400,
   },
   deleteAvatar: {
     position: 'absolute',

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -14,6 +15,7 @@ import Loading from '../../../../partials/Loading';
 import { AuthService } from '../../../../../services/auth.service';
 
 import useStyles from './styles';
+import { setUser } from '../../../../../redux/userSlice';
 
 export default function SignIn({ callBack, onClose, onSignIn }) {
   const classes = useStyles();
@@ -21,6 +23,7 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     AuthService.setRememberMe(false);
@@ -43,6 +46,7 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
         setError('Что-то пошло не так, попробуйте позже');
       }
     } else {
+      dispatch(setUser(result.data))
       onSignIn(result.data);
       setIsPending(false);
       onClose();

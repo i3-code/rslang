@@ -9,6 +9,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '50%',
     objectFit: 'contain',
   },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  drawer: {
+    maxWidth: '100%',
+  }
 }));
 
 export default useStyles;
