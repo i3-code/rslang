@@ -17,7 +17,7 @@ const UserPanel = ({ type, ...props }) => {
 };
 
 export default function UserArea() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const panelType = user ? 'userLogged' : 'signIn';
   const [type, setType] = useState(panelType);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);

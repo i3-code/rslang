@@ -62,10 +62,10 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
   const handleSubmit = async () => {
     if (formRef.current.reportValidity()) {
       setIsPending(true);
-      const response = await AuthService.signUp({ username, password, avatar });
+      const response = await AuthService.signUp({ username, password, avatar, email });
       if (response instanceof Error) {
         setIsPending(false);
-        if (response.response.status === 409) {
+        if (response.response.status === 417) {
           setSignError('Такой пользователь уже существует');
         } else {
           setSignError('Что-то пошло не так, попробуйте позже');
@@ -103,13 +103,14 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                value={email}
                 variant="outlined"
                 required
                 fullWidth
                 label="E-mail"
-                value={email}
                 autoComplete="email"
                 onChange={handleEmailChange}
+                type="email"
               />
             </Grid>
             <Grid item xs={12}>
@@ -150,14 +151,7 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
             </Grid>
           </Grid>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleSubmit}
-          >
+          <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={handleSubmit}>
             Зарегистрироваться
           </Button>
           {signError && <Typography className={classes.signError}>{signError}</Typography>}

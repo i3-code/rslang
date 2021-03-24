@@ -37,8 +37,8 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
     const result = await AuthService.signIn(credentials);
     if (result instanceof Error) {
       setIsPending(false);
-      if (result.response.status === 401) {
-        setError('Имя пользователя или пароль неверны');
+      if (result.response.status === 404 || result.response.status === 403) {
+        setError('Электронный адрес или пароль неверны');
       } else {
         setError('Что-то пошло не так, попробуйте позже');
       }

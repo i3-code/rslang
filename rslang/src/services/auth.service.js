@@ -15,7 +15,7 @@ export class AuthService {
   static signUp = async (userData) => {
     try {
       await axios.post(urls.auth.signup, userData);
-      return AuthService.signIn({ username: userData.username, password: userData.password });
+      return AuthService.signIn({ email: userData.email, password: userData.password });
     } catch (err) {
       return err;
     }

@@ -4,7 +4,7 @@ const urls = {
   auth: {
     signup: `${baseUrl}/users`,
     login: `${baseUrl}/signin`,
-    whoAmI: `${baseUrl}/whoAmI`,
+    whoAmI: `${baseUrl}/users/whoAmI`,
   },
 };
 
