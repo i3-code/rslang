@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 
 import Menu from '../../components/Menu';
 import Page from './Page';
 
-export default function Book({del, deletedWords}) {
-  // const [deletedWords, setDeletedWords] = useState([])
-  // const [hardWords, setHardWords] = useState([])
-
-  // const deleteWord = (wordId) => {
-  //   setDeletedWords([...deletedWords, wordId])
-  // }
-
+export default function Book({del, deletedWords, addToHardWords, hardWords}) {
   return (
     <Grid>
       <Container>
-        <Typography variant="h2">Book</Typography>
-        <Page group={0} page={0} del={del} deletedWords={deletedWords}/>
-        <Menu />
+        <Page group={0} page={0} del={del} deletedWords={deletedWords} hardWords={hardWords} addToHardWords={addToHardWords}/>
       </Container>
     </Grid>
   );

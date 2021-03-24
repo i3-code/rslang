@@ -4,8 +4,16 @@ import { Grid } from '@material-ui/core';
 
 import Word from './Word';
 
-export default function Page({group, page, deletedWords, del}) {
+export default function Page({group, page, deletedWords, del, addToHardWords, hardWords}) {
   const [words, setWords] = useState(null);
+
+  const filterFunk = (id) => {
+    if (!deletedWords[page]) {
+      return true
+    } else {
+      return !deletedWords[page].includes(id)
+    }
+  }
 
   useEffect(() => {
     axios
@@ -15,9 +23,16 @@ export default function Page({group, page, deletedWords, del}) {
 
   return (
     <Grid>
-      { words && words.filter((word)=> !deletedWords.includes(word.id))
+      { words && words.filter((word)=> filterFunk(word.id))
         .map((word) => {
-        return <Word currentWord={word} key={word.id} delWord={del}/>
+        return <Word
+          currentWord={word}
+          key={word.id}
+          delWord={del}
+          page={page}
+          addToHardWords={addToHardWords}
+          hardWords={hardWords}
+        />
       })}
     </Grid>
   );
