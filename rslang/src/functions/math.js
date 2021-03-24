@@ -20,5 +20,18 @@ export function calculatePercentResult(good, length) {
   let result = good / length
   const parsed = parseInt(result * 100);
   if (isNaN(parsed)) { return 0; }
+
   return parsed;
+}
+
+export function getRandomAnswers(rightAnswer, answerVariations) {
+  const answers = [rightAnswer]
+  while (answers.length !== 4) {
+    let randomAnswer = randomFromArray(answerVariations)
+    if(answers.indexOf(randomAnswer) === -1) {
+      answers.push(randomAnswer)
+    }
+  }
+
+  return shuffle(answers)
 }
