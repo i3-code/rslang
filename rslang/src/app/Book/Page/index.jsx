@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 
 import Word from './Word';
 
-export default function Page({group, page, deletedWords, del, addToHardWords, hardWords}) {
+export default function Page({group, page, deletedWords, del, addToHardWords, hardWords, translation, actions}) {
   const [words, setWords] = useState(null);
 
   const filterFunk = (id) => {
@@ -32,6 +32,8 @@ export default function Page({group, page, deletedWords, del, addToHardWords, ha
           page={page}
           addToHardWords={addToHardWords}
           hardWords={hardWords}
+          translation={translation}
+          actions={actions}
         />
       })}
     </Grid>

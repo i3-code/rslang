@@ -4,10 +4,9 @@ import useSound from 'use-sound';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-export default function Word({currentWord, delWord, page, addToHardWords, hardWords}) {
+export default function Word({currentWord, delWord, page, addToHardWords, hardWords, translation, actions}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate} = currentWord;
   const classes = useStyles();
@@ -18,7 +17,6 @@ export default function Word({currentWord, delWord, page, addToHardWords, hardWo
   const [playMeaning] = useSound(
     `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audioMeaning}`, {
       onend: () => {
-        console.log('rrr')
         playExample()
       },
     }
@@ -27,7 +25,6 @@ export default function Word({currentWord, delWord, page, addToHardWords, hardWo
   const [playActive] = useSound(
     `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audio}`, {
       onend: () => {
-        console.log(playMeaning)
         playMeaning()
       }
     },
@@ -55,7 +52,7 @@ export default function Word({currentWord, delWord, page, addToHardWords, hardWo
           <Typography>
             <span className={classes.word}>{word}</span>
             <span>{` ${transcription} `}</span>
-            <span>{wordTranslate}</span>
+            {translation && <span>{wordTranslate}</span>}
             <Tooltip title="Звук">
             <IconButton
               display="inline"
@@ -67,13 +64,14 @@ export default function Word({currentWord, delWord, page, addToHardWords, hardWo
           </Typography>
 
           <Typography dangerouslySetInnerHTML={createMarkup(textMeaning)}></Typography>
-          <Typography className={classes.bottomLine}>{textMeaningTranslate}</Typography>
+          {translation && <Typography className={classes.bottomLine}>{textMeaningTranslate}</Typography>}
 
           <Typography dangerouslySetInnerHTML={createMarkup(textExample)}></Typography>
-          <Typography>{textExampleTranslate}</Typography>
+          {translation && <Typography>{textExampleTranslate}</Typography>}
         </CardContent>
         <div className={classes.actionsWrapper}>
-          <CardActions disableSpacing>
+          {actions &&
+           <CardActions disableSpacing>
             <Tooltip title="В сложные">
               <IconButton aria-label="hard" onClick={()=>addToHardWords([page, id])}>
               <img src="https://img.icons8.com/material/24/000000/learning.png" alt='В сложные'/>
@@ -84,7 +82,7 @@ export default function Word({currentWord, delWord, page, addToHardWords, hardWo
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-          </CardActions>
+          </CardActions>}
           <Typography>Результаты</Typography>
           </div>
       </div>
