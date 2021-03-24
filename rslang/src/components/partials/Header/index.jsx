@@ -7,7 +7,7 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import { Grid } from "@material-ui/core";
+import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -25,6 +25,8 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import InfoIcon from '@material-ui/icons/Info';
+
+import UserArea from './UserArea';
 
 import useStyles from './styles';
 
@@ -62,82 +64,87 @@ export default function Header() {
   return (
     <Grid>
       <AppBar
-      position="fixed"
-      className={clsx(classes.appBar, {
-        [classes.appBarShift]: open,
-      })}
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
       >
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          className={clsx(classes.menuButton, {
-            [classes.hide]: open,
-          })}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" noWrap>
-          {pageName[0]}
-        </Typography>
-      </Toolbar>
+        <Toolbar>
+          <Grid container alignItems="center" justify="space-between">
+            <Grid container alignItems="center" className={classes.pageTitle}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, {
+                  [classes.hide]: open,
+                })}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                {pageName[0]}
+              </Typography>
+            </Grid>
+            <UserArea />
+          </Grid>
+        </Toolbar>
       </AppBar>
       <Drawer
-      variant="permanent"
-      className={clsx(classes.drawer, {
-        [classes.drawerOpen]: open,
-        [classes.drawerClose]: !open,
-      })}
-      classes={{
-        paper: clsx({
+        variant="permanent"
+        className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
-        }),
-      }}
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
+        }}
       >
-      <div className={classes.toolbar}>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-        </IconButton>
-      </div>
-      <Divider />
-      <List>
-        {Object.entries(mainIcons).map(([link, [text, icon]]) => (
-          <NavLink
-            key={text}
-            to={link}
-            className={classes.link}
-            activeClassName={classes.selected}
-            exact={true}
-            replace={true}
-          >
-            <ListItem button>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          </NavLink>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {Object.entries(additionalIcons).map(([link, [text, icon]]) => (
-          <NavLink
-            key={text}
-            to={link}
-            className={classes.link}
-            activeClassName={classes.selected}
-            exact={true}
-            replace={true}
-          >
-            <ListItem button>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          </NavLink>
-        ))}
-      </List>
+        <div className={classes.toolbar}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {Object.entries(mainIcons).map(([link, [text, icon]]) => (
+            <NavLink
+              key={text}
+              to={link}
+              className={classes.link}
+              activeClassName={classes.selected}
+              exact={true}
+              replace={true}
+            >
+              <ListItem button>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            </NavLink>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {Object.entries(additionalIcons).map(([link, [text, icon]]) => (
+            <NavLink
+              key={text}
+              to={link}
+              className={classes.link}
+              activeClassName={classes.selected}
+              exact={true}
+              replace={true}
+            >
+              <ListItem button>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            </NavLink>
+          ))}
+        </List>
       </Drawer>
     </Grid>
   );
