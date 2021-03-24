@@ -30,8 +30,9 @@ const useStyles = makeStyles(() => ({
     },
   },
   appBar: {
-    width: '100%',
-    background: theme.palette.action.active,
+    zIndex: theme.zIndex.drawer + 1,
+    top: 'auto',
+    bottom: 0,
   },
   toolbar: {
     display: 'flex',
