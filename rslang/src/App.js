@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, {useState, Suspense } from 'react';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Loading from './components/partials/Loading';
@@ -9,6 +9,14 @@ import Games from './app/Games';
 import Stats from './app/Stats';
 
 function App() {
+  const [deletedWords, setDeletedWords] = useState([])
+  const [hardWords, setHardWords] = useState([])
+
+  const deleteWord = (wordId) => {
+    console.log(wordId)
+    setDeletedWords([...deletedWords, wordId])
+  }
+
   return (
     <Suspense fallback={<Loading fullScreen />}>
       <Router>
@@ -18,7 +26,7 @@ function App() {
               <Home />
             </Route>
             <Route path="/book">
-              <Book />
+              <Book del={deleteWord} deletedWords={deletedWords}/>
             </Route>
             <Route path="/games">
               <Games />
