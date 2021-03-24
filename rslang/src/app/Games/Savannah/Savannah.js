@@ -2,17 +2,24 @@ import './Savannah.css'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import SavannahQuiz from './SavannahQuiz/SavannahQuiz'
+import {calculatePercentResult, randomFromArray, shuffle} from '../../../functions/math'
+import Loading from '../../../components/partials/Loading'
+import ResultGame from './ResultGame/ResultGame'
 
 const Savannah = () => {
   const TIMER_LIMIT = 7
   const [start, setStart] = useState(false)
+  const [finished, setFinished] = useState(false)
   const [timer, setTimer] = useState(0)
   const [questionNumber, setQuestionNumber] = useState(0)
   const [quiz, setQuiz] = useState([])
+  const [result, setResult] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true)
         const fetchedData = await axios.get('https://react-rslang.herokuapp.com/words');
         const words = fetchedData.data;
         const answerVariations = words.map(word => word.wordTranslate)
@@ -29,11 +36,12 @@ const Savannah = () => {
           })
         })
         setQuiz(quizPrepare)
+        setLoading(false)
       } catch (e) {
         console.log(e)
       }
     })()
-  }, [])
+  }, [result])
 
   useEffect(() => {
     if (start) {
@@ -56,6 +64,8 @@ const Savannah = () => {
   function nextRound() {
     if (questionNumber >= quiz.length - 1) {
       setStart(false)
+      setResult(calculateResult())
+      setFinished(true)
       return
     }
     setTimer(0)
@@ -66,54 +76,60 @@ const Savannah = () => {
     }, 50);
   }
 
-  function setAnswer(answer) {
-    // calculate result
-    console.log(answer)
+  function setAnswer(answer, number) {
+    if (quiz[number].rightAnswer === answer) {
+      const newQuiz = [...quiz]
+      newQuiz[number].status = true
+      setQuiz(() => newQuiz)
+    }
     nextRound()
+  }
+
+  function calculateResult() {
+    let good = quiz.filter(q => q.status)
+    return calculatePercentResult(good.length, quiz.length)
   }
 
   function getRandomAnswers(rightAnswer, answerVariations) {
     return shuffle([rightAnswer, randomFromArray(answerVariations), randomFromArray(answerVariations), randomFromArray(answerVariations)])
   }
 
-  function randomFromArray(arr) {
-    return arr[Math.floor((Math.random() * arr.length))];
+  const restartGame = () => {
+    setTimer(0)
+    setQuestionNumber(0)
+    setFinished(false)
+    setStart(true)
   }
-
-  function shuffle(array) {
-    let currentIndex = array.length, temporaryValue, randomIndex;
-    while (0 !== currentIndex) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-  }
-
 
   return (
     <div className="savannah-background"
          style={{backgroundImage: `url(https://searchthisweb.com/wallpaper/african-savanna_2880x1800_y526q.jpg)`}}>
       <div className="savannah-wrapper">
         <div className="savannah">
-          {!start || quiz.length === 0
+          {loading === true
             ?
-            <div className="start-menu-wrapper">
-              <div className="title">Саванна</div>
-              <div className="note">Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше
-                очков опыта получишь.
-              </div>
-              <button className="start-button" onClick={() => setStart(true)}>Начать</button>
-            </div>
+            <Loading/>
             :
-            <SavannahQuiz
-              quiz={quiz}
-              questionNumber={questionNumber}
-              setAnswer={setAnswer}
-            />
+            !start
+              ?
+                finished
+                  ?
+                  <ResultGame result={result} restartGame={restartGame}/>
+                  :
+                  <div className="start-menu-wrapper">
+                    <div className="title">Саванна</div>
+                    <div className="note">Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем
+                      больше
+                      очков опыта получишь.
+                    </div>
+                    <button className="start-button" onClick={() => setStart(true)}>Начать</button>
+                  </div>
+              :
+              <SavannahQuiz
+                quiz={quiz}
+                questionNumber={questionNumber}
+                setAnswer={setAnswer}
+              />
           }
         </div>
       </div>

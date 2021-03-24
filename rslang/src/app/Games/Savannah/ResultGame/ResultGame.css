@@ -1,0 +1,47 @@
+.wrapper-result-game {
+    width: 100%;
+    max-width: 784px;
+    min-height: 646px;
+    margin: 0 auto;
+    border-radius: 8px;
+    border: 1px solid #e6e9ee;
+    background-color: #fff;
+    padding: 42px 16px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.wrapper-result-game .result-game-percent {
+    display: flex;
+    align-items: center;
+    min-height: 337px;
+    font-size: 36px;
+    color: #37383c;
+}
+
+.wrapper-result-game .button-continue {
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: rgba(37,130,231,.08);
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.43;
+    color: #2582e7;
+    padding: 10px 42px;
+    margin-top: 24px;
+}
+
+.wrapper-result-game .button-back {
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.71;
+    text-align: center;
+    color: #2582e7;
+    text-decoration: underline;
+    cursor: pointer;
+}
