@@ -121,7 +121,7 @@ export default function Header() {
               exact={true}
               replace={true}
             >
-              <ListItem button>
+              <ListItem button selected={location.pathname === link}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
@@ -139,7 +139,7 @@ export default function Header() {
               exact={true}
               replace={true}
             >
-              <ListItem button>
+              <ListItem button selected={location.pathname === link}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>

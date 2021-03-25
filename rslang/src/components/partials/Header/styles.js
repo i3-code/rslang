@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
   },
   selected: {
-    color: 'red',
+    textDecoration: 'underline',
   },
   pageTitle: {
     width: 'auto',

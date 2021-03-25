@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Grid, Typography } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import Card from '../../components/partials/Card';
 
 const cardsArray = [
@@ -13,8 +13,6 @@ const cardsArray = [
 
 export default function Book() {
   return (
-    <Grid>
-      <Typography variant="h4">Book</Typography>
       <Container>
         <Grid container direction="row" justify="space-evenly" alignItems="center" >
           {cardsArray.map((card, i) => (
@@ -22,6 +20,5 @@ export default function Book() {
           ))}
         </Grid>
       </Container>
-    </Grid>
   );
 }
