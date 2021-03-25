@@ -1,10 +1,10 @@
-import './Savannah.css'
-import {useEffect} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-import SavannahQuiz from './SavannahQuiz/SavannahQuiz'
-import Loading from '../../../components/partials/Loading'
-import ResultGame from './ResultGame/ResultGame'
-import StartGameMenu from './StartGameMenu/StartGameMenu'
+import './Savannah.css';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import SavannahQuiz from './SavannahQuiz/SavannahQuiz';
+import Loading from '../../../components/partials/Loading';
+import ResultGame from './ResultGame/ResultGame';
+import StartGameMenu from './StartGameMenu/StartGameMenu';
 import {
   fetchWordsForQuiz,
   selectTimer,
@@ -12,57 +12,61 @@ import {
   selectStart,
   selectStatistics,
   nextRound,
-  incrementTimer
+  incrementTimer,
 } from './savannahSlice';
 
-const Savannah = () => {
-  const dispatch = useDispatch()
-  const TIMER_LIMIT = 7
+import urls from '../../../constants/urls';
 
-  const timer = useSelector(selectTimer)
-  const start = useSelector(selectStart)
-  const statistics = useSelector(selectStatistics)
+const Savannah = () => {
+  const dispatch = useDispatch();
+  const TIMER_LIMIT = 7;
+
+  const timer = useSelector(selectTimer);
+  const start = useSelector(selectStart);
+  const statistics = useSelector(selectStatistics);
 
   useEffect(() => {
     (async () => {
-      await dispatch(fetchWordsForQuiz('https://react-rslang.herokuapp.com/words'))
-    })()
-  }, [statistics, dispatch])
+      await dispatch(fetchWordsForQuiz(urls.words));
+    })();
+  }, [statistics, dispatch]);
 
   useEffect(() => {
     if (start) {
       const intervalIdTimer = setInterval(() => {
-        dispatch(incrementTimer())
-      }, 1000)
+        dispatch(incrementTimer());
+      }, 1000);
 
-      return () => clearInterval(intervalIdTimer)
+      return () => clearInterval(intervalIdTimer);
     }
-  }, [start, dispatch])
+  }, [start, dispatch]);
 
   useEffect(() => {
     if (timer >= TIMER_LIMIT) {
-      dispatch(nextRound())
+      dispatch(nextRound());
     }
-  }, [timer, dispatch])
+  }, [timer, dispatch]);
 
   return (
-    <div className="savannah-background"
-         style={{backgroundImage: `url(https://searchthisweb.com/wallpaper/african-savanna_2880x1800_y526q.jpg)`}}>
+    <div
+      className="savannah-background"
+      style={{ backgroundImage: `url(https://searchthisweb.com/wallpaper/african-savanna_2880x1800_y526q.jpg)` }}
+    >
       <div className="savannah-wrapper">
         <div className="savannah">
-          {
-            useSelector(selectLoading)
-              ? <Loading/>
-              : start
-                ? <SavannahQuiz/>
-                : statistics
-                  ? <ResultGame/>
-                  : <StartGameMenu/>
-          }
+          {useSelector(selectLoading) ? (
+            <Loading />
+          ) : start ? (
+            <SavannahQuiz />
+          ) : statistics ? (
+            <ResultGame />
+          ) : (
+            <StartGameMenu />
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Savannah
+export default Savannah;
