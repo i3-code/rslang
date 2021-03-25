@@ -5,8 +5,8 @@ const urls = {
     signup: `${baseUrl}/users`,
     login: `${baseUrl}/signin`,
     whoAmI: `${baseUrl}/users/whoAmI`,
-    words: `${baseUrl}/words`,
   },
+  words: `${baseUrl}/words`,
 };
 
 export default urls;
