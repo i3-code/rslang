@@ -1,0 +1,42 @@
+.savannah .start-menu-wrapper {
+    text-align: center;
+}
+
+.savannah .title {
+    font-size: 40px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 60px;
+    color: #00c49d;
+    text-transform: uppercase;
+    letter-spacing: 13px;
+}
+
+.savannah .note {
+    max-width: 565px;
+    margin: 0 auto 58px;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 300;
+    color: #00c49d;
+}
+
+.savannah .start-button {
+    display: inline-block;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1;
+    text-align: center;
+    padding: 19px 15px 21px;
+    text-decoration: none;
+    min-width: 162px;
+    color: #fff;
+    background: #00c49d;
+    border-radius: 4px;
+    transition: all .15s ease;
+    border: none;
+}

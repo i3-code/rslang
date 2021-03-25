@@ -1,15 +1,21 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-    button:{
-        width: 40, height: 40,
-        padding: 0,
-    },
-    icon: {
-        width: 40, height: 40,
-      },
+  root: {
+    width: 'auto',
+    cursor: 'pointer',
+  },
   avatarIcon: {
     borderRadius: '50%',
+    objectFit: 'contain',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  drawer: {
+    maxWidth: '100%',
   },
 }));
 

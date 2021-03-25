@@ -28,12 +28,21 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
     minWidth: 300,
   },
+  languageSwitcher: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
   avatarWrapper: {
     position: 'relative',
   },
   avatarImg: {
     width: '100%',
     objectFit: 'contain',
+    maxHeight: 400,
   },
   deleteAvatar: {
     position: 'absolute',

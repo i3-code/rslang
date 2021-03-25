@@ -1,10 +1,10 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-export default function Stats() {
+export default function About() {
   return (
     <div>
-      <Typography variant="h4">Stats</Typography>
+      <Typography variant="h4">About</Typography>
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum

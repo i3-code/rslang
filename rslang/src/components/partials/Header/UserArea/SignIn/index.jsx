@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
+import { useDispatch } from 'react-redux';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -10,21 +13,22 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import Loading from '../../../Loading';
-//import { AuthService } from '../../../../../services/auth.service';
+import Loading from '../../../../partials/Loading';
+import { AuthService } from '../../../../../services/auth.service';
 
 import useStyles from './styles';
+import { setUser } from '../../../../../redux/userSlice';
 
 export default function SignIn({ callBack, onClose, onSignIn }) {
   const classes = useStyles();
-
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
-  /* useEffect(() => {
-    AuthService.setRememberMe(false)
-  }, [])*/
+  useEffect(() => {
+    AuthService.setRememberMe(false);
+  }, []);
 
   const handleChangeCredentials = (e) => {
     const { name, value } = e.target;
@@ -34,23 +38,25 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
   const handleSubmit = async () => {
     setIsPending(true);
     setError(null);
-    //const result = await AuthService.signIn(credentials);
-    /*if (result instanceof Error) {
+
+    const result = await AuthService.signIn(credentials);
+    if (result instanceof Error) {
       setIsPending(false);
-      if (result.response.status === 401) {
-        setError('SIGNIN.WRONG_CREDENTIALS');
+      if (result.response.status === 404 || result.response.status === 403) {
+        setError('Электронный адрес или пароль неверны');
       } else {
-        setError('SIGNUP.SOMETHIG_WENT_WRONG');
+        setError('Что-то пошло не так, попробуйте позже');
       }
     } else {
+      dispatch(setUser(result.data))
       onSignIn(result.data);
       setIsPending(false);
       onClose();
-    }*/
+    }
   };
 
   const handleRememberMe = (e) => {
-    // AuthService.setRememberMe(e.target.checked)
+    AuthService.setRememberMe(e.target.checked);
   };
 
   return (
@@ -70,9 +76,9 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
             margin="normal"
             required
             fullWidth
-            name="username"
+            name="email"
             onChange={handleChangeCredentials}
-            label="Имя пользователя"
+            label="E-mail"
             autoFocus
           />
           <TextField
@@ -85,16 +91,17 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
             type="password"
           />
           <FormControlLabel
-            onClick={handleRememberMe} control={<Checkbox value="remember" color="primary" />}
-            label="Запомнить меня"
+            onClick={handleRememberMe}
+            control={<Checkbox value="remember" color="primary" />}
+            label={'Запомнить меня'}
           />
           <Button fullWidth variant="contained" color="primary" onClick={handleSubmit} className={classes.submit}>
-            Войти
+            {'Войти'}
           </Button>
           <Grid container justify="center">
             <Grid item>
               <Link variant="body2" className={classes.interactive} onClick={callBack('signUp')}>
-                Нет аккаунта? Регистрируйтесь
+                {'Нет аккаунта? Регистрируйтесь'}
               </Link>
             </Grid>
           </Grid>
