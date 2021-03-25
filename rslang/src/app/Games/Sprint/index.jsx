@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box } from '@material-ui/core';
 import data from './data-example';
 import Timer from '../components/Timer';
@@ -30,25 +30,25 @@ const SprintGame = () => {
     return newWord;
   };
 
-  const checkAnswer = (suggestedAsCorrect) => {
+  const updateStreak = useCallback((incrementStreak = true) => {
+    incrementStreak ? setStreak(streak + 1) : setStreak(0);
+    const multiplierValue = streak >= 9 ? 80 : streak >= 6 ? 40 : streak >= 3 ? 20 : 10;
+    setScoreMultiplier(multiplierValue);
+    if (incrementStreak) setScore(score + scoreMultiplier);
+  },[score, scoreMultiplier, streak]);
+
+  const checkAnswer = useCallback((suggestedAsCorrect) => {
     const shownTranslationIsCorrect = word.shownTranslate === word.correctTranslate;
     const userWasCorrect =
       (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
     updateStreak(userWasCorrect);
     setCounter(counter + 1);
-  };
+  },[counter, updateStreak, word.correctTranslate, word.shownTranslate]);
 
-  const updateStreak = (incrementStreak = true) => {
-    incrementStreak ? setStreak(streak + 1) : setStreak(0);
-    const multiplierValue = streak >= 9 ? 80 : streak >= 6 ? 40 : streak >= 3 ? 20 : 10;
-    setScoreMultiplier(multiplierValue);
-    if (incrementStreak) setScore(score + scoreMultiplier);
-  };
-
-  const keyboardEvents = (e) => {
+  const keyboardEvents = useCallback((e) => {
     if (e.key === 'ArrowLeft') checkAnswer(false);
     if (e.key === 'ArrowRight') checkAnswer(true);
-  };
+  },[checkAnswer]);
 
   const endGame = () => {
     setGameEnded(true);

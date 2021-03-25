@@ -13,7 +13,7 @@ const Timer = ({ seconds, onTimerEnd }) => {
       onTimerEnd();
     }
     return () => clearInterval(intervalId);
-  }, [timeLeft]);
+  }, [onTimerEnd, timeLeft]);
 
   return <div>{timeLeft}</div>;
 };
