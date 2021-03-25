@@ -13,10 +13,10 @@ const ResultGame = ({ result }) => {
         <div>Ваш результат {useSelector(selectResult)}%</div>
       </div>
       <div className="button-continue" onClick={() => dispatch(restartGame())}>
-        Продолжить тренеровку
+        Продолжить тренировку
       </div>
       <NavLink className="button-back" to="/games">
-        К списку тренеровок
+        К списку тренировок
       </NavLink>
     </div>
   );
