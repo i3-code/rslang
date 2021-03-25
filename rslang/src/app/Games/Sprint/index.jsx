@@ -1,51 +1,48 @@
 import { useState, useEffect } from 'react';
-import { render } from '@testing-library/react';
-import { Box, Typography, Grid, Button } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import data from './data-example';
-// source: https://stackoverflow.com/questions/57137094/implementing-a-countdown-timer-in-react-with-hooks
-const Timer = ({ seconds }) => {
-  const [timeLeft, setTimeLeft] = useState(seconds);
-
-  useEffect(() => {
-    if (!timeLeft) return;
-
-    const intervalId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [timeLeft]);
-
-  return <div>{timeLeft}</div>;
-};
+import Timer from '../components/Timer';
 
 const Streak = ({ streak }) => {
-  return <div>{streak}</div>;
+  return <div>Correct streak:{streak}</div>;
 };
 
 const SprintGame = () => {
-  const generateNewWord = (index) => {
-    const typing = data[index].word;
-    const randomTranslate = data[Math.floor(Math.random() * data.length)].wordTranslate;
-    const correctTranslate = data[index].wordTranslate;
-    const shownTranslate = Math.random() < 0.5 ? data[index].wordTranslate : randomTranslate;
-    return { typing, correctTranslate, shownTranslate };
-  };
-
+  const [scoreMultiplier, setScoreMultiplier] = useState(10);
+  const [score, setScore] = useState(0);
   const [counter, setCounter] = useState(0);
   const [streak, setStreak] = useState(0);
-  const [word, setWord] = useState(generateNewWord(0));
+  const [word, setWord] = useState(0);
+  const [gameEnded, setGameEnded] = useState(false);
 
-  const pickNextWord = () => {
-    setCounter(counter + 1);
+  const generateNewWord = (index) => {
+    let newWord;
+    if (index < data.length) {
+      const typing = data[index].word;
+      const randomTranslate = data[Math.floor(Math.random() * data.length)].wordTranslate;
+      const correctTranslate = data[index].wordTranslate;
+      const shownTranslate = Math.random() < 0.5 ? data[index].wordTranslate : randomTranslate;
+      newWord = { typing, correctTranslate, shownTranslate };
+    } else {
+      newWord = { typing: null, correctTranslate: null, shownTranslate: null };
+      setGameEnded(true);
+    }
+    return newWord;
   };
 
   const checkAnswer = (suggestedAsCorrect) => {
     const shownTranslationIsCorrect = word.shownTranslate === word.correctTranslate;
     const userWasCorrect =
       (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
-    userWasCorrect ? setStreak(streak + 1) : setStreak(0);
-    pickNextWord();
+    updateStreak(userWasCorrect);
+    setCounter(counter + 1);
+  };
+
+  const updateStreak = (incrementStreak = true) => {
+    incrementStreak ? setStreak(streak + 1) : setStreak(0);
+    const multiplierValue = streak >= 9 ? 80 : streak >= 6 ? 40 : streak >= 3 ? 20 : 10;
+    setScoreMultiplier(multiplierValue);
+    if (incrementStreak) setScore(score + scoreMultiplier);
   };
 
   const keyboardEvents = (e) => {
@@ -53,9 +50,13 @@ const SprintGame = () => {
     if (e.key === 'ArrowRight') checkAnswer(true);
   };
 
+  const endGame = () => {
+    setGameEnded(true);
+  };
+
   useEffect(() => {
-    setWord(generateNewWord(counter));
-  }, [setWord, counter]);
+    if (!gameEnded) setWord(generateNewWord(counter));
+  }, [setWord, counter, gameEnded]);
 
   useEffect(() => {
     window.addEventListener('keydown', keyboardEvents);
@@ -64,10 +65,14 @@ const SprintGame = () => {
     };
   }, [keyboardEvents]);
 
-  return (
+  const gameLayout = (
     <Box>
-      words used {counter}
-      <Timer seconds={60} />
+      Score: {score}
+      <br />
+      Words used: {counter}
+      <br />
+      timer: <Timer seconds={60} onTimerEnd={endGame} />
+      <br />
       <Streak streak={streak} />
       <h1>{word.typing}</h1>
       <h2>{word.shownTranslate}</h2>
@@ -77,6 +82,9 @@ const SprintGame = () => {
       </div>
     </Box>
   );
+  const gameEndScreen = <Box>Your score is: {score}</Box>;
+
+  return gameEnded ? gameEndScreen : gameLayout;
 };
 
 export default SprintGame;

@@ -7,6 +7,7 @@ export default function Games() {
     <div>
       <Typography variant="h4">Games</Typography>
       <Link to="/games/savannah">Savannah</Link>
+      <br />
       <Link to="/games/sprint">Sprint</Link>
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
