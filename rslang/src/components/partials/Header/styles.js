@@ -62,6 +62,9 @@ const useStyles = makeStyles((theme) => ({
   selected: {
     color: 'red',
   },
+  pageTitle: {
+    width: 'auto',
+  },
 }));
 
 export default useStyles;
