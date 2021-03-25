@@ -16,7 +16,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   media: {
-    height: 140,
+    height: 180,
+    [theme.breakpoints.down('sm')]: {
+      height: 140,
+    },
   },
   link: {
     color: 'inherit',
