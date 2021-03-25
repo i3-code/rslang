@@ -6,17 +6,21 @@ const useStyles = makeStyles((theme) => ({
       width: 300,
     },
     [theme.breakpoints.between('sm', 'md')]: {
-        width: 345,
+      width: 345,
     },
     [theme.breakpoints.between('md', 'lg')]: {
-        width: 400,
+      width: 400,
     },
     [theme.breakpoints.up('lg')]: {
-        width: 400,
+      width: 400,
     },
   },
   media: {
     height: 140,
+  },
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
   },
 }));
 
