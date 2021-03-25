@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import useStyles from './styles';
 
 import Card from '@material-ui/core/Card';
@@ -10,15 +9,11 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 export default function CountryCard({groupNumber, name, img, background}) {
-  const history = useHistory();
   const classes = useStyles();
 
-  function handleClick() {
-   // history.push(`/book/${}`);
-  }
   return (
     <Box mt={2} mb={2}>
-      <Card className={classes.root} onClick={handleClick}>
+      <Card className={classes.root}>
         <CardActionArea>
           <CardMedia
             className={classes.media}

@@ -13,6 +13,7 @@ const Layout = (props) => {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {props.children}
+          <div className={classes.toolbar} />
         </main>
       </div>
       <Footer />
