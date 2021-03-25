@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
-import Card from '../../components/partials/Book/Card';
+import Card from '../../components/partials/Card';
 
 const cardsArray = [
   { img: './images/1.jpg', name: 'Коллекция 1', background: 'linear-gradient(45deg,#4099ff,#73b4ff)' },
@@ -18,7 +18,7 @@ export default function Book() {
       <Container>
         <Grid container direction="row" justify="space-evenly" alignItems="center" >
           {cardsArray.map((card, i) => (
-            <Card key={card.name} groupNumber={i} {...card} />
+            <Card key={card.name} desc="600 слов" {...card} />
           ))}
         </Grid>
       </Container>
