@@ -9,40 +9,35 @@ import Games from './app/Games';
 import Stats from './app/Stats';
 import Settings from './app/Settings';
 import About from './app/About';
-import Savannah from './app/Games/Savannah/Savannah';
 import Layout from './components/Layout/Layout';
 
 function App() {
   return (
     <Suspense fallback={<Loading fullScreen />}>
       <Router>
-        <Switch>
-          <Route exact path="/games/savannah">
-            <Savannah />
-          </Route>
-          <Layout>
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/book">
-                <Book />
-              </Route>
-              <Route exact path="/games">
-                <Games />
-              </Route>
-              <Route path="/stats">
-                <Stats />
-              </Route>
-              <Route path="/settings">
-                <Settings />
-              </Route>
-              <Route path="/about">
-                <About />
-              </Route>
-            </Switch>
-          </Layout>
-        </Switch>
+        <Layout>
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/book">
+              <Book />
+            </Route>
+            <Route path="/games/:game" component={Games} />
+            <Route path="/games">
+              <Games />
+            </Route>
+            <Route path="/stats">
+              <Stats />
+            </Route>
+            <Route path="/settings">
+              <Settings />
+            </Route>
+            <Route path="/about">
+              <About />
+            </Route>
+          </Switch>
+        </Layout>
       </Router>
     </Suspense>
   );

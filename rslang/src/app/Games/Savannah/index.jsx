@@ -17,7 +17,7 @@ import {
 
 import urls from '../../../constants/urls';
 
-const Savannah = () => {
+export default function Savannah() {
   const dispatch = useDispatch();
   const TIMER_LIMIT = 7;
 
@@ -67,6 +67,4 @@ const Savannah = () => {
       </div>
     </div>
   );
-};
-
-export default Savannah;
+}
