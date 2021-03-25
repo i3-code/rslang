@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawer: {
     maxWidth: '100%',
-  }
+  },
 }));
 
 export default useStyles;

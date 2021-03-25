@@ -2,14 +2,15 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Loading from './components/partials/Loading';
+
 import Home from './app/Home';
 import Book from './app/Book';
 import Games from './app/Games';
 import Stats from './app/Stats';
 import Settings from './app/Settings';
 import About from './app/About';
-import Savannah from "./app/Games/Savannah/Savannah";
-import Layout from "./components/Layout/Layout";
+import Savannah from './app/Games/Savannah/Savannah';
+import Layout from './components/Layout/Layout';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/games/savannah">
-            <Savannah/>
+            <Savannah />
           </Route>
           <Layout>
             <Switch>

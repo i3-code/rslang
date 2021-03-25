@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
 import { useDispatch } from 'react-redux';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -19,7 +21,6 @@ import { setUser } from '../../../../../redux/userSlice';
 
 export default function SignIn({ callBack, onClose, onSignIn }) {
   const classes = useStyles();
-
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
@@ -37,6 +38,7 @@ export default function SignIn({ callBack, onClose, onSignIn }) {
   const handleSubmit = async () => {
     setIsPending(true);
     setError(null);
+
     const result = await AuthService.signIn(credentials);
     if (result instanceof Error) {
       setIsPending(false);

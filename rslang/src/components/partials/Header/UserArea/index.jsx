@@ -65,8 +65,8 @@ export default function UserArea() {
         </IconButton>
         <Typography>{user ? user.username : 'Войти'}</Typography>
       </Grid>
-      <Drawer classes={{paper: classes.drawer}} width="30%" anchor="right" open={isDrawerOpened} onClose={toggleDrawer(false)}>        
-        <IconButton className={classes.closeButton}  onClick={toggleDrawer(false)}>         
+      <Drawer classes={{paper: classes.drawer}} width="30%" anchor="right" open={isDrawerOpened} onClose={toggleDrawer(false)}>
+        <IconButton className={classes.closeButton}  onClick={toggleDrawer(false)}>
             <ArrowForwardIcon />
         </IconButton>
         <UserPanel
