@@ -1,10 +1,14 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import {Link} from "react-router-dom";
 
 export default function Games() {
   return (
     <div>
       <Typography variant="h4">Games</Typography>
+      <Link to="/games/savannah">
+        Savannah
+      </Link>
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
