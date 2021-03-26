@@ -1,18 +1,20 @@
-import './StartGameMenu.css';
+import styles from './StartGameMenu.module.css';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { startGame } from '../savannahSlice';
 
-const StartGameMenu = () => {
-  const dispatch = useDispatch();
-
+const StartGameMenu = ({ title, note, startGame, colorText, colorTextButton, colorButtonBackground }) => {
   return (
-    <div className="start-menu-wrapper">
-      <div className="title">Саванна</div>
-      <div className="note">
-        Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь.
+    <div className={styles.startMenuWrapper}>
+      <div className={styles.title} style={{ color: colorText }}>
+        {title}
       </div>
-      <button className="start-button" onClick={() => dispatch(startGame())}>
+      <div className={styles.note} style={{ color: colorText }}>
+        {note}
+      </div>
+      <button
+        className={styles.startButton}
+        onClick={() => startGame()}
+        style={{ color: colorTextButton, backgroundColor: colorButtonBackground }}
+      >
         Начать
       </button>
     </div>

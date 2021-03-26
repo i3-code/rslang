@@ -1,5 +1,5 @@
 import './Savannah.css';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import SavannahQuiz from './SavannahQuiz/SavannahQuiz';
 import Loading from '../../../components/partials/Loading';
@@ -17,6 +17,7 @@ import {
   selectWrongAnswers,
   restartGame,
   selectResult,
+  startGame,
 } from './savannahSlice';
 
 import urls from '../../../constants/urls';
@@ -74,7 +75,14 @@ export default function Savannah() {
               result={result}
             />
           ) : (
-            <StartGameMenu />
+            <StartGameMenu
+              title="Саванна"
+              note="Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь."
+              startGame={() => dispatch(startGame())}
+              colorText="#00c49d"
+              colorTextButton="#fff"
+              colorButtonBackground="#00c49d"
+            />
           )}
         </div>
       </div>
