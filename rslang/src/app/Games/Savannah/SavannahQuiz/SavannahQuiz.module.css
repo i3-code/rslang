@@ -1,4 +1,4 @@
-.wrapper-savannah-game .savannah-game-answer {
+.gameAnswer {
   display: inline-block;
   vertical-align: top;
   font-size: 24px;
@@ -19,7 +19,7 @@
   user-select: none;
 }
 
-.wrapper-savannah-game .savannah-game-question {
+.gameQuestion {
   position: absolute;
   text-align: center;
   top: 70px;
@@ -43,7 +43,7 @@
   user-select: none;
 }
 
-.wrapper-savannah-game .savannah-game-question.active {
+.gameQuestion.active {
   animation: fail 7s linear 1 normal running 0s none;
 }
 

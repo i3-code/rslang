@@ -1,4 +1,5 @@
-import './Savannah.css';
+import styles from './Savannah.module.css';
+import urls from '../../../constants/urls';
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import SavannahQuiz from './SavannahQuiz/SavannahQuiz';
@@ -19,8 +20,6 @@ import {
   selectResult,
   startGame,
 } from './savannahSlice';
-
-import urls from '../../../constants/urls';
 
 export default function Savannah() {
   const dispatch = useDispatch();
@@ -58,11 +57,11 @@ export default function Savannah() {
 
   return (
     <div
-      className="savannah-background"
+      className={styles.savannahBackground}
       style={{ backgroundImage: `url(https://searchthisweb.com/wallpaper/african-savanna_2880x1800_y526q.jpg)` }}
     >
-      <div className="savannah-wrapper">
-        <div className="savannah">
+      <div className={styles.savannahWrapper}>
+        <div className={styles.savannah}>
           {useSelector(selectLoading) ? (
             <Loading />
           ) : start ? (
