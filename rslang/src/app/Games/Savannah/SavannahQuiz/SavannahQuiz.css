@@ -22,7 +22,7 @@
 .wrapper-savannah-game .savannah-game-question {
   position: absolute;
   text-align: center;
-  top: 0;
+  top: 70px;
   right: 0;
   left: 0;
   margin: auto;
@@ -49,7 +49,7 @@
 
 @keyframes fail {
   0% {
-    top: 0;
+    top: 70px;
     transform: scale3d(1.5, 1.5, 1.5);
   }
   100% {

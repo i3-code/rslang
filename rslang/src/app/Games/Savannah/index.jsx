@@ -13,6 +13,10 @@ import {
   selectStatistics,
   nextRound,
   incrementTimer,
+  selectRightAnswers,
+  selectWrongAnswers,
+  restartGame,
+  selectResult,
 } from './savannahSlice';
 
 import urls from '../../../constants/urls';
@@ -24,6 +28,10 @@ export default function Savannah() {
   const timer = useSelector(selectTimer);
   const start = useSelector(selectStart);
   const statistics = useSelector(selectStatistics);
+
+  const rightAnswers = useSelector(selectRightAnswers);
+  const wrongAnswers = useSelector(selectWrongAnswers);
+  const result = useSelector(selectResult);
 
   useEffect(() => {
     (async () => {
@@ -59,7 +67,12 @@ export default function Savannah() {
           ) : start ? (
             <SavannahQuiz />
           ) : statistics ? (
-            <ResultGame />
+            <ResultGame
+              rightAnswers={rightAnswers}
+              wrongAnswers={wrongAnswers}
+              restartGame={() => dispatch(restartGame())}
+              result={result}
+            />
           ) : (
             <StartGameMenu />
           )}
