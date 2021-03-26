@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import SavannahQuiz from './SavannahQuiz/SavannahQuiz';
 import Loading from '../../../components/partials/Loading';
-import ResultGame from './ResultGame/ResultGame';
-import StartGameMenu from './StartGameMenu/StartGameMenu';
+import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
+import ResultGame from '../components/ResultGame/ResultGame';
 import {
   fetchWordsForQuiz,
   selectTimer,
