@@ -13,7 +13,7 @@ export default function CountryCard({name, desc = '', img, background, link = '#
   const classes = useStyles();
 
   return (
-    <Link to={link} replace={true} className={classes.link}>
+    <Link to={link} className={classes.link}>
     <Box mt={2} mb={2}>
       <Card className={classes.root}>
         <CardActionArea>

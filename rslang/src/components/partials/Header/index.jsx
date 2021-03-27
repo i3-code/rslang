@@ -123,7 +123,7 @@ export default function Header() {
                 className={classes.link}
                 activeClassName={classes.selected}
                 exact={true}
-                replace={true}
+                replace={selected}
               >
                 <ListItem button selected={selected}>
                   <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
@@ -143,7 +143,7 @@ export default function Header() {
                 className={classes.link}
                 activeClassName={classes.selected}
                 exact={true}
-                replace={true}
+                replace={selected}
               >
                 <ListItem button selected={selected}>
                   <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>

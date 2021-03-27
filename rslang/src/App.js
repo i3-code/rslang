@@ -9,7 +9,7 @@ import Games from './app/Games';
 import Stats from './app/Stats';
 import Settings from './app/Settings';
 import About from './app/About';
-import Layout from './components/Layout/Layout';
+import Layout from './components/Layout';
 
 function App() {
   return (
