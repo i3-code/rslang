@@ -13,7 +13,7 @@ export default function CountryCard({name, desc = '', img, background, link = '#
   const classes = useStyles();
 
   return (
-    <Link to={link} className={classes.link}>
+    <Link to={link} replace={true} className={classes.link}>
     <Box mt={2} mb={2}>
       <Card className={classes.root}>
         <CardActionArea>
@@ -22,7 +22,7 @@ export default function CountryCard({name, desc = '', img, background, link = '#
             image={img}
             title={desc}
           />
-          <CardContent  style={{background: `${background}`}}>
+          <CardContent style={{background: `${background}`}}>
             <Typography gutterBottom variant="h5" component="h2">
               {name}
             </Typography>
