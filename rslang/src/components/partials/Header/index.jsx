@@ -50,11 +50,12 @@ const getNameByPath = (path) => {
 
 export default function Header() {
   const location = useLocation();
-  const [pageName, setPageName] = React.useState(getNameByPath(location.pathname));
+  const path = getNameByPath(location.pathname);
+  const [pageName, setPageName] = React.useState(path);
 
   React.useEffect(() => {
-    setPageName(getNameByPath(location.pathname));
-  }, [location]);
+    setPageName(path);
+  }, [path]);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -113,39 +114,43 @@ export default function Header() {
         </div>
         <Divider />
         <List>
-          {Object.entries(mainIcons).map(([link, [text, icon]]) => (
-            <NavLink
-              key={text}
-              to={link}
-              className={classes.link}
-              activeClassName={classes.selected}
-              exact={true}
-              replace={true}
-            >
-              <ListItem button selected={location.pathname === link}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </NavLink>
-          ))}
+          {Object.entries(mainIcons).map(([link, [text, icon]]) => {
+            const selected = (path === getNameByPath(link));
+            return (
+              <NavLink
+                key={text}
+                to={link}
+                className={classes.link}
+                activeClassName={classes.selected}
+                exact={true}
+                replace={selected}
+              >
+                <ListItem button selected={selected}>
+                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </NavLink>
+          )})}
         </List>
         <Divider />
         <List>
-          {Object.entries(additionalIcons).map(([link, [text, icon]]) => (
-            <NavLink
-              key={text}
-              to={link}
-              className={classes.link}
-              activeClassName={classes.selected}
-              exact={true}
-              replace={true}
-            >
-              <ListItem button selected={location.pathname === link}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </NavLink>
-          ))}
+          {Object.entries(additionalIcons).map(([link, [text, icon]]) => {
+            const selected = (path === getNameByPath(link));
+            return (
+              <NavLink
+                key={text}
+                to={link}
+                className={classes.link}
+                activeClassName={classes.selected}
+                exact={true}
+                replace={selected}
+              >
+                <ListItem button selected={selected}>
+                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </NavLink>
+          )})}
         </List>
       </Drawer>
     </Grid>

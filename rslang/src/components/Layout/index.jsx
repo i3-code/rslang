@@ -3,7 +3,7 @@ import Header from '../partials/Header';
 import Footer from '../partials/Footer';
 import useStyles from '../../styles';
 
-const Layout = (props) => {
+export default function Layout(props) {
   const classes = useStyles();
 
   return (
@@ -19,6 +19,4 @@ const Layout = (props) => {
       <Footer />
     </>
   );
-};
-
-export default Layout;
+}

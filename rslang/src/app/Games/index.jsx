@@ -6,19 +6,19 @@ import Sprint from './Sprint';
 
 const cardsArray = [
   {
-    img: './images/1.jpg',
+    img: './images/games/savannah.jpg',
     name: 'Саванна',
     background: 'linear-gradient(45deg,#F9F53E,#FBF969)',
     link: '/games/savannah',
   },
   {
-    img: './images/2.jpg',
+    img: './images/games/audiocall.jpg',
     name: 'Аудиовызов',
     background: 'linear-gradient(45deg,#4099ff,#73b4ff)',
     link: '/games/audiocall',
   },
   {
-    img: './images/3.jpg',
+    img: './images/games/sprint.jpg',
     name: 'Спринт',
     background: 'linear-gradient(45deg,#FF5370,#ff869a)',
     link: '/games/sprint',

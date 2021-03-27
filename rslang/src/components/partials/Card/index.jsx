@@ -22,7 +22,7 @@ export default function CountryCard({name, desc = '', img, background, link = '#
             image={img}
             title={desc}
           />
-          <CardContent  style={{background: `${background}`}}>
+          <CardContent style={{background: `${background}`}}>
             <Typography gutterBottom variant="h5" component="h2">
               {name}
             </Typography>
