@@ -1,10 +1,11 @@
-import './Savannah.css';
-import { useEffect } from 'react';
+import styles from './Savannah.module.css';
+import urls from '../../../constants/urls';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import SavannahQuiz from './SavannahQuiz/SavannahQuiz';
 import Loading from '../../../components/partials/Loading';
-import ResultGame from './ResultGame/ResultGame';
-import StartGameMenu from './StartGameMenu/StartGameMenu';
+import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
+import ResultGame from '../components/ResultGame/ResultGame';
 import {
   fetchWordsForQuiz,
   selectTimer,
@@ -13,9 +14,12 @@ import {
   selectStatistics,
   nextRound,
   incrementTimer,
+  selectRightAnswers,
+  selectWrongAnswers,
+  restartGame,
+  selectResult,
+  startGame,
 } from './savannahSlice';
-
-import urls from '../../../constants/urls';
 
 export default function Savannah() {
   const dispatch = useDispatch();
@@ -24,6 +28,10 @@ export default function Savannah() {
   const timer = useSelector(selectTimer);
   const start = useSelector(selectStart);
   const statistics = useSelector(selectStatistics);
+
+  const rightAnswers = useSelector(selectRightAnswers);
+  const wrongAnswers = useSelector(selectWrongAnswers);
+  const result = useSelector(selectResult);
 
   useEffect(() => {
     (async () => {
@@ -49,19 +57,31 @@ export default function Savannah() {
 
   return (
     <div
-      className="savannah-background"
+      className={styles.savannahBackground}
       style={{ backgroundImage: `url(https://searchthisweb.com/wallpaper/african-savanna_2880x1800_y526q.jpg)` }}
     >
-      <div className="savannah-wrapper">
-        <div className="savannah">
+      <div className={styles.savannahWrapper}>
+        <div className={styles.savannah}>
           {useSelector(selectLoading) ? (
             <Loading />
           ) : start ? (
             <SavannahQuiz />
           ) : statistics ? (
-            <ResultGame />
+            <ResultGame
+              rightAnswers={rightAnswers}
+              wrongAnswers={wrongAnswers}
+              restartGame={() => dispatch(restartGame())}
+              result={result}
+            />
           ) : (
-            <StartGameMenu />
+            <StartGameMenu
+              title="Саванна"
+              note="Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь."
+              startGame={() => dispatch(startGame())}
+              colorText="#00c49d"
+              colorTextButton="#fff"
+              colorButtonBackground="#00c49d"
+            />
           )}
         </div>
       </div>

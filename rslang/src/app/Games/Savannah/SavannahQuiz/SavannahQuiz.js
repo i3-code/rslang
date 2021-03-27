@@ -1,4 +1,4 @@
-import './SavannahQuiz.css';
+import styles from './SavannahQuiz.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { nextRound, selectQuestionNumber, selectQuiz, setAnswer } from '../savannahSlice';
 
@@ -8,13 +8,13 @@ const SavannahQuiz = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="wrapper-savannah-game">
-      <div id="savannah-game-question" className="savannah-game-question active">
+    <>
+      <div id="savannah-game-question" className={`${styles.gameQuestion} ${styles.active}`}>
         {quiz[questionNumber].question}
       </div>
       {quiz[questionNumber].answers.map((answer, index) => (
         <div
-          className="savannah-game-answer"
+          className={styles.gameAnswer}
           key={index}
           onClick={() => {
             dispatch(setAnswer({ answer, questionNumber }));
@@ -24,7 +24,7 @@ const SavannahQuiz = () => {
           {index + 1}. {answer}
         </div>
       ))}
-    </div>
+    </>
   );
 };
 
