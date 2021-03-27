@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
   },
   selected: {
-    textDecoration: 'underline',
+    color: theme.palette.info.main,
   },
   pageTitle: {
     width: 'auto',

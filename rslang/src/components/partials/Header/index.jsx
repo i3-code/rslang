@@ -114,39 +114,43 @@ export default function Header() {
         </div>
         <Divider />
         <List>
-          {Object.entries(mainIcons).map(([link, [text, icon]]) => (
-            <NavLink
-              key={text}
-              to={link}
-              className={classes.link}
-              activeClassName={classes.selected}
-              exact={true}
-              replace={true}
-            >
-              <ListItem button selected={path === getNameByPath(link)}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </NavLink>
-          ))}
+          {Object.entries(mainIcons).map(([link, [text, icon]]) => {
+            const selected = (path === getNameByPath(link));
+            return (
+              <NavLink
+                key={text}
+                to={link}
+                className={classes.link}
+                activeClassName={classes.selected}
+                exact={true}
+                replace={true}
+              >
+                <ListItem button selected={selected}>
+                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </NavLink>
+          )})}
         </List>
         <Divider />
         <List>
-          {Object.entries(additionalIcons).map(([link, [text, icon]]) => (
-            <NavLink
-              key={text}
-              to={link}
-              className={classes.link}
-              activeClassName={classes.selected}
-              exact={true}
-              replace={true}
-            >
-              <ListItem button selected={path === getNameByPath(link)}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </NavLink>
-          ))}
+          {Object.entries(additionalIcons).map(([link, [text, icon]]) => {
+            const selected = (path === getNameByPath(link));
+            return (
+              <NavLink
+                key={text}
+                to={link}
+                className={classes.link}
+                activeClassName={classes.selected}
+                exact={true}
+                replace={true}
+              >
+                <ListItem button selected={selected}>
+                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </NavLink>
+          )})}
         </List>
       </Drawer>
     </Grid>
