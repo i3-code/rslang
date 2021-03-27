@@ -36,10 +36,12 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
     setSignError('');
     setUsername(e.target.value);
   };
+
   const handleEmailChange = (e) => {
     setSignError('');
     setEmail(e.target.value);
   };
+
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handlesDeleteAvatar = (e) => setAvatar(null);
 
@@ -150,7 +152,6 @@ export default function SignUp({ callBack, onClose, onSignIn }) {
               {avatarError && <Typography className={classes.avatarError}>{avatarError}</Typography>}
             </Grid>
           </Grid>
-
           <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={handleSubmit}>
             Зарегистрироваться
           </Button>

@@ -11,7 +11,8 @@ const gitHubs = ['volha010892', 'DrD1esel', 'Christina-Kashevar', 'i3-code', 'dz
 export default function Footer() {
   const location = useLocation();
   const classes = useStyles();
-  if (location.pathname === '/games') return <div />;
+
+  if (location.pathname.includes('/games')) return <div />;
 
   return (
     <Grid className={classes.root}>

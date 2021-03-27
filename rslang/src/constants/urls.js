@@ -6,6 +6,7 @@ const urls = {
     login: `${baseUrl}/signin`,
     whoAmI: `${baseUrl}/users/whoAmI`,
   },
+  words: `${baseUrl}/words`,
 };
 
 export default urls;

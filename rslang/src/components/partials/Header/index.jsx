@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+
+import { NavLink, useLocation} from 'react-router-dom';
 
 import clsx from 'clsx';
 import { useTheme } from '@material-ui/core/styles';
@@ -43,7 +44,8 @@ const additionalIcons = {
 };
 
 const getNameByPath = (path) => {
-  return mainIcons[path] || additionalIcons[path] || ['404'];
+  const name = path.slice(0, path.lastIndexOf('/')) || path;
+  return path === '/page' ? ['Учебник'] : mainIcons[name] || additionalIcons[name] || ['404'];
 };
 
 export default function Header() {
@@ -120,7 +122,7 @@ export default function Header() {
               exact={true}
               replace={true}
             >
-              <ListItem button>
+              <ListItem button selected={location.pathname === link}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
@@ -138,7 +140,7 @@ export default function Header() {
               exact={true}
               replace={true}
             >
-              <ListItem button>
+              <ListItem button selected={location.pathname === link}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>

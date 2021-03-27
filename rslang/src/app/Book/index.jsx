@@ -1,50 +1,26 @@
-import React, { useState } from 'react';
-import { Container, Grid, Typography, Box, Button } from '@material-ui/core';
-import Pagination from '@material-ui/lab/Pagination';
+import React from 'react';
+import { Container, Grid } from '@material-ui/core';
 
-import Page from './Page';
-import useStyles from './style';
+import Card from '../../components/partials/Card';
 
-export default function Book({del, deletedWords, addToHardWords, hardWords}) {
-  const classes = useStyles();
+export default function Book() {
 
-  const [translation, setTranslation] = useState(true);
-  const [actions, setActions] = useState(true)
-  const [page, setPage] = useState(0)
+const cardsArray = [
+  { img: './images/1.jpg', name: 'Коллекция 1', background: 'linear-gradient(45deg,#4099ff,#73b4ff)' },
+  { img: './images/2.jpg', name: 'Коллекция 2', background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)' },
+  { img: './images/3.jpg', name: 'Коллекция 3', background: 'linear-gradient(45deg,#FFB64D,#ffcb80)' },
+  { img: './images/4.jpg', name: 'Коллекция 4', background: 'linear-gradient(45deg,#FF5370,#ff869a)' },
+  { img: './images/5.png', name: 'Коллекция 5', background: 'linear-gradient(45deg,#C882E2,#C376DF)' },
+  { img: './images/4.png', name: 'Коллекция 6', background: 'linear-gradient(45deg,#F9F53E,#FBF969)' },
+];
 
   return (
-    <Grid>
-      <Container className={classes.bookWrapper}>
-       <Box className={classes.btnWrapper}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.btn}
-            onClick={()=> setTranslation(!translation)}
-          >
-            Перевод
-          </Button>
-          <Button variant="contained" color="secondary" onClick={()=> setActions(!actions)}>Действия</Button>
-        </Box>
-        <Page
-         group={0}
-         page={page}
-         del={del}
-         deletedWords={deletedWords}
-         hardWords={hardWords}
-         addToHardWords={addToHardWords}
-         translation={translation}
-         actions={actions}
-        />
-        <Pagination
-         count={30}
-         variant="outlined"
-         color="primary"
-         size="large"
-         onChange={(e)=> setPage(+e.target.innerText - 1)}
-         className={classes.pagination}
-        />
-      </Container>
-    </Grid>
+    <Container >
+      <Grid container direction="row" justify="space-evenly" alignItems="center" >
+        {cardsArray.map((card, i) => (
+          <Card key={card.name} desc="600 слов" index={i} {...card} />
+        ))}
+      </Grid>
+    </Container>
   );
 }

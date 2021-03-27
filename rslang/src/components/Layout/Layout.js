@@ -1,7 +1,7 @@
-import React from 'react'
-import Header from "../partials/Header";
-import Footer from "../partials/Footer";
-import useStyles from "../../styles";
+import React from 'react';
+import Header from '../partials/Header';
+import Footer from '../partials/Footer';
+import useStyles from '../../styles';
 
 const Layout = (props) => {
   const classes = useStyles();
@@ -9,15 +9,16 @@ const Layout = (props) => {
   return (
     <>
       <div className={classes.root}>
-        <Header/>
+        <Header />
         <main className={classes.content}>
-          <div className={classes.toolbar}/>
+          <div className={classes.toolbar} />
           {props.children}
+          <div className={classes.toolbar} />
         </main>
       </div>
-      <Footer/>
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
