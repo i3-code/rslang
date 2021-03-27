@@ -50,11 +50,12 @@ const getNameByPath = (path) => {
 
 export default function Header() {
   const location = useLocation();
-  const [pageName, setPageName] = React.useState(getNameByPath(location.pathname));
+  const path = getNameByPath(location.pathname);
+  const [pageName, setPageName] = React.useState(path);
 
   React.useEffect(() => {
-    setPageName(getNameByPath(location.pathname));
-  }, [location]);
+    setPageName(path);
+  }, [path]);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -122,7 +123,7 @@ export default function Header() {
               exact={true}
               replace={true}
             >
-              <ListItem button selected={location.pathname === link}>
+              <ListItem button selected={path === getNameByPath(link)}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
@@ -140,7 +141,7 @@ export default function Header() {
               exact={true}
               replace={true}
             >
-              <ListItem button selected={location.pathname === link}>
+              <ListItem button selected={path === getNameByPath(link)}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
