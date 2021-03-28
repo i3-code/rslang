@@ -18,7 +18,7 @@ const cardsArray = [
     <Container >
       <Grid container direction="row" justify="space-evenly" alignItems="center" >
         {cardsArray.map((card, i) => (
-          <Card key={card.name} desc="600 слов" index={i} {...card} />
+          <Card key={card.name} desc="600 слов" index={i} {...card} book={true}/>
         ))}
       </Grid>
     </Container>

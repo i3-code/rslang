@@ -71,7 +71,26 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  }
+  },
+  blue: {
+    border: '2px solid #4099ff'
+  },
+  turquoise: {
+    border: '2px solid #2ed8b6'
+  },
+  orange: {
+    border: '2px solid #FFB64D'
+  },
+  pink: {
+    border: '2px solid #FF5370'
+  },
+  violet: {
+    border: '2px solid #C882E2'
+  },
+  yellow: {
+    border: '2px solid #F9F53E'
+  },
+
   })
 );
 

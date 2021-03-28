@@ -12,13 +12,21 @@ import Box from '@material-ui/core/Box';
 import { setGroup } from '../../../app/Book/bookSlice';
 import { useDispatch } from 'react-redux';
 
-export default function CountryCard({name, desc = '', img, background, index, link = '#'}) {
+const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20'))
+: {page: 0, group: 0}
+
+export default function CountryCard({name, desc = '', img, background, index, link = '#', book}) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   return (
-    <Link to="/page" className={classes.link}>
-    <Box mt={2} mb={2} onClick={(e)=> dispatch(setGroup({groupNum: index}))}>
+    <Link to={book ? "/page" : link} className={classes.link}>
+    <Box mt={2} mb={2} onClick={(e)=> {
+      storageInfo.group = index
+      storageInfo.page = 0
+      localStorage.setItem('rslang20', JSON.stringify(storageInfo))
+      dispatch(setGroup({groupNum: index}))
+      }}>
       <Card className={classes.root}>
         <CardActionArea>
           <CardMedia

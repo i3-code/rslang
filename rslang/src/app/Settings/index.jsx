@@ -6,6 +6,7 @@ import useStyles from './style';
 import { useDispatch } from 'react-redux';
 import { setTranslation, setDisplayActions } from '../Book/bookSlice';
 
+
 export default function Settings() {
   const classes = useStyles();
   const dispatch = useDispatch();

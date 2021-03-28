@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20'))
+: {page: 0, group: 0}
+
 export const bookSlice = createSlice({
   name: 'book',
   initialState: {
     translation: true,
     displayActions: true,
-    page: 0,
-    group: 0,
+    page: storageInfo.page,
+    group: storageInfo.group,
   },
   reducers: {
     setTranslation: (state) => {
@@ -19,6 +22,7 @@ export const bookSlice = createSlice({
       state.page = action.payload.numberPage
     },
     setGroup: (state, action) => {
+
       state.group = action.payload.groupNum
     }
   },

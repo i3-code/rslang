@@ -8,10 +8,15 @@ import useStyles from './style';
 import { useDispatch } from 'react-redux';
 import { setPage } from '../bookSlice';
 
+const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20'))
+: {page: 0, group: 0}
+
+
 
 export default function Section() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  console.log(storageInfo)
 
   return (
     <Grid>
@@ -22,14 +27,19 @@ export default function Section() {
          variant="outlined"
          color="primary"
          size="large"
-         onChange={(e)=> dispatch(setPage({numberPage: +e.target.innerText - 1}))}
+         defaultPage={storageInfo.page + 1}
+         onChange={(e)=> {
+          storageInfo.page = +e.target.innerText - 1
+          localStorage.setItem('rslang20', JSON.stringify(storageInfo))
+           dispatch(setPage({numberPage: +e.target.innerText - 1}))}
+         }
          className={classes.pagination}
         />
         <Box className={classes.linkwrapper}>
-          <Link href="#" underline='none' className={classes.link}> Саванна </Link>
-          <Link href="#" underline='none' className={classes.link}> Аудиовызов </Link>
-          <Link href="#" underline='none' className={classes.link}> Спринт </Link>
-          <Link href="#" underline='none' className={classes.link}> Своя игра </Link>
+          <Link href="#/games/savannah" underline='none' className={classes.link}> Саванна </Link>
+          <Link href="#/games/audiocall" underline='none' className={classes.link}> Аудиовызов </Link>
+          <Link href="#/games/sprint" underline='none' className={classes.link}> Спринт </Link>
+          <Link href="#/games/ourgame" underline='none' className={classes.link}> Своя игра </Link>
         </Box>
       </Container>
     </Grid>

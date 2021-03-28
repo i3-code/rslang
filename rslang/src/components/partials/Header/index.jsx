@@ -34,6 +34,7 @@ import useStyles from './styles';
 const mainIcons = {
   '/': ['Главная', <HomeIcon />],
   '/book': ['Учебник', <LibraryBooksIcon />],
+  '/page': ['Учебник', <LibraryBooksIcon />],
   '/games': ['Игры', <SportsEsportsIcon />],
   '/stats': ['Статистика', <AssessmentIcon />],
 };
@@ -45,7 +46,7 @@ const additionalIcons = {
 
 const getNameByPath = (path) => {
   const name = path.slice(0, path.lastIndexOf('/')) || path;
-  return path === '/page' ? ['Учебник'] : mainIcons[name] || additionalIcons[name] || ['404'];
+  return mainIcons[name] || additionalIcons[name] || ['404'];
 };
 
 export default function Header() {

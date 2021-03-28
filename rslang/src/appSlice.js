@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const storageInfoWords = localStorage.getItem('words') ? JSON.parse(localStorage.getItem('words'))
+: {deletedWords: {}, hardWords: {}}
+
 export const appSlice = createSlice({
   name: 'app',
   initialState: {
-    deletedWords: {},
-    hardWords: {},
+    deletedWords: storageInfoWords.deletedWords,
+    hardWords: storageInfoWords.hardWords,
   },
   reducers: {
     setDeletedWords: (state, action) => {
