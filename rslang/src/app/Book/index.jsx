@@ -17,7 +17,7 @@ const cardsArray = [
   return (
     <Container >
       <Grid container direction="row" justify="space-evenly" alignItems="center" >
-        {cardsArray.map((card, i) => (
+        {cardsArray.map((card) => (
           <Card key={card.name} desc="600 слов" {...card} />
         ))}
       </Grid>

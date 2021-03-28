@@ -1,17 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
-
-const theme = createMuiTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 730,
-      md: 1080,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
-})
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   hard: {
-    boxShadow: '0px 0px 21px 2px rgba(254, 0, 0, 0.2) inset'
+    boxShadow: '0px 0px 21px 2px rgba(254, 0, 0, 0.2) inset',
   },
   media: {
     width: 120,
@@ -57,12 +44,12 @@ const useStyles = makeStyles((theme) => ({
   },
   word: {
     fontWeight: 900,
-    color: 'blue'
+    color: 'blue',
   },
   bottomLine: {
     marginBottom: 6,
   },
-  text:{
+  text: {
     [theme.breakpoints.down('md')]: {
       fontSize: '14px',
     },
@@ -73,25 +60,23 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   blue: {
-    border: '2px solid #4099ff'
+    border: '2px solid #4099ff',
   },
   turquoise: {
-    border: '2px solid #2ed8b6'
+    border: '2px solid #2ed8b6',
   },
   orange: {
-    border: '2px solid #FFB64D'
+    border: '2px solid #FFB64D',
   },
   pink: {
-    border: '2px solid #FF5370'
+    border: '2px solid #FF5370',
   },
   violet: {
-    border: '2px solid #C882E2'
+    border: '2px solid #C882E2',
   },
   yellow: {
-    border: '2px solid #F9F53E'
+    border: '2px solid #F9F53E',
   },
-
-  })
-);
+}));
 
 export default useStyles;

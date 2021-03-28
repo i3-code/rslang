@@ -8,18 +8,17 @@ import useStyles from './style';
 import { useDispatch } from 'react-redux';
 import { setPage } from '../bookSlice';
 
-const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20'))
-: {page: 0, group: 0}
+const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20')) : { page: 0, group: 0 };
 
-export default function Section() {
+export default function Section(props) {
+  const group = +props?.match?.params?.group - 1 || 0;
   const classes = useStyles();
   const dispatch = useDispatch();
-  console.log(storageInfo)
 
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
-        <Page />
+        <Page group={group} />
         <Pagination
          count={30}
          variant="outlined"

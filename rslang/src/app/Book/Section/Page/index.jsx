@@ -5,23 +5,28 @@ import { Grid } from '@material-ui/core';
 import Word from './Word';
 import { useSelector } from 'react-redux';
 import { deletedWords } from '../../../../appSlice';
-import { page, group } from '../../bookSlice';
+import { page } from '../../bookSlice';
 
-export default function Page() {
+export default function Page({group}) {
   const [words, setWords] = useState(null);
 
   const deletedWordsList = useSelector(deletedWords);
   const pageNum = useSelector(page);
-  const groupNum = useSelector(group);
+  const groupNum = useState(group);
 
   const filterFunk = (id) => {
     return !deletedWordsList[pageNum] ? true : (!deletedWordsList[pageNum].includes(id))
   }
 
   useEffect(() => {
-    axios
+    const fetchData = async () => {
+      axios
       .get(`https://react-rslang.herokuapp.com/words?group=${groupNum}&page=${pageNum}`)
       .then((response) => setWords(response.data))
+      .catch((error) => console.log(error));
+    };
+
+    fetchData();
   },[groupNum, pageNum])
 
   return (

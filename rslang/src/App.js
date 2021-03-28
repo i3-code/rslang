@@ -21,7 +21,7 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route path="/book/:page" component={Section} />
+            <Route path="/book/:group" component={Section} />
             <Route path="/book">
               <Book />
             </Route>
