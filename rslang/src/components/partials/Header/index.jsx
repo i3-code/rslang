@@ -34,7 +34,6 @@ import useStyles from './styles';
 const mainIcons = {
   '/': ['Главная', <HomeIcon />],
   '/book': ['Учебник', <LibraryBooksIcon />],
-  '/page': ['Учебник', <LibraryBooksIcon />],
   '/games': ['Игры', <SportsEsportsIcon />],
   '/stats': ['Статистика', <AssessmentIcon />],
 };

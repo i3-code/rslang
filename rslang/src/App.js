@@ -21,10 +21,10 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
+            <Route path="/book/:page" component={Section} />
             <Route path="/book">
               <Book />
             </Route>
-            <Route path="/page" component={Section}/>
             <Route path="/games/:game" component={Games} />
             <Route path="/games">
               <Games />

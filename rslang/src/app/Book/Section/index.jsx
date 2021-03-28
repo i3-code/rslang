@@ -11,8 +11,6 @@ import { setPage } from '../bookSlice';
 const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20'))
 : {page: 0, group: 0}
 
-
-
 export default function Section() {
   const classes = useStyles();
   const dispatch = useDispatch();
