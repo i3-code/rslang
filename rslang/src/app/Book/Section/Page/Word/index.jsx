@@ -28,25 +28,27 @@ export default function Word({currentWord}) {
     return {__html: text};
   }
 
+  const [playExample] = useSound(
+    `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audioExample}`,
+  );
+
   const [playMeaning] = useSound(
     `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audioMeaning}`, {
       onend: () => {
-        playExample()
+        setTimeout(playExample, 1000);
       },
     }
-  )
+  );
 
-  const [playActive] = useSound(
+  const [playActive, audioData] = useSound(
     `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audio}`, {
       onend: () => {
-        playMeaning()
+        const {isPlaying, stop} = audioData;
+        if (isPlaying) stop();
+        setTimeout(playMeaning, 1000);
       }
     },
-  )
-
-  const [playExample] = useSound(
-    `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audioExample}`,
-  )
+  );
 
   const isHard = () => {
     return (hardWordsList[pageNum] && hardWordsList[pageNum].includes(id))
