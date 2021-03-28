@@ -1,35 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Container, Grid, Box, Link } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
+
+import Loading from '../../../components/partials/Loading';
 
 import Page from './Page';
 import useStyles from './style';
 
-import { useDispatch } from 'react-redux';
-import { setPage } from '../bookSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { page, setPage } from '../bookSlice';
 
 const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20')) : { page: 0, group: 0 };
 
 export default function Section(props) {
-  const group = +props?.match?.params?.group - 1 || 0;
-  const classes = useStyles();
+  const group = props?.match?.params?.group  || 0;
+  const [pageNum, setPageNum] = useState(useSelector(page) || 1);
+  const [loading, setLoading] = useState(true);
+  const [words, setWords] = useState(null);
   const dispatch = useDispatch();
+
+  const classes = useStyles();
+
+  const handleChange = (event, value) => {
+    setLoading(true);
+    setPageNum(value);
+    storageInfo.page = value;
+    localStorage.setItem('rslang20', JSON.stringify(storageInfo));
+    dispatch(setPage({pageNum: value}))
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      axios
+      .get(`https://react-rslang.herokuapp.com/words?group=${group}&page=${pageNum - 1}`)
+      .then((response) => {
+        setWords(response.data);
+        setLoading(false);
+      })
+      .catch((error) => console.log(error));
+    };
+
+    fetchData();
+  },[group, pageNum])
+
 
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
-        <Page group={group} />
+        { (loading) ? <Loading /> : <Page words={words} /> }
         <Pagination
          count={30}
          variant="outlined"
          color="primary"
          size="large"
-         defaultPage={storageInfo.page + 1}
-         onChange={(e)=> {
-          storageInfo.page = +e.target.innerText - 1
-          localStorage.setItem('rslang20', JSON.stringify(storageInfo))
-           dispatch(setPage({numberPage: +e.target.innerText - 1}))}
-         }
+         page={pageNum}
+         onChange={handleChange}
+         showFirstButton
+         showLastButton
          className={classes.pagination}
         />
         <Box className={classes.linkwrapper}>
