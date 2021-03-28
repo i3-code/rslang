@@ -5,6 +5,7 @@ import Loading from './components/partials/Loading';
 
 import Home from './app/Home';
 import Book from './app/Book';
+import Section from './app/Book/Section';
 import Games from './app/Games';
 import Stats from './app/Stats';
 import Settings from './app/Settings';
@@ -20,6 +21,7 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
+            <Route path="/book/:group" component={Section} />
             <Route path="/book">
               <Book />
             </Route>
