@@ -1,33 +1,101 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+
+import useStyles from './styles';
+import Card1 from '../../components/partials/Card';
+
+import { Grid, Typography, Card, CardContent, CardMedia, Box } from '@material-ui/core';
 
 export default function Home() {
+  const classes = useStyles();
+  const cardsArray = [
+    {
+      img: './images/games/savannah.jpg',
+      name: 'Саванна',
+      background: 'linear-gradient(45deg,#F9F53E,#FBF969)',
+    },
+    {
+      img: './images/games/audiocall.jpg',
+      name: 'Аудиовызов',
+      background: 'linear-gradient(45deg,#4099ff,#73b4ff)',
+    },
+    {
+      img: './images/games/sprint.jpg',
+      name: 'Спринт',
+      background: 'linear-gradient(45deg,#FF5370,#ff869a)',
+    },
+    {
+      img: './images/4.jpg',
+      name: 'Своя игра',
+      background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
+    },
+  ];
   return (
-    <div>
-      <Typography variant="h4">Home</Typography>
-      <Typography paragraph>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-        ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-        facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-        gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-        donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-        adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-        Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-        imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-        arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-        donec massa sapien faucibus et molestie ac.
-      </Typography>
-      <Typography paragraph>
-        Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-        facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-        tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-        consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-        vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-        hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-        tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-        nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-        accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-      </Typography>
-    </div>
+    <Grid container direction="column" alignItems="center">
+      <Card className={classes.start}>
+        <CardContent>
+          <Typography paragraph className={classes.content}>
+            Прокачай английский в онлайн-школе RS School
+          </Typography>
+        </CardContent>
+        <CardMedia className={classes.cover} image="./images/mainPage/mainPage.jpg" title="Learning English" />
+      </Card>
+      <Box mt={10}  className={classes.advantage}>
+        Мы создали это приложение для всех, кто хочет знать английский язык. Здесь есть все необходимое для того, чтобы
+        изучать английские слова онлайн: мини-игры, электронный учебник, отслеживания индивидуального прогресса.
+      </Box>
+      <Box mt={10} className={classes.container}>
+        <Typography paragraph className={classes.title}>
+          Игры
+        </Typography>
+        <Typography paragraph className={classes.description}>
+          С помощью игр слова запоминаются быстро и легко
+        </Typography>
+        <Grid container direction="row" justify="space-evenly" alignItems="center">
+          {cardsArray.map((card) => (
+            <Card1 key={card.name} {...card} />
+          ))}
+        </Grid>
+      </Box>
+      <Box mt={10} className={classes.container}>
+        <Card className={classes.book}>
+          <CardContent>
+            <Typography paragraph className={classes.title}>
+              Электронный учебник
+            </Typography>
+            <Typography paragraph className={classes.description}>
+              Поможет увеличить словарный запас или вспомнить забытые слова
+            </Typography>
+          </CardContent>
+          <CardMedia className={classes.bookImg} image="./images/mainPage/book.png" title="Book" />
+        </Card>
+      </Box>
+      <Box mt={10} className={classes.container}>
+        <Card className={classes.book}>
+          <CardContent>
+            <Typography paragraph className={classes.title}>
+              Статистика прогресса
+            </Typography>
+            <Typography paragraph className={classes.description}>
+              На странице статистики отображается краткосрочная статистика по результатам каждого дня и долгосрочная
+              статистика за весь период изучения
+            </Typography>
+          </CardContent>
+          <CardMedia className={classes.cover} image="./images/mainPage/statistic.png" title="Book" />
+        </Card>
+      </Box>
+      <Box mt={10} className={classes.container}>
+        <Card className={classes.book}>
+          <CardContent>
+            <Typography paragraph className={classes.title}>
+              Видео
+            </Typography>
+            <Typography paragraph className={classes.description}>
+              Как пользоваться приложением
+            </Typography>
+          </CardContent>
+          <CardMedia className={classes.cover} image="./images/mainPage/statistic.png" title="Book" />
+        </Card>
+      </Box>
+    </Grid>
   );
 }
