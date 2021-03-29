@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,13 +9,14 @@ import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tool
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import urls from '../../../../../constants/urls';
+
 const storageInfoWords = localStorage.getItem('words') ? JSON.parse(localStorage.getItem('words'))
 : {deletedWords: {}, hardWords: {}}
 
 export default function Word({currentWord}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate} = currentWord;
-  const classes = useStyles();
 
   const dispatch = useDispatch();
   const hardWordsList = useSelector(hardWords);
@@ -24,34 +25,67 @@ export default function Word({currentWord}) {
   const groupNum = useSelector(group);
   const showActions = useSelector(displayActions);
 
+  const classes = useStyles();
+
+  const [isAudio, setIsAudio] = useState(false);
+  const [isAudioMeaning, setIsAudioMeaning] = useState(false);
+  const [isAudioExample, setIsAudioExample] = useState(false);
+
+  const soundPrefix = urls.base;
+  const [playAudioExample, playAudioExampleData] = useSound(`${soundPrefix}/${audioExample}`);
+  const [playAudioMeaning, playAudioMeaningData] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
+  const [playAudio, playAudioData] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
+
+
+  useEffect(() => {
+    const { isPlaying, stop } = playAudioData;
+    if (isAudio) {
+      if (isPlaying) stop();
+      playAudio();
+      setIsAudio(false);
+    }
+
+    return () => {
+      if (isPlaying) stop();
+    };
+  }, [isAudio, playAudio, playAudioData]);
+
+  useEffect(() => {
+    const { isPlaying, stop } = playAudioMeaningData;
+    if (isAudioMeaning) {
+      if (isPlaying) stop();
+      playAudioMeaning();
+      setIsAudioMeaning(false);
+    }
+
+    return () => {
+      if (isPlaying) stop();
+    };
+  }, [isAudioMeaning, playAudioMeaning, playAudioMeaningData]);
+
+  useEffect(() => {
+    const { isPlaying, stop } = playAudioExampleData;
+    if (isAudioExample) {
+      if (isPlaying) stop();
+      playAudioExample();
+      setIsAudioExample(false);
+    }
+
+    return () => {
+      if (isPlaying) stop();
+    };
+  }, [isAudioExample, playAudioExample, playAudioExampleData]);
+
+  const handleAudio = () => {
+    setIsAudio(true);
+  }
+
   const createMarkup = (text) => {
     return {__html: text};
   }
 
-  const [playExample] = useSound(
-    `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audioExample}`,
-  );
-
-  const [playMeaning] = useSound(
-    `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audioMeaning}`, {
-      onend: () => {
-        setTimeout(playExample, 1000);
-      },
-    }
-  );
-
-  const [playActive, audioData] = useSound(
-    `https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${audio}`, {
-      onend: () => {
-        const {isPlaying, stop} = audioData;
-        if (isPlaying) stop();
-        setTimeout(playMeaning, 1000);
-      }
-    },
-  );
-
   const isHard = () => {
-    return (hardWordsList[pageNum] && hardWordsList[pageNum].includes(id))
+    return (hardWordsList[pageNum] && hardWordsList[pageNum].includes(id));
   }
 
   const borderColor = {
@@ -76,7 +110,7 @@ export default function Word({currentWord}) {
             <span>{` ${transcription} `}</span>
             {showTranslation && <span>{wordTranslate}</span>}
             <Tooltip title="Звук">
-              <IconButton display="inline" onClick={playActive}>
+              <IconButton display="inline" onClick={handleAudio}>
                 <VolumeDownIcon />
               </IconButton>
             </Tooltip>
