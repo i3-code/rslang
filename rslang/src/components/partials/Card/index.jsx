@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useStyles from './styles';
 
-import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,7 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-export default function CountryCard({ name, desc = '', img, background, link = ''}) {
+export default function CountryCard({ name, desc = '', img, background, link = '' }) {
   const classes = useStyles();
 
   return (
