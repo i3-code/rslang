@@ -12,25 +12,21 @@ export default function Home() {
       img: './images/games/savannah.jpg',
       name: 'Саванна',
       background: 'linear-gradient(45deg,#F9F53E,#FBF969)',
-      toLink: false,
     },
     {
       img: './images/games/audiocall.jpg',
       name: 'Аудиовызов',
       background: 'linear-gradient(45deg,#4099ff,#73b4ff)',
-      toLink: false,
     },
     {
       img: './images/games/sprint.jpg',
       name: 'Спринт',
       background: 'linear-gradient(45deg,#FF5370,#ff869a)',
-      toLink: false,
     },
     {
       img: './images/4.jpg',
       name: 'Своя игра',
       background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
-      toLink: false,
     },
   ];
   return (
