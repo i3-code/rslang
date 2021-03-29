@@ -7,7 +7,13 @@ const urls = {
     login: `${baseUrl}/signin`,
     whoAmI: `${baseUrl}/users/whoAmI`,
   },
-  words: `${baseUrl}/words`,
+  words: {
+    all: `${baseUrl}/words`,
+    byId: (wordId) => (userId) => `${baseUrl}/users/${userId}/words/${wordId}`,
+  },
+  aggregatedWords: {
+    all: (userId) => `${baseUrl}/users/${userId}/aggregatedWords`,
+  },
 };
 
 export default urls;
