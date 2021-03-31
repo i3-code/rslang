@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
+import {setHardWords, setDeletedWords, setInactivePagination, hardWords } from '../../../../../redux/appSlice';
 import { translate, controls } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
@@ -20,7 +20,7 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, groupNum}) {
+export default function Word({currentWord, groupNum, pageNum, wordsOnPage}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate} = currentWord;
 
@@ -86,9 +86,16 @@ export default function Word({currentWord, groupNum}) {
     return {__html: text};
   }
 
+  const checkNumberOfWordsOnPage = () => {
+    if (wordsOnPage === 1) {
+      dispatch(setInactivePagination({groupNum, pageNum}))
+    }
+
+  }
+
   const isHard = () => hardWordsList[groupNum].includes(id);
   const handleHard = () => dispatch(setHardWords({groupNum, id}));
-  const handleDeleted = () => dispatch(setDeletedWords({groupNum, id}));
+  const handleDeleted = () => { dispatch(setDeletedWords({groupNum, id})); checkNumberOfWordsOnPage() };
 
 
   return (

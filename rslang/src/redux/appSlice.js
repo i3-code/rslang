@@ -22,6 +22,14 @@ const initialState = localStorage.getItem(saveName)
         4: [],
         5: [],
       },
+      inactivePagination: {
+        0: [],
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+        5: [],
+      }
     };
 
 export const appSlice = createSlice({
@@ -42,12 +50,20 @@ export const appSlice = createSlice({
       if (!wordsArray.includes(id)) wordsArray.push(id);
       saveState(saveName, newState);
     },
+    setInactivePagination: (state, action) => {
+      const { groupNum, pageNum } = action.payload;
+      const newState = { ...state };
+      const paginationArray = newState.inactivePagination[groupNum];
+      if (!paginationArray.includes(pageNum)) paginationArray.push(pageNum);
+      saveState(saveName, newState);
+    }
   },
 });
 
-export const { setDeletedWords, setHardWords } = appSlice.actions;
+export const { setDeletedWords, setHardWords, setInactivePagination } = appSlice.actions;
 
 export const deletedWords = (state) => state.app.deletedWords;
 export const hardWords = (state) => state.app.hardWords;
+export const inactivePagination = (state) => state.app.inactivePagination;
 
 export default appSlice.reducer;
