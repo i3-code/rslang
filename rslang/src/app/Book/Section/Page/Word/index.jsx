@@ -3,7 +3,7 @@ import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
 import {setHardWords, setDeletedWords, hardWords } from '../../../../../appSlice';
-import { translation, page, group, displayActions } from '../../../bookSlice';
+import { translation, page, displayActions } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
@@ -11,10 +11,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import urls from '../../../../../constants/urls';
 
-const storageInfoWords = localStorage.getItem('words') ? JSON.parse(localStorage.getItem('words'))
-: {deletedWords: {}, hardWords: {}}
+const borderColor = {
+  0: 'blue',
+  1: 'turquoise',
+  2: 'orange',
+  3: 'pink',
+  4: 'violet',
+  5: 'yellow',
+};
 
-export default function Word({currentWord}) {
+export default function Word({currentWord, groupNum}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate} = currentWord;
 
@@ -22,7 +28,6 @@ export default function Word({currentWord}) {
   const hardWordsList = useSelector(hardWords);
   const showTranslation = useSelector(translation);
   const pageNum = useSelector(page);
-  const groupNum = useSelector(group);
   const showActions = useSelector(displayActions);
 
   const classes = useStyles();
@@ -76,26 +81,16 @@ export default function Word({currentWord}) {
     };
   }, [isAudioExample, playAudioExample, playAudioExampleData]);
 
-  const handleAudio = () => {
-    setIsAudio(true);
-  }
+  const handleAudio = () => setIsAudio(true);
 
   const createMarkup = (text) => {
     return {__html: text};
   }
 
-  const isHard = () => {
-    return (hardWordsList[pageNum] && hardWordsList[pageNum].includes(id));
-  }
+  const isHard = () => hardWordsList[groupNum].includes(id);
+  const handleHard = () => dispatch(setHardWords({groupNum, id}));
+  const handleDeleted = () => dispatch(setDeletedWords({groupNum, id}));
 
-  const borderColor = {
-    0: 'blue',
-    1: 'turquoise',
-    2: 'orange',
-    3: 'pink',
-    4: 'violet',
-    5: 'yellow',
-  }
 
   return (
     <Card className={`${classes.root} ${ isHard() ? classes.hard : ''} ${classes[borderColor[groupNum]]}`}>
@@ -127,22 +122,12 @@ export default function Word({currentWord}) {
           {showActions &&
            <CardActions disableSpacing>
             <Tooltip title="В сложные">
-              <IconButton onClick={()=> {
-                storageInfoWords.hardWords[pageNum] ? storageInfoWords.hardWords[pageNum].push(id)
-                : storageInfoWords.hardWords[pageNum] = [id]
-                localStorage.setItem('words', JSON.stringify(storageInfoWords))
-                dispatch(setHardWords({pageNum, id}))
-                }}>
+              <IconButton onClick={handleHard}>
               <img src="https://img.icons8.com/material/24/000000/learning.png" alt='В сложные'/>
               </IconButton>
             </Tooltip>
             <Tooltip title="Удалить">
-              <IconButton onClick={ () => {
-                storageInfoWords.deletedWords[pageNum] ? storageInfoWords.deletedWords[pageNum].push(id)
-                : storageInfoWords.deletedWords[pageNum] = [id]
-                localStorage.setItem('words', JSON.stringify(storageInfoWords))
-                dispatch(setDeletedWords({pageNum, id}))
-              }}>
+              <IconButton onClick={handleDeleted}>
                 <DeleteIcon />
               </IconButton>
             </Tooltip>

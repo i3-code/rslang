@@ -8,13 +8,15 @@ import Loading from '../../../components/partials/Loading';
 import Page from './Page';
 import useStyles from './style';
 
+import urls from '../../../constants/urls';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { page, setPage } from '../bookSlice';
 
 const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20')) : { page: 0, group: 0 };
 
 export default function Section(props) {
-  const group = props?.match?.params?.group  || 0;
+  const groupNum = props?.match?.params?.group  || 0;
   const [pageNum, setPageNum] = useState(useSelector(page) || 1);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
@@ -34,7 +36,7 @@ export default function Section(props) {
   useEffect(() => {
     const fetchData = async () => {
       axios
-      .get(`https://react-rslang.herokuapp.com/words?group=${group}&page=${pageNum - 1}`)
+      .get(`${urls.words}?group=${groupNum}&page=${pageNum - 1}`)
       .then((response) => {
         setWords(response.data);
         setLoading(false);
@@ -43,13 +45,13 @@ export default function Section(props) {
     };
 
     fetchData();
-  },[group, pageNum])
+  },[groupNum, pageNum])
 
 
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
-        { (loading) ? <Loading /> : <Page words={words} /> }
+        { (loading) ? <Loading /> : <Page {...{words, groupNum, pageNum}} /> }
         <Pagination
          count={30}
          variant="outlined"

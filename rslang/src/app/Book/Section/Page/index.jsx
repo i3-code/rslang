@@ -6,17 +6,17 @@ import Word from './Word';
 import { useSelector } from 'react-redux';
 import { deletedWords } from '../../../../appSlice';
 
-export default function Page({words, pageNum}) {
+export default function Page({words, groupNum, pageNum}) {
   const deletedWordsList = useSelector(deletedWords);
 
-  const filterFunk = (id) => {
-    return !deletedWordsList[pageNum] ? true : (!deletedWordsList[pageNum].includes(id))
+  const filterFunc = (id) => {
+    return !deletedWordsList[groupNum].includes(id);
   }
 
   return (
     <Grid>
-      { words && words.filter((word)=> filterFunk(word.id))
-        .map((word) => <Word currentWord={word} key={word.id}/>)
+      { words && words.filter((word) => filterFunc(word.id))
+        .map((word) => <Word currentWord={word} groupNum={groupNum} key={word.id}/>)
       }
     </Grid>
   );
