@@ -3,7 +3,7 @@ import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
 import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
-import { translation, displayActions } from '../../../bookSlice';
+import { translate, controls } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
@@ -26,8 +26,8 @@ export default function Word({currentWord, groupNum}) {
 
   const dispatch = useDispatch();
   const hardWordsList = useSelector(hardWords);
-  const showTranslation = useSelector(translation);
-  const showActions = useSelector(displayActions);
+  const showTranslate = useSelector(translate);
+  const showControls = useSelector(controls);
 
   const classes = useStyles();
 
@@ -102,7 +102,7 @@ export default function Word({currentWord, groupNum}) {
           <Typography className={classes.text}>
             <span className={classes.word}>{word}</span>
             <span>{` ${transcription} `}</span>
-            {showTranslation && <span>{wordTranslate}</span>}
+            {showTranslate && <span>{wordTranslate}</span>}
             <Tooltip title="Озвучить">
               <IconButton display="inline" onClick={handleAudio}>
                 <VolumeDownIcon />
@@ -111,14 +111,14 @@ export default function Word({currentWord, groupNum}) {
           </Typography>
 
           <Typography dangerouslySetInnerHTML={createMarkup(textMeaning)} className={classes.text}></Typography>
-          {showTranslation && <Typography className={`${classes.bottomLine} ${classes.text}`}>{textMeaningTranslate}</Typography>}
+          {showTranslate && <Typography className={`${classes.bottomLine} ${classes.text}`}>{textMeaningTranslate}</Typography>}
 
           <Typography dangerouslySetInnerHTML={createMarkup(textExample)} className={classes.text}></Typography>
-          {showTranslation && <Typography className={classes.text}>{textExampleTranslate}</Typography>}
+          {showTranslate && <Typography className={classes.text}>{textExampleTranslate}</Typography>}
         </CardContent>
 
         <div className={classes.actionsWrapper}>
-          {showActions &&
+          {showControls &&
            <CardActions disableSpacing>
             <Tooltip title="В сложные">
               <IconButton onClick={handleHard}>

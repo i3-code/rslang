@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Container, Grid, Box, Link } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
@@ -10,10 +11,7 @@ import useStyles from './style';
 
 import urls from '../../../constants/urls';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { page, setPage } from '../bookSlice';
-
-const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20')) : { page: 0, group: 0 };
 
 export default function Section(props) {
   const groupNum = props?.match?.params?.group  || 0;
@@ -28,8 +26,6 @@ export default function Section(props) {
     if (pageNum === value) return;
     setLoading(true);
     setPageNum(value);
-    storageInfo.page = value;
-    localStorage.setItem('rslang20', JSON.stringify(storageInfo));
     dispatch(setPage({pageNum: value}))
   };
 
