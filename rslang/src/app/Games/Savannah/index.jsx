@@ -38,7 +38,7 @@ export default function Savannah() {
 
   useEffect(() => {
     (async () => {
-      await dispatch(fetchWordsForQuiz(urls.words));
+      await dispatch(fetchWordsForQuiz(urls.words.all));
     })();
   }, [statistics, dispatch]);
 
