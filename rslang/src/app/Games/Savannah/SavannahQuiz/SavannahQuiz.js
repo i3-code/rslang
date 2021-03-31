@@ -1,12 +1,20 @@
 import './SavannahQuiz.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { nextRound, selectGuardAllowed, selectQuestionNumber, selectQuiz, setAnswer } from '../savannahSlice';
+import {
+  nextRound,
+  selectDuration,
+  selectGuardAllowed,
+  selectQuestionNumber,
+  selectQuiz,
+  setAnswer,
+} from '../savannahSlice';
 import GuardBoard from '../../components/GuardBoard/GuardBoard';
 
 const SavannahQuiz = () => {
   const questionNumber = useSelector(selectQuestionNumber);
   const quiz = useSelector(selectQuiz);
   const guardAllowed = useSelector(selectGuardAllowed);
+  const duration = useSelector(selectDuration);
   const dispatch = useDispatch();
 
   return (
@@ -25,7 +33,7 @@ const SavannahQuiz = () => {
               dispatch(setAnswer({ answer, questionNumber, index }));
               setTimeout(() => {
                 dispatch(nextRound());
-              }, 2000);
+              }, duration);
             }}
           >
             {index + 1}. {answer}

@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
-import { setAnswerAnimation } from '../components/AnswerAnimation/AnswerAnimation';
-import { playAnswerSound } from '../components/AnswerSound/AnswerSound';
-
-const checkContainAnswerArray = (array, question) => {
-  return array.map((el) => el.question).indexOf(question) === -1;
-};
+import { setAnswerAnimation } from '../../../functions/games/answerAnimation';
+import { playAnswerSound } from '../../../functions/games/answerSound';
+import { checkContainAnswerArray } from '../../../functions/games/answerContain';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
   initialState: {
+    duration: 1000,
     timer: 0,
     result: 0,
     loading: true,
@@ -66,15 +64,15 @@ export const savannahSlice = createSlice({
           state.rightAnswers.push(quiz);
         }
         playAnswerSound(true);
-        setAnswerAnimation('game-answer', action.payload.index, 'right-answer');
-        setAnswerAnimation('game-question-wrapper', 0, 'finished');
+        setAnswerAnimation('game-answer', action.payload.index, 'right-answer', state.duration);
+        setAnswerAnimation('game-question-wrapper', 0, 'finished', state.duration);
       } else {
         if (checkContainAnswerArray(state.wrongAnswers, quiz.question)) {
           state.wrongAnswers.push(quiz);
         }
         playAnswerSound(false);
-        setAnswerAnimation('game-answer', action.payload.index, 'wrong-answer');
-        setAnswerAnimation('game-answer', quiz.answers.indexOf(quiz.rightAnswer), 'right-answer');
+        setAnswerAnimation('game-answer', action.payload.index, 'wrong-answer', state.duration);
+        setAnswerAnimation('game-answer', quiz.answers.indexOf(quiz.rightAnswer), 'right-answer', state.duration);
       }
     },
     restartGame: (state) => {
@@ -102,6 +100,7 @@ export const selectStatistics = (state) => state.savannahGame.statistics;
 export const selectRightAnswers = (state) => state.savannahGame.rightAnswers;
 export const selectWrongAnswers = (state) => state.savannahGame.wrongAnswers;
 export const selectGuardAllowed = (state) => state.savannahGame.guardAllowed;
+export const selectDuration = (state) => state.savannahGame.duration;
 
 export const {
   incrementTimer,
