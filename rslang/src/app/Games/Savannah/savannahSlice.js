@@ -4,6 +4,10 @@ import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../func
 import { setAnswerAnimation } from '../components/AnswerAnimation/AnswerAnimation';
 import { playAnswerSound } from '../components/AnswerSound/AnswerSound';
 
+const checkContainAnswerArray = (array, question) => {
+  return array.map((el) => el.question).indexOf(question) === -1;
+};
+
 export const savannahSlice = createSlice({
   name: 'savannahGame',
   initialState: {
@@ -58,12 +62,16 @@ export const savannahSlice = createSlice({
       const quiz = state.quiz[action.payload.questionNumber];
       if (quiz.rightAnswer === action.payload.answer) {
         quiz.status = true;
-        state.rightAnswers.push(quiz);
+        if (checkContainAnswerArray(state.rightAnswers, quiz.question)) {
+          state.rightAnswers.push(quiz);
+        }
         playAnswerSound(true);
         setAnswerAnimation('game-answer', action.payload.index, 'right-answer');
         setAnswerAnimation('game-question-wrapper', 0, 'finished');
       } else {
-        state.wrongAnswers.push(quiz);
+        if (checkContainAnswerArray(state.wrongAnswers, quiz.question)) {
+          state.wrongAnswers.push(quiz);
+        }
         playAnswerSound(false);
         setAnswerAnimation('game-answer', action.payload.index, 'wrong-answer');
         setAnswerAnimation('game-answer', quiz.answers.indexOf(quiz.rightAnswer), 'right-answer');
@@ -76,7 +84,9 @@ export const savannahSlice = createSlice({
       state.start = true;
     },
     timeFinished: (state) => {
-      state.wrongAnswers.push(state.quiz[state.questionNumber]);
+      if (checkContainAnswerArray(state.wrongAnswers, state.quiz[state.questionNumber].question)) {
+        state.wrongAnswers.push(state.quiz[state.questionNumber]);
+      }
       playAnswerSound(false);
     },
   },
