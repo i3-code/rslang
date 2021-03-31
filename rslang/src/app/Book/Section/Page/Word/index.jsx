@@ -101,7 +101,7 @@ export default function Word({currentWord}) {
     <Card className={`${classes.root} ${ isHard() ? classes.hard : ''} ${classes[borderColor[groupNum]]}`}>
       <CardMedia
         className={classes.media}
-        image={`https://raw.githubusercontent.com/i3-code/react-rslang-be/main/${image}`}
+        image={`${urls.base}/${image}`}
       />
       <div className={classes.contentWrapper}>
         <CardContent className={classes.content}>
