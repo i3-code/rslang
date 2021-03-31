@@ -3,6 +3,7 @@ import { Container, Grid } from '@material-ui/core';
 import Card from '../../components/partials/Card';
 import Savannah from './Savannah';
 import Sprint from './Sprint';
+import MyGame from './MyGame';
 
 const cardsArray = [
   {
@@ -25,15 +26,16 @@ const cardsArray = [
   },
   {
     img: './images/4.jpg',
-    name: 'Своя игра',
+    name: 'Сортировка',
     background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
-    link: '/games/ourgame',
+    link: '/games/sort',
   },
 ];
 
 const games = {
   savannah: <Savannah />,
   sprint: <Sprint />,
+  sort: <MyGame/>,
 };
 
 export default function Games(props) {
