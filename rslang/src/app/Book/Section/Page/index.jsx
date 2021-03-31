@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import Word from './Word';
 
 import { useSelector } from 'react-redux';
-import { deletedWords } from '../../../../appSlice';
+import { deletedWords } from '../../../../redux/appSlice';
 
 export default function Page({words, groupNum, pageNum}) {
   const deletedWordsList = useSelector(deletedWords);

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = localStorage.getItem('words')
-  ? JSON.parse(localStorage.getItem('words'))
+const initialState = localStorage.getItem('initialState')
+  ? JSON.parse(localStorage.getItem('initialState'))
   : {
       deletedWords: {
         0: [],

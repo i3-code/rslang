@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, hardWords } from '../../../../../appSlice';
-import { translation, page, displayActions } from '../../../bookSlice';
+import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
+import { translation, displayActions } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
@@ -27,7 +27,6 @@ export default function Word({currentWord, groupNum}) {
   const dispatch = useDispatch();
   const hardWordsList = useSelector(hardWords);
   const showTranslation = useSelector(translation);
-  const pageNum = useSelector(page);
   const showActions = useSelector(displayActions);
 
   const classes = useStyles();
