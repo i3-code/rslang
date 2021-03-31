@@ -1,14 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Box } from '@material-ui/core';
 import data from '../data-example';
 import Timer from '../../components/Timer';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { calculatePercentResult, shuffle } from '../../../../functions/math';
+import './styles.css';
 const dataShuffled = shuffle(data);
 const Streak = ({ streak }) => {
   return <div>Correct streak:{streak}</div>;
 };
 
 const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
+  const [showUI, setShowUI] = useState(true);
   const [scoreMultiplier, setScoreMultiplier] = useState(10);
   const [score, setScore] = useState(0);
   const [counter, setCounter] = useState(0);
@@ -23,9 +26,11 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
       const randomTranslate = dataShuffled[Math.floor(Math.random() * dataShuffled.length)].wordTranslate;
       const correctTranslate = dataShuffled[index].wordTranslate;
       const shownTranslate = Math.random() < 0.5 ? dataShuffled[index].wordTranslate : randomTranslate;
-      newWord = { typing, correctTranslate, shownTranslate };
+      const id = dataShuffled[index].id;
+      newWord = { typing, correctTranslate, shownTranslate, id };
+      setShowUI(false);
     } else {
-      newWord = { typing: null, correctTranslate: null, shownTranslate: null };
+      newWord = { typing: null, correctTranslate: null, shownTranslate: null, id: null };
       endGame();
     }
     return newWord;
@@ -79,8 +84,11 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
   }, [onGameEnd, setAnswersResults, correctAnswers, wrongAnswers, setResult]);
 
   useEffect(() => {
-    if (!gameEnded) setWord(generateNewWord(counter));
-  }, [setWord, counter, gameEnded]);
+    if (!gameEnded) {
+      setWord(generateNewWord(counter));
+      setShowUI(true);
+    }
+  }, [setWord, counter, gameEnded, setShowUI]);
 
   useEffect(() => {
     window.addEventListener('keydown', keyboardEvents);
@@ -90,7 +98,7 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
   }, [keyboardEvents]);
 
   const gameLayout = (
-    <Box>
+    <div className="sprint">
       Score: {score}
       <br />
       Words used: {counter}
@@ -98,13 +106,25 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
       timer: <Timer seconds={60} onTimerEnd={endGame} />
       <br />
       <Streak streak={streak} />
-      <h1>{word.typing}</h1>
-      <h2>{word.shownTranslate}</h2>
+      <div class="animation-wrap">
+        <TransitionGroup>
+          <CSSTransition key={word.id} timeout={500} classNames="slide">
+            <h1 class="sprint__word">{word.typing}</h1>
+          </CSSTransition>
+        </TransitionGroup>
+      </div>
+      <div class="animation-wrap">
+        <TransitionGroup>
+          <CSSTransition key={word.id} timeout={500} classNames="slide">
+            <h2 class="sprint__translation">{word.shownTranslate}</h2>
+          </CSSTransition>
+        </TransitionGroup>
+      </div>
       <div>
         <button onClick={() => checkAnswer(false)}>не верно</button>
         <button onClick={() => checkAnswer(true)}>верно</button>
       </div>
-    </Box>
+    </div>
   );
   return gameLayout;
 };

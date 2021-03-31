@@ -1,0 +1,42 @@
+.slide-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-enter-active {
+  transform: translateX(0%);
+  opacity: 1;
+  transition: opacity 0.5s, transform 0.5s;
+}
+.slide-exit {
+  top: 0;
+  position: absolute;
+  transform: translateX(0%);
+  opacity: 1;
+}
+.slide-exit-active {
+  top: 0;
+  position: absolute;
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.sprint {
+  overflow: hidden;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animation-wrap {
+  position: relative;
+}
+.animation-wrap-vertical {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
