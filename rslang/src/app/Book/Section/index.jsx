@@ -23,6 +23,7 @@ export default function Section(props) {
   const classes = useStyles();
 
   const handleChange = (event, value) => {
+    if (pageNum === value) return;
     setLoading(true);
     setPageNum(value);
     storageInfo.page = value;
