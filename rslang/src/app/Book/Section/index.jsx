@@ -32,7 +32,7 @@ export default function Section(props) {
   useEffect(() => {
     const fetchData = async () => {
       axios
-      .get(`${urls.words}?group=${groupNum}&page=${pageNum - 1}`)
+      .get(`${urls.words.all}?group=${groupNum}&page=${pageNum - 1}`)
       .then((response) => {
         setWords(response.data);
         setLoading(false);
