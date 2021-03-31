@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = localStorage.getItem('book')
-  ? JSON.parse(localStorage.getItem('book'))
+import saveState from '../../functions/saveState';
+
+const saveName = 'book';
+const initialState = localStorage.getItem(saveName)
+  ? JSON.parse(localStorage.getItem(saveName))
   : {
       translate: true,
       controls: true,
@@ -15,28 +18,22 @@ const initialState = localStorage.getItem('book')
       },
     };
 
-const saveState = (state) => {
-  const currentState = { ...state };
-  localStorage.setItem('book', JSON.stringify(currentState));
-};
-
 export const bookSlice = createSlice({
   name: 'book',
   initialState,
   reducers: {
     setTranslate: (state) => {
       state.translate = !state.translate;
-      saveState(state);
+      saveState(saveName, state);
     },
     setControls: (state) => {
       state.controls = !state.controls;
-      saveState(state);
+      saveState(saveName, state);
     },
     setPage: (state, action) => {
-      console.log(action);
       const { groupNum, pageNum } = action.payload;
       state.page[groupNum] = pageNum;
-      saveState(state);
+      saveState(saveName, state);
     },
   },
 });

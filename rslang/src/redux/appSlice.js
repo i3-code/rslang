@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = localStorage.getItem('app')
-  ? JSON.parse(localStorage.getItem('app'))
+import saveState from '../functions/saveState';
+
+const saveName = 'app';
+const initialState = localStorage.getItem(saveName)
+  ? JSON.parse(localStorage.getItem(saveName))
   : {
       deletedWords: {
         0: [],
@@ -30,12 +33,14 @@ export const appSlice = createSlice({
       const newState = { ...state };
       const wordsArray = newState.deletedWords[groupNum];
       if (!wordsArray.includes(id)) wordsArray.push(id);
+      saveState(saveName, newState);
     },
     setHardWords: (state, action) => {
       const { groupNum, id } = action.payload;
       const newState = { ...state };
       const wordsArray = newState.hardWords[groupNum];
       if (!wordsArray.includes(id)) wordsArray.push(id);
+      saveState(saveName, newState);
     },
   },
 });
