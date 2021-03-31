@@ -11,6 +11,7 @@ import Stats from './app/Stats';
 import Settings from './app/Settings';
 import About from './app/About';
 import Layout from './components/Layout';
+import { Examples } from './app/Examples';
 
 function App() {
   return (
@@ -37,6 +38,9 @@ function App() {
             </Route>
             <Route path="/about">
               <About />
+            </Route>
+            <Route path="/examples">
+              <Examples />
             </Route>
           </Switch>
         </Layout>
