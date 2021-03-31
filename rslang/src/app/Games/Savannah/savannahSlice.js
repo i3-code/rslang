@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
+import { setAnswerAnimation } from '../../../functions/games/answerAnimation';
+import { playAnswerSound } from '../../../functions/games/answerSound';
+import { checkContainAnswerArray } from '../../../functions/games/answerContain';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
   initialState: {
+    duration: 1000,
     timer: 0,
     result: 0,
     loading: true,
@@ -14,6 +18,7 @@ export const savannahSlice = createSlice({
     statistics: null,
     rightAnswers: [],
     wrongAnswers: [],
+    guardAllowed: true,
   },
   reducers: {
     incrementTimer: (state) => {
@@ -35,6 +40,7 @@ export const savannahSlice = createSlice({
       state.quiz = action.payload;
     },
     nextRound: (state) => {
+      state.guardAllowed = true;
       if (state.questionNumber >= state.quiz.length - 1) {
         state.result = calculatePercentResult(state.quiz.filter((q) => q.status).length, state.quiz.length);
         state.start = false;
@@ -50,11 +56,23 @@ export const savannahSlice = createSlice({
       }, 50);
     },
     setAnswer: (state, action) => {
-      if (state.quiz[action.payload.questionNumber].rightAnswer === action.payload.answer) {
-        state.quiz[action.payload.questionNumber].status = true;
-        state.rightAnswers.push(state.quiz[action.payload.questionNumber]);
+      state.guardAllowed = false;
+      const quiz = state.quiz[action.payload.questionNumber];
+      if (quiz.rightAnswer === action.payload.answer) {
+        quiz.status = true;
+        if (checkContainAnswerArray(state.rightAnswers, quiz.question)) {
+          state.rightAnswers.push(quiz);
+        }
+        playAnswerSound(true);
+        setAnswerAnimation('game-answer', action.payload.index, 'right-answer', state.duration);
+        setAnswerAnimation('game-question-wrapper', 0, 'finished', state.duration);
       } else {
-        state.wrongAnswers.push(state.quiz[action.payload.questionNumber]);
+        if (checkContainAnswerArray(state.wrongAnswers, quiz.question)) {
+          state.wrongAnswers.push(quiz);
+        }
+        playAnswerSound(false);
+        setAnswerAnimation('game-answer', action.payload.index, 'wrong-answer', state.duration);
+        setAnswerAnimation('game-answer', quiz.answers.indexOf(quiz.rightAnswer), 'right-answer', state.duration);
       }
     },
     restartGame: (state) => {
@@ -62,6 +80,12 @@ export const savannahSlice = createSlice({
       state.questionNumber = 0;
       state.statistics = null;
       state.start = true;
+    },
+    timeFinished: (state) => {
+      if (checkContainAnswerArray(state.wrongAnswers, state.quiz[state.questionNumber].question)) {
+        state.wrongAnswers.push(state.quiz[state.questionNumber]);
+      }
+      playAnswerSound(false);
     },
   },
 });
@@ -75,6 +99,8 @@ export const selectStart = (state) => state.savannahGame.start;
 export const selectStatistics = (state) => state.savannahGame.statistics;
 export const selectRightAnswers = (state) => state.savannahGame.rightAnswers;
 export const selectWrongAnswers = (state) => state.savannahGame.wrongAnswers;
+export const selectGuardAllowed = (state) => state.savannahGame.guardAllowed;
+export const selectDuration = (state) => state.savannahGame.duration;
 
 export const {
   incrementTimer,
@@ -86,6 +112,7 @@ export const {
   setAnswer,
   startGame,
   restartGame,
+  timeFinished,
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch) => {
