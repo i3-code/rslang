@@ -16,6 +16,7 @@ export const savannahSlice = createSlice({
     statistics: null,
     rightAnswers: [],
     wrongAnswers: [],
+    guardAllowed: true,
   },
   reducers: {
     incrementTimer: (state) => {
@@ -37,6 +38,7 @@ export const savannahSlice = createSlice({
       state.quiz = action.payload;
     },
     nextRound: (state) => {
+      state.guardAllowed = true;
       if (state.questionNumber >= state.quiz.length - 1) {
         state.result = calculatePercentResult(state.quiz.filter((q) => q.status).length, state.quiz.length);
         state.start = false;
@@ -52,6 +54,7 @@ export const savannahSlice = createSlice({
       }, 50);
     },
     setAnswer: (state, action) => {
+      state.guardAllowed = false;
       if (state.quiz[action.payload.questionNumber].rightAnswer === action.payload.answer) {
         state.quiz[action.payload.questionNumber].status = true;
         state.rightAnswers.push(state.quiz[action.payload.questionNumber]);
@@ -81,6 +84,7 @@ export const selectStart = (state) => state.savannahGame.start;
 export const selectStatistics = (state) => state.savannahGame.statistics;
 export const selectRightAnswers = (state) => state.savannahGame.rightAnswers;
 export const selectWrongAnswers = (state) => state.savannahGame.wrongAnswers;
+export const selectGuardAllowed = (state) => state.savannahGame.guardAllowed;
 
 export const {
   incrementTimer,
