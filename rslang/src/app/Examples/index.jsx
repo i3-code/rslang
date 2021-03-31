@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FormControl, Grid, IconButton, MenuItem, Select, Typography } from '@material-ui/core';
+import { Button, FormControl, Grid, IconButton, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../redux/userSlice';
 import { WordsService, WORD_STATS } from '../../services/words.service';
 import useStyles from './styles';
+import { UserService } from '../../services/user.service';
 
 export const Examples = () => {
   const classes = useStyles();
@@ -12,6 +13,8 @@ export const Examples = () => {
   const [words, setWords] = useState([]);
   const [userWords, setUserWords] = useState([]);
   const [difficulty, setDifficulty] = useState('easy');
+  const [winStreak, setWinStreak] = useState(0);
+  const [newWinStreak, setNewWinStreak] = useState(0);
 
   const getUserWords = async () => {
     try {
@@ -31,10 +34,15 @@ export const Examples = () => {
     }
   };
 
+  const getWinStreak = async () => {
+    setWinStreak(await UserService.getWinStreak());
+  };
+
   useEffect(() => {
     if (user) {
       getUserWords();
       getWords();
+      getWinStreak();
     }
   }, [user]);
 
@@ -45,10 +53,17 @@ export const Examples = () => {
   };
 
   const handleAddStat = async (wordId, stat) => {
-    await WordsService.addWordStat(wordId, stat);    
+    await WordsService.addWordStat(wordId, stat);
     getUserWords();
     getWords();
-  }
+  };
+
+  const handleWinStreakChange = (e) => setNewWinStreak(e.target.value);
+
+  const handleSetWinStreak = async () => {
+    await UserService.setWinStreak(newWinStreak);
+    getWinStreak();
+  };
 
   return (
     <Grid>
@@ -86,7 +101,7 @@ export const Examples = () => {
           ))}
         </Grid>
       </Grid>
-      <Grid>
+      <Grid className={classes.categoryContainer}>
         <Typography>Only user's words with userInfo</Typography>
         <Grid className={classes.wordsContainer}>
           {userWords.map((word) => (
@@ -99,13 +114,20 @@ export const Examples = () => {
                   <AddIcon />
                 </IconButton>
                 <Typography>Success: {word.userWord.optional.success || 0}</Typography>
-                <IconButton  onClick={() => handleAddStat(word._id, WORD_STATS.SUCCESS)}>
+                <IconButton onClick={() => handleAddStat(word._id, WORD_STATS.SUCCESS)}>
                   <AddIcon />
                 </IconButton>
               </Grid>
             </Grid>
           ))}
         </Grid>
+      </Grid>
+      <Grid className={classes.categoryContainer}>
+        <Typography>Win streak: {winStreak}</Typography>
+        <TextField value={newWinStreak} type="number" onChange={handleWinStreakChange} />
+        <Button onClick={handleSetWinStreak} color="primary" variant="contained">
+          Set new win streak
+        </Button>
       </Grid>
     </Grid>
   );

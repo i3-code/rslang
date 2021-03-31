@@ -15,6 +15,9 @@ const urls = {
     all: (userId) => `${baseUrl}/users/${userId}/aggregatedWords`,
     byId: (wordId) => (userId) => `${baseUrl}/users/${userId}/aggregatedWords/${wordId}`,
   },
+  user: {
+    statistics: (userId) => `${baseUrl}/users/${userId}/statistics`,
+  }
 };
 
 export default urls;
