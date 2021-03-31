@@ -109,7 +109,7 @@ export default function Word({currentWord}) {
             <span className={classes.word}>{word}</span>
             <span>{` ${transcription} `}</span>
             {showTranslation && <span>{wordTranslate}</span>}
-            <Tooltip title="Звук">
+            <Tooltip title="Озвучить">
               <IconButton display="inline" onClick={handleAudio}>
                 <VolumeDownIcon />
               </IconButton>
