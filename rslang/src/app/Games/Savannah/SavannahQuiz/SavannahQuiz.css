@@ -63,8 +63,8 @@
 }
 
 .game-question-wrapper.finished {
-  transition: .5s;
-  transform: scale3d(0, 0 , 0);
+  transition: 1s;
+  opacity: 0;
 }
 
 @keyframes fail {
