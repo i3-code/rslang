@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
+import { setAnswerAnimation } from '../components/AnswerAnimation/AnswerAnimation';
+import { playAnswerSound } from '../components/AnswerSound/AnswerSound';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
@@ -53,8 +55,12 @@ export const savannahSlice = createSlice({
       if (state.quiz[action.payload.questionNumber].rightAnswer === action.payload.answer) {
         state.quiz[action.payload.questionNumber].status = true;
         state.rightAnswers.push(state.quiz[action.payload.questionNumber]);
+        playAnswerSound(true);
+        setAnswerAnimation('game-answer', action.payload.index, 'right-answer');
       } else {
         state.wrongAnswers.push(state.quiz[action.payload.questionNumber]);
+        playAnswerSound(false);
+        setAnswerAnimation('game-answer', action.payload.index, 'wrong-answer');
       }
     },
     restartGame: (state) => {

@@ -1,4 +1,4 @@
-.gameAnswer {
+.game-answer {
   display: inline-block;
   vertical-align: top;
   font-size: 24px;
@@ -19,7 +19,15 @@
   user-select: none;
 }
 
-.gameQuestion {
+.game-answer.right-answer {
+  color: green;
+}
+
+.game-answer.wrong-answer {
+  color: red;
+}
+
+.game-question {
   position: absolute;
   text-align: center;
   top: 70px;
@@ -43,7 +51,7 @@
   user-select: none;
 }
 
-.gameQuestion.active {
+.game-question.active {
   animation: fail 7s linear 1 normal running 0s none;
 }
 
