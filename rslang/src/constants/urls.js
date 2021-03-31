@@ -13,6 +13,7 @@ const urls = {
   },
   aggregatedWords: {
     all: (userId) => `${baseUrl}/users/${userId}/aggregatedWords`,
+    byId: (wordId) => (userId) => `${baseUrl}/users/${userId}/aggregatedWords/${wordId}`,
   },
 };
 

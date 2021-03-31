@@ -20,4 +20,13 @@ export class RequestService {
     });
     return result;
   };
+
+  static put = (url, body) => {
+    const token = localStorage.getItem('token');
+    const decodedToken = decodeJWT(token);
+    const result = axios.put(url(decodedToken.id), body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return result;
+  };
 }

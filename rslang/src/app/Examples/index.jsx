@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FormControl, Grid, MenuItem, Select, Typography } from '@material-ui/core';
+import { Button, FormControl, Grid, IconButton, MenuItem, Select, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../redux/userSlice';
-import { WordsService } from '../../services/words.service';
+import { WordsService, WORD_STATS } from '../../services/words.service';
 import useStyles from './styles';
 
 export const Examples = () => {
@@ -38,17 +39,16 @@ export const Examples = () => {
   }, [user]);
 
   const handleAddWord = async (wordId) => {
-    const word = {
-      difficulty,
-      optional: {
-        fail: 0,
-        success: 0,
-      },
-    };
-    await WordsService.addUserWord(wordId, word);
+    await WordsService.addUserWord(wordId, difficulty);
     getUserWords();
     getWords();
   };
+
+  const handleAddStat = async (wordId, stat) => {
+    await WordsService.addWordStat(wordId, stat);    
+    getUserWords();
+    getWords();
+  }
 
   return (
     <Grid>
@@ -56,8 +56,8 @@ export const Examples = () => {
         <Typography>All words with userInfo</Typography>
         <Grid className={classes.wordsContainer}>
           {words.map((word) => (
-            <Grid container alignItems="center" className={classes.wordLine}>
-              <Typography key={word._id}>{word.word}</Typography>
+            <Grid key={word._id} container alignItems="center" className={classes.wordLine}>
+              <Typography>{word.word}</Typography>
               {word.userWord ? (
                 <Grid container className={classes.wordStat}>
                   <Typography>Difficulty: {word.userWord.difficulty}</Typography>
@@ -90,12 +90,18 @@ export const Examples = () => {
         <Typography>Only user's words with userInfo</Typography>
         <Grid className={classes.wordsContainer}>
           {userWords.map((word) => (
-            <Grid container className={classes.wordLine}>
-              <Typography key={word.id}>{word.word}</Typography>
-              <Grid container className={classes.wordStat}>
+            <Grid key={word._id} container className={classes.wordLine}>
+              <Typography>{word.word}</Typography>
+              <Grid container className={classes.wordStat} alignItems="center">
                 <Typography>Difficulty: {word.userWord.difficulty}</Typography>
                 <Typography>Fail: {word.userWord.optional.fail || 0}</Typography>
+                <IconButton onClick={() => handleAddStat(word._id, WORD_STATS.FAIL)}>
+                  <AddIcon />
+                </IconButton>
                 <Typography>Success: {word.userWord.optional.success || 0}</Typography>
+                <IconButton  onClick={() => handleAddStat(word._id, WORD_STATS.SUCCESS)}>
+                  <AddIcon />
+                </IconButton>
               </Grid>
             </Grid>
           ))}
