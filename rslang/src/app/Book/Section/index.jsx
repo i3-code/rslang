@@ -14,8 +14,8 @@ import urls from '../../../constants/urls';
 import { page, setPage } from '../bookSlice';
 
 export default function Section(props) {
-  const groupNum = props?.match?.params?.group  || 0;
-  const [pageNum, setPageNum] = useState(useSelector(page) || 1);
+  const groupNum = Number(props?.match?.params?.group)  || 0;
+  const [pageNum, setPageNum] = useState(useSelector(page)[groupNum] || 1);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export default function Section(props) {
     if (pageNum === value) return;
     setLoading(true);
     setPageNum(value);
-    dispatch(setPage({pageNum: value}))
+    dispatch(setPage({pageNum: value, groupNum}));
   };
 
   useEffect(() => {
