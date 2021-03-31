@@ -61,6 +61,7 @@ export const savannahSlice = createSlice({
         state.rightAnswers.push(quiz);
         playAnswerSound(true);
         setAnswerAnimation('game-answer', action.payload.index, 'right-answer');
+        setAnswerAnimation('game-question-wrapper', 0, 'finished');
       } else {
         state.wrongAnswers.push(quiz);
         playAnswerSound(false);

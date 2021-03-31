@@ -11,8 +11,10 @@ const SavannahQuiz = () => {
 
   return (
     <>
-      <div id="savannah-game-question" className="game-question active">
-        {quiz[questionNumber].question}
+      <div className="game-question-wrapper">
+        <div id="savannah-game-question" className="game-question active">
+          {quiz[questionNumber].question}
+        </div>
       </div>
       <GuardBoard guardAllowed={guardAllowed}>
         {quiz[questionNumber].answers.map((answer, index) => (

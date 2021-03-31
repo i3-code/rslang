@@ -34,7 +34,7 @@
   border-radius: 7px;
 }
 
-.game-question {
+.game-question, .game-question-wrapper {
   position: absolute;
   text-align: center;
   top: 70px;
@@ -60,6 +60,11 @@
 
 .game-question.active {
   animation: fail 7s linear 1 normal running 0s none;
+}
+
+.game-question-wrapper.finished {
+  transition: .5s;
+  transform: scale3d(0, 0 , 0);
 }
 
 @keyframes fail {
