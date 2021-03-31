@@ -55,15 +55,17 @@ export const savannahSlice = createSlice({
     },
     setAnswer: (state, action) => {
       state.guardAllowed = false;
-      if (state.quiz[action.payload.questionNumber].rightAnswer === action.payload.answer) {
-        state.quiz[action.payload.questionNumber].status = true;
-        state.rightAnswers.push(state.quiz[action.payload.questionNumber]);
+      const quiz = state.quiz[action.payload.questionNumber];
+      if (quiz.rightAnswer === action.payload.answer) {
+        quiz.status = true;
+        state.rightAnswers.push(quiz);
         playAnswerSound(true);
         setAnswerAnimation('game-answer', action.payload.index, 'right-answer');
       } else {
-        state.wrongAnswers.push(state.quiz[action.payload.questionNumber]);
+        state.wrongAnswers.push(quiz);
         playAnswerSound(false);
         setAnswerAnimation('game-answer', action.payload.index, 'wrong-answer');
+        setAnswerAnimation('game-answer', quiz.answers.indexOf(quiz.rightAnswer), 'right-answer');
       }
     },
     restartGame: (state) => {
@@ -71,6 +73,10 @@ export const savannahSlice = createSlice({
       state.questionNumber = 0;
       state.statistics = null;
       state.start = true;
+    },
+    timeFinished: (state) => {
+      state.wrongAnswers.push(state.quiz[state.questionNumber]);
+      playAnswerSound(false);
     },
   },
 });
@@ -96,6 +102,7 @@ export const {
   setAnswer,
   startGame,
   restartGame,
+  timeFinished,
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch) => {

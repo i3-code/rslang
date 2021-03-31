@@ -7,7 +7,7 @@
   max-width: 270px;
   text-align: left;
   position: relative;
-  padding: 20px 15px 20px 30px;
+  padding: 20px;
   color: #fff;
   transition: all 0.15s ease;
   border-radius: 2px;
@@ -18,13 +18,20 @@
   -ms-user-select: none;
   user-select: none;
 }
+.game-answer:hover {
+  background: hsla(0,0%,100%,.1);
+  border-radius: 7px;
+}
+
 
 .game-answer.right-answer {
-  color: green;
+  background: hsla(120,100%,50%,0.3);
+  border-radius: 7px;
 }
 
 .game-answer.wrong-answer {
-  color: red;
+  background: hsla(0,0%,100%,.3);
+  border-radius: 7px;
 }
 
 .game-question {
