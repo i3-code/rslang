@@ -19,6 +19,8 @@ import {
   restartGame,
   selectResult,
   startGame,
+  selectGuardAllowed,
+  timeFinished,
 } from './savannahSlice';
 
 export default function Savannah() {
@@ -32,6 +34,7 @@ export default function Savannah() {
   const rightAnswers = useSelector(selectRightAnswers);
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
+  const guardAllowed = useSelector(selectGuardAllowed);
 
   useEffect(() => {
     (async () => {
@@ -50,10 +53,11 @@ export default function Savannah() {
   }, [start, dispatch]);
 
   useEffect(() => {
-    if (timer >= TIMER_LIMIT) {
+    if (timer >= TIMER_LIMIT && guardAllowed) {
+      dispatch(timeFinished());
       dispatch(nextRound());
     }
-  }, [timer, dispatch]);
+  }, [timer, dispatch, guardAllowed]);
 
   return (
     <div

@@ -1,38 +1,47 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20'))
-: {page: 0, group: 0}
+import saveState from '../../functions/saveState';
+
+const saveName = 'book';
+const initialState = localStorage.getItem(saveName)
+  ? JSON.parse(localStorage.getItem(saveName))
+  : {
+      translate: true,
+      controls: true,
+      page: {
+        0: 1,
+        1: 1,
+        2: 1,
+        3: 1,
+        4: 1,
+        5: 1,
+      },
+    };
 
 export const bookSlice = createSlice({
   name: 'book',
-  initialState: {
-    translation: true,
-    displayActions: true,
-    page: storageInfo.page,
-    group: storageInfo.group,
-  },
+  initialState,
   reducers: {
-    setTranslation: (state) => {
-      state.translation = !state.translation;
+    setTranslate: (state) => {
+      state.translate = !state.translate;
+      saveState(saveName, state);
     },
-    setDisplayActions: (state) => {
-      state.displayActions = !state.displayActions;
+    setControls: (state) => {
+      state.controls = !state.controls;
+      saveState(saveName, state);
     },
     setPage: (state, action) => {
-      state.page = action.payload.numberPage
+      const { groupNum, pageNum } = action.payload;
+      state.page[groupNum] = pageNum;
+      saveState(saveName, state);
     },
-    setGroup: (state, action) => {
-
-      state.group = action.payload.groupNum
-    }
   },
 });
 
-export const { setTranslation, setDisplayActions, setPage, setGroup } = bookSlice.actions;
+export const { setTranslate, setControls, setPage } = bookSlice.actions;
 
-export const translation = state => state.book.translation;
-export const displayActions = state => state.book.displayActions;
-export const page = state => state.book.page;
-export const group = state => state.book.group;
+export const translate = (state) => state.book.translate;
+export const controls = (state) => state.book.controls;
+export const page = (state) => state.book.page;
 
 export default bookSlice.reducer;
