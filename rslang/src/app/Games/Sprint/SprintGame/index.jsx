@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { Button } from '@material-ui/core';
 import data from '../data-example';
 import Timer from '../../components/Timer';
@@ -87,7 +87,7 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
   );
 
   const endGame = useCallback(() => {
-    onGameEnd(true);
+    onGameEnd();
     setResult(calculatePercentResult(correctAnswers.length, dataShuffled.length));
     setAnswersResults({
       wrong: wrongAnswers,
@@ -99,7 +99,7 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
     if (gameState === 'game') {
       setWord(generateNewWord(counter));
     }
-  }, [setWord, counter]);
+  }, [setWord, counter, gameState]);
 
   useEffect(() => {
     window.addEventListener('keydown', keyboardEvents);
@@ -116,18 +116,18 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
           <div className="sprint__score">Score: {score}</div>
           <Timer className="sprint__timer" seconds={60} onTimerEnd={endGame} />
           <div className="animation-wrap">
-            <TransitionGroup>
+            <SwitchTransition>
               <CSSTransition key={word.id} timeout={500} classNames="slide">
                 <div className="sprint__word">{word.typing}</div>
               </CSSTransition>
-            </TransitionGroup>
+            </SwitchTransition>
           </div>
           <div className="animation-wrap">
-            <TransitionGroup className="animation-wrap">
+            <SwitchTransition>
               <CSSTransition key={word.id} timeout={500} classNames="slide">
                 <div className="sprint__translation">{word.shownTranslate}</div>
               </CSSTransition>
-            </TransitionGroup>
+            </SwitchTransition>
           </div>
           <div>
             <Button className="sprint__button" variant="contained" color="secondary" onClick={() => checkAnswer(false)}>

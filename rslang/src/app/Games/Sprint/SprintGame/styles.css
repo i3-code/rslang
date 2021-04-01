@@ -8,14 +8,10 @@
   transition: opacity 0.5s, transform 0.5s;
 }
 .slide-exit {
-  top: 0;
-  position: absolute;
   transform: translateX(0%);
   opacity: 1;
 }
 .slide-exit-active {
-  top: 0;
-  position: absolute;
   transform: translateX(-100%);
   opacity: 0;
   transition: opacity 0.5s, transform 0.5s;
