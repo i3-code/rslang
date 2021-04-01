@@ -5,6 +5,7 @@ import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import ResultGame from '../components/ResultGame/ResultGame';
 import SprintGame from './SprintGame';
 import './styles.css';
+
 const Sprint = () => {
   const [gameState, setGameState] = useState('start');
   const [answersResults, setAnswersResults] = useState({ right: [], wrong: [] });
@@ -20,7 +21,7 @@ const Sprint = () => {
   );
   const gameComponent = (
     <SprintGame
-      onGameEnd={() => setGameState('end')}
+      setGameState = {setGameState}
       gameState={gameState}
       setResult={setResult}
       setAnswersResults={setAnswersResults}

@@ -25,7 +25,7 @@ const Streak = ({ streak, scoreMultiplier }) => {
   );
 };
 
-const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
+const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) => {
   const [scoreMultiplier, setScoreMultiplier] = useState(10);
   const [score, setScore] = useState(0);
   const [counter, setCounter] = useState(0);
@@ -33,7 +33,17 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
   const [word, setWord] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
-  const generateNewWord = (index) => {
+
+  const endGame = useCallback(() => {
+    setGameState('end');
+    setResult(calculatePercentResult(correctAnswers.length, dataShuffled.length));
+    setAnswersResults({
+      wrong: wrongAnswers,
+      right: correctAnswers,
+    });
+  }, [correctAnswers, setAnswersResults, setGameState, setResult, wrongAnswers]);
+
+  const generateNewWord = useCallback((index) => {
     let newWord;
     if (index < dataShuffled.length) {
       const typing = dataShuffled[index].word;
@@ -47,7 +57,7 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
       endGame();
     }
     return newWord;
-  };
+  },[endGame]);
 
   const updateStreak = useCallback(
     (incrementStreak = true) => {
@@ -55,9 +65,7 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
       const multiplierValue = incrementStreak ? (streak >= 11 ? 80 : streak >= 7 ? 40 : streak >= 3 ? 20 : 10) : 10;
       setScoreMultiplier(multiplierValue);
       if (incrementStreak) setScore(score + scoreMultiplier);
-    },
-    [score, scoreMultiplier, streak],
-  );
+    },[score, scoreMultiplier, streak]);
 
   const checkAnswer = useCallback(
     (suggestedAsCorrect) => {
@@ -75,7 +83,7 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
         ? setCorrectAnswers([...correctAnswers, editedWord])
         : setWrongAnswers([...wrongAnswers, editedWord]);
     },
-    [counter, updateStreak, word.correctTranslate, word.shownTranslate, wrongAnswers, correctAnswers],
+    [correctAnswers, counter, updateStreak, word.correctTranslate, word.shownTranslate, wrongAnswers],
   );
 
   const keyboardEvents = useCallback(
@@ -86,20 +94,11 @@ const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
     [checkAnswer],
   );
 
-  const endGame = useCallback(() => {
-    onGameEnd();
-    setResult(calculatePercentResult(correctAnswers.length, dataShuffled.length));
-    setAnswersResults({
-      wrong: wrongAnswers,
-      right: correctAnswers,
-    });
-  }, [onGameEnd, setAnswersResults, correctAnswers, wrongAnswers, setResult]);
-
   useEffect(() => {
     if (gameState === 'game') {
       setWord(generateNewWord(counter));
     }
-  }, [setWord, counter, gameState]);
+  }, [counter, gameState, generateNewWord]);
 
   useEffect(() => {
     window.addEventListener('keydown', keyboardEvents);
