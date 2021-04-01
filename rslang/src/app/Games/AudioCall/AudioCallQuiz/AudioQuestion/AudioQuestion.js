@@ -1,4 +1,4 @@
-import './AudioQuestion.css';
+import styles from './AudioQuestion.module.css';
 import { useSelector } from 'react-redux';
 import { selectQuestionNumber, selectQuiz } from '../../../Savannah/savannahSlice';
 import urls from '../../../../../constants/urls';
@@ -22,11 +22,20 @@ const AudioQuestion = () => {
   }, [questionNumber]);
 
   return (
-    <div className="game-question-wrapper">
-      <div className="game-question">
-        <CSSTransition in={animationButton} timeout={1000} classNames="audio-button-animation">
+    <div className={styles.gameQuestionWrapper}>
+      <div className={styles.gameQuestion}>
+        <CSSTransition
+          in={animationButton}
+          timeout={1000}
+          classNames={{
+            enterActive: styles.audioButtonAnimationEnter,
+            enterDone: styles.audioButtonAnimationEnterActive,
+            exitActive: styles.audioButtonAnimationExit,
+            exitDone: styles.audioButtonAnimationExitActive,
+          }}
+        >
           <button
-            className="audio-button"
+            className={styles.audioButton}
             onClick={async () => {
               setAnimationButton((prev) => !prev);
               await playWord();
