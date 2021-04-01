@@ -1,4 +1,4 @@
-.game-answer {
+.gameAnswer {
     display: inline-block;
     vertical-align: top;
     font-size: 24px;
@@ -19,17 +19,17 @@
     user-select: none;
 }
 
-.game-answer:hover {
+.gameAnswer:hover {
     background: hsla(0,0%,100%,.1);
     border-radius: 7px;
 }
 
-.game-answer.right-answer {
+.gameAnswer.rightAnswer {
     background: hsla(120,100%,50%,0.3);
     border-radius: 7px;
 }
 
-.game-answer.wrong-answer {
+.gameAnswer.wrongAnswer {
     background: hsla(0,0%,100%,.3);
     border-radius: 7px;
 }

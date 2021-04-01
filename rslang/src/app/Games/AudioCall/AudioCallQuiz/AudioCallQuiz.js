@@ -1,4 +1,3 @@
-import './AudioCallQuiz.css';
 import AudioQuestion from './AudioQuestion/AudioQuestion';
 import Answers from '../../components/Answers/Answers';
 

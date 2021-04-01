@@ -1,4 +1,4 @@
-import './Answers.css';
+import styles from './Answers.module.css';
 import GuardBoard from '../GuardBoard/GuardBoard';
 import {
   nextRound,
@@ -29,14 +29,14 @@ const Answers = () => {
   useEffect(() => {
     if (getAnswer) {
       if (getRightAnswer) {
-        setAnswerAnimation('game-answer', currentAnswer, 'right-answer', duration);
+        setAnswerAnimation(styles.gameAnswer, currentAnswer, styles.rightAnswer, duration);
         playAnswerSound(true);
       } else {
-        setAnswerAnimation('game-answer', currentAnswer, 'wrong-answer', duration);
+        setAnswerAnimation(styles.gameAnswer, currentAnswer, styles.wrongAnswer, duration);
         setAnswerAnimation(
-          'game-answer',
+          styles.gameAnswer,
           quiz[questionNumber].answers.indexOf(quiz[questionNumber].rightAnswer),
-          'right-answer',
+          styles.rightAnswer,
           duration,
         );
         playAnswerSound(false);
@@ -49,7 +49,7 @@ const Answers = () => {
     <GuardBoard guardAllowed={guardAllowed}>
       {quiz[questionNumber].answers.map((answer, index) => (
         <div
-          className="game-answer"
+          className={styles.gameAnswer}
           key={index}
           onClick={() => {
             dispatch(setAnswer({ answer, questionNumber, index }));

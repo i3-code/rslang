@@ -1,4 +1,3 @@
-import './SavannahQuiz.css';
 import SavannahQuestion from './SavannahQuestion/SavannahQuestion';
 import Answers from '../../components/Answers/Answers';
 
