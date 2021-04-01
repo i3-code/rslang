@@ -5,7 +5,9 @@ import data from '../data-example';
 import Timer from '../../components/Timer';
 import { calculatePercentResult, shuffle } from '../../../../functions/math';
 import './styles.css';
+
 const dataShuffled = shuffle(data);
+
 const Streak = ({ streak, scoreMultiplier }) => {
   const streakClass = streak >= 12 ? 'streak-03' : streak >= 8 ? 'streak-02' : streak >= 4 ? 'streak-01' : '';
   const marks = ['', '', ''].map((item, index) => {
@@ -25,23 +27,18 @@ const Streak = ({ streak, scoreMultiplier }) => {
   );
 };
 
+const defaultWord = { typing: null, correctTranslate: null, shownTranslate: null, id: null };
+
 const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) => {
   const [scoreMultiplier, setScoreMultiplier] = useState(10);
   const [score, setScore] = useState(0);
   const [counter, setCounter] = useState(0);
   const [streak, setStreak] = useState(0);
-  const [word, setWord] = useState(0);
+  const [word, setWord] = useState(defaultWord);
+  const [prevWord, setPrevWord] = useState(defaultWord);
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
-
-  const endGame = useCallback(() => {
-    setGameState('end');
-    setResult(calculatePercentResult(correctAnswers.length, dataShuffled.length));
-    setAnswersResults({
-      wrong: wrongAnswers,
-      right: correctAnswers,
-    });
-  }, [correctAnswers, setAnswersResults, setGameState, setResult, wrongAnswers]);
+  const [end, setEnd] = useState(false);
 
   const generateNewWord = useCallback((index) => {
     let newWord;
@@ -53,22 +50,20 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
       const id = dataShuffled[index].id;
       newWord = { typing, correctTranslate, shownTranslate, id };
     } else {
-      newWord = { typing: null, correctTranslate: null, shownTranslate: null, id: null };
-      endGame();
+      newWord = defaultWord;
+      setEnd(true);
     }
     return newWord;
-  },[endGame]);
+  },[]);
 
-  const updateStreak = useCallback(
-    (incrementStreak = true) => {
+  const updateStreak = useCallback((incrementStreak = true) => {
       incrementStreak ? setStreak(streak + 1) : setStreak(0);
       const multiplierValue = incrementStreak ? (streak >= 11 ? 80 : streak >= 7 ? 40 : streak >= 3 ? 20 : 10) : 10;
       setScoreMultiplier(multiplierValue);
       if (incrementStreak) setScore(score + scoreMultiplier);
     },[score, scoreMultiplier, streak]);
 
-  const checkAnswer = useCallback(
-    (suggestedAsCorrect) => {
+  const checkAnswer = useCallback((suggestedAsCorrect) => {
       const shownTranslationIsCorrect = word.shownTranslate === word.correctTranslate;
       const userWasCorrect =
         (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
@@ -82,23 +77,17 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
       userWasCorrect
         ? setCorrectAnswers([...correctAnswers, editedWord])
         : setWrongAnswers([...wrongAnswers, editedWord]);
-    },
-    [correctAnswers, counter, updateStreak, word.correctTranslate, word.shownTranslate, wrongAnswers],
-  );
+        setPrevWord(word);
+    },[correctAnswers, counter, updateStreak, word, wrongAnswers]);
 
-  const keyboardEvents = useCallback(
-    (e) => {
-      if (e.key === 'ArrowLeft') checkAnswer(false);
-      if (e.key === 'ArrowRight') checkAnswer(true);
-    },
-    [checkAnswer],
-  );
+  const keyboardEvents = useCallback((e) => {
+    if (e.key === 'ArrowLeft') checkAnswer(false);
+    if (e.key === 'ArrowRight') checkAnswer(true);
+  }, [checkAnswer]);
 
   useEffect(() => {
-    if (gameState === 'game') {
-      setWord(generateNewWord(counter));
-    }
-  }, [counter, gameState, generateNewWord]);
+    if (gameState === 'game' && prevWord === word) setWord(generateNewWord(counter));
+  }, [counter, gameState, generateNewWord, prevWord, word]);
 
   useEffect(() => {
     window.addEventListener('keydown', keyboardEvents);
@@ -107,13 +96,28 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
     };
   }, [keyboardEvents]);
 
+  useEffect(() => {
+    if (end) {
+      setGameState('end');
+      setResult(calculatePercentResult(correctAnswers.length, dataShuffled.length));
+      setAnswersResults({
+        wrong: wrongAnswers,
+        right: correctAnswers,
+      });
+    }
+  }, [correctAnswers, end, setAnswersResults, setGameState, setResult, wrongAnswers]);
+
+  const handleEnd = useCallback(() => {
+    setEnd(true);
+  }, []);
+
   const gameLayout = (
     <div className="sprint">
       <div className="sprint__wrap">
         <Streak streak={streak} scoreMultiplier={scoreMultiplier} />
         <div className="sprint__body">
           <div className="sprint__score">Score: {score}</div>
-          <Timer className="sprint__timer" seconds={60} onTimerEnd={endGame} />
+          <Timer className="sprint__timer" seconds={60} onTimerEnd={handleEnd} />
           <div className="animation-wrap">
             <SwitchTransition>
               <CSSTransition key={word.id} timeout={500} classNames="slide">

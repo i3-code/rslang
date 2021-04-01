@@ -16,7 +16,7 @@ const Timer = ({ seconds, onTimerEnd, className }) => {
       onTimerEnd();
     }
     return () => clearInterval(intervalId);
-  }, [timeLeft]);
+  }, [onTimerEnd, timeLeft]);
 
   return (
     <div className={`animation-wrap timer-wrap ${className}`}>
