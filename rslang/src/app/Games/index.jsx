@@ -3,6 +3,7 @@ import { Container, Grid } from '@material-ui/core';
 import Card from '../../components/partials/Card';
 import Savannah from './Savannah';
 import Sprint from './Sprint';
+import AudioCall from './AudioCall';
 
 const cardsArray = [
   {
@@ -34,6 +35,7 @@ const cardsArray = [
 const games = {
   savannah: <Savannah />,
   sprint: <Sprint />,
+  audiocall: <AudioCall />,
 };
 
 export default function Games(props) {
