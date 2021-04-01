@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
-import { setAnswerAnimation } from '../../../functions/games/answerAnimation';
 import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
 
@@ -19,6 +18,9 @@ export const savannahSlice = createSlice({
     rightAnswers: [],
     wrongAnswers: [],
     guardAllowed: true,
+    getAnswer: false,
+    currentAnswer: 0,
+    getRightAnswer: false,
   },
   reducers: {
     incrementTimer: (state) => {
@@ -40,6 +42,7 @@ export const savannahSlice = createSlice({
       state.quiz = action.payload;
     },
     nextRound: (state) => {
+      state.getAnswer = false;
       state.guardAllowed = true;
       if (state.questionNumber >= state.quiz.length - 1) {
         state.result = calculatePercentResult(state.quiz.filter((q) => q.status).length, state.quiz.length);
@@ -49,30 +52,24 @@ export const savannahSlice = createSlice({
         return;
       }
       state.timer = 0;
-      document.getElementById('savannah-game-question').classList.remove('active');
       state.questionNumber++;
-      setTimeout(function () {
-        document.getElementById('savannah-game-question').classList.add('active');
-      }, 50);
     },
     setAnswer: (state, action) => {
       state.guardAllowed = false;
+      state.getAnswer = true;
+      state.currentAnswer = action.payload.index;
       const quiz = state.quiz[action.payload.questionNumber];
       if (quiz.rightAnswer === action.payload.answer) {
         quiz.status = true;
         if (checkContainAnswerArray(state.rightAnswers, quiz.question)) {
           state.rightAnswers.push(quiz);
         }
-        playAnswerSound(true);
-        setAnswerAnimation('game-answer', action.payload.index, 'right-answer', state.duration);
-        setAnswerAnimation('game-question-wrapper', 0, 'finished', state.duration);
+        state.getRightAnswer = true;
       } else {
+        state.getRightAnswer = false;
         if (checkContainAnswerArray(state.wrongAnswers, quiz.question)) {
           state.wrongAnswers.push(quiz);
         }
-        playAnswerSound(false);
-        setAnswerAnimation('game-answer', action.payload.index, 'wrong-answer', state.duration);
-        setAnswerAnimation('game-answer', quiz.answers.indexOf(quiz.rightAnswer), 'right-answer', state.duration);
       }
     },
     restartGame: (state) => {
@@ -101,6 +98,9 @@ export const selectRightAnswers = (state) => state.savannahGame.rightAnswers;
 export const selectWrongAnswers = (state) => state.savannahGame.wrongAnswers;
 export const selectGuardAllowed = (state) => state.savannahGame.guardAllowed;
 export const selectDuration = (state) => state.savannahGame.duration;
+export const selectGetAnswer = (state) => state.savannahGame.getAnswer;
+export const selectGetRightAnswer = (state) => state.savannahGame.getRightAnswer;
+export const selectCurrentAnswer = (state) => state.savannahGame.currentAnswer;
 
 export const {
   incrementTimer,
