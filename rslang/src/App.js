@@ -12,6 +12,7 @@ import Settings from './app/Settings';
 import About from './app/About';
 import Layout from './components/Layout';
 import { Examples } from './app/Examples';
+import Dictionary from './app/Dictionary';
 
 function App() {
   return (
@@ -19,29 +20,16 @@ function App() {
       <Router>
         <Layout>
           <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
+            <Route exact path="/" component={Home} />
             <Route path="/book/:group" component={Section} />
-            <Route path="/book">
-              <Book />
-            </Route>
+            <Route path="/book" component={Book} />
             <Route path="/games/:game" component={Games} />
-            <Route path="/games">
-              <Games />
-            </Route>
-            <Route path="/stats">
-              <Stats />
-            </Route>
-            <Route path="/settings">
-              <Settings />
-            </Route>
-            <Route path="/about">
-              <About />
-            </Route>
-            <Route path="/examples">
-              <Examples />
-            </Route>
+            <Route path="/games" component={Games} />
+            <Route path="/stats" component={Stats} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/about" component={About} />
+            <Route path="/examples" component={Examples} />
+            <Route path="/dictionary" component={Dictionary} />
           </Switch>
         </Layout>
       </Router>
