@@ -23,7 +23,7 @@ const AudioQuestion = () => {
 
   return (
     <div className="game-question-wrapper">
-      <div id="savannah-game-question" className="game-question">
+      <div className="game-question">
         <CSSTransition in={animationButton} timeout={1000} classNames="audio-button-animation">
           <button
             className="audio-button"

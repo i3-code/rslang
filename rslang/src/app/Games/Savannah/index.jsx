@@ -52,12 +52,12 @@ export default function Savannah() {
     }
   }, [start, dispatch]);
 
-  // useEffect(() => {
-  //   if (timer >= TIMER_LIMIT && guardAllowed) {
-  //     dispatch(timeFinished());
-  //     dispatch(nextRound());
-  //   }
-  // }, [timer, dispatch, guardAllowed]);
+  useEffect(() => {
+    if (timer >= TIMER_LIMIT && guardAllowed) {
+      dispatch(timeFinished());
+      dispatch(nextRound());
+    }
+  }, [timer, dispatch, guardAllowed]);
 
   return (
     <div

@@ -18,11 +18,11 @@
   -ms-user-select: none;
   user-select: none;
 }
+
 .game-answer:hover {
   background: hsla(0,0%,100%,.1);
   border-radius: 7px;
 }
-
 
 .game-answer.right-answer {
   background: hsla(120,100%,50%,0.3);

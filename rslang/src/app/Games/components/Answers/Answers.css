@@ -1,0 +1,35 @@
+.game-answer {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 300;
+    max-width: 270px;
+    text-align: left;
+    position: relative;
+    padding: 20px;
+    color: #fff;
+    transition: all 0.15s ease;
+    border-radius: 2px;
+    cursor: pointer;
+    margin: 0 20px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.game-answer:hover {
+    background: hsla(0,0%,100%,.1);
+    border-radius: 7px;
+}
+
+.game-answer.right-answer {
+    background: hsla(120,100%,50%,0.3);
+    border-radius: 7px;
+}
+
+.game-answer.wrong-answer {
+    background: hsla(0,0%,100%,.3);
+    border-radius: 7px;
+}

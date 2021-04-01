@@ -55,6 +55,7 @@ export const savannahSlice = createSlice({
     },
     setAnswer: (state, action) => {
       state.guardAllowed = false;
+      state.getAnswer = true;
       const quiz = state.quiz[action.payload.questionNumber];
       if (quiz.rightAnswer === action.payload.answer) {
         quiz.status = true;
@@ -63,7 +64,6 @@ export const savannahSlice = createSlice({
         }
         playAnswerSound(true);
         setAnswerAnimation('game-answer', action.payload.index, 'right-answer', state.duration);
-        state.getAnswer = true;
       } else {
         if (checkContainAnswerArray(state.wrongAnswers, quiz.question)) {
           state.wrongAnswers.push(quiz);
