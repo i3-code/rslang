@@ -59,7 +59,7 @@
 }
 
 .game-question.active {
-  animation: fail 7s linear 1 normal running 0s none;
+  /*animation: fail 7s linear 1 normal running 0s none;*/
 }
 
 .game-question-wrapper.finished {
