@@ -3,7 +3,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './styles.css';
 
 // source: https://stackoverflow.com/questions/57137094/implementing-a-countdown-timer-in-react-with-hooks
-const Timer = ({ seconds, onTimerEnd }) => {
+const Timer = ({ seconds, onTimerEnd, className }) => {
   const [timeLeft, setTimeLeft] = useState(seconds);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Timer = ({ seconds, onTimerEnd }) => {
   }, [onTimerEnd, timeLeft]);
 
   return (
-    <div className="animation-wrap timer-wrap">
+    <div className={`animation-wrap timer-wrap ${className}`}>
       <TransitionGroup>
         <CSSTransition key={timeLeft} timeout={500} classNames="slide-vertical">
           <div className="timer">{timeLeft}</div>

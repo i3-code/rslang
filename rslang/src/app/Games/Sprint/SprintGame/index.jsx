@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { Button } from '@material-ui/core';
 import data from '../data-example';
 import Timer from '../../components/Timer';
 import { calculatePercentResult, shuffle } from '../../../../functions/math';
@@ -24,7 +25,7 @@ const Streak = ({ streak, scoreMultiplier }) => {
   );
 };
 
-const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
+const SprintGame = ({ onGameEnd, setAnswersResults, setResult, gameState }) => {
   const [scoreMultiplier, setScoreMultiplier] = useState(10);
   const [score, setScore] = useState(0);
   const [counter, setCounter] = useState(0);
@@ -79,7 +80,6 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
 
   const keyboardEvents = useCallback(
     (e) => {
-      console.log(1);
       if (e.key === 'ArrowLeft') checkAnswer(false);
       if (e.key === 'ArrowRight') checkAnswer(true);
     },
@@ -96,10 +96,10 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
   }, [onGameEnd, setAnswersResults, correctAnswers, wrongAnswers, setResult]);
 
   useEffect(() => {
-    if (!gameEnded) {
+    if (gameState === 'game') {
       setWord(generateNewWord(counter));
     }
-  }, [setWord, counter, gameEnded]);
+  }, [setWord, counter]);
 
   useEffect(() => {
     window.addEventListener('keydown', keyboardEvents);
@@ -112,9 +112,9 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
     <div className="sprint">
       <div className="sprint__wrap">
         <Streak streak={streak} scoreMultiplier={scoreMultiplier} />
-        <div className="spring__score">{score}</div>
         <div className="sprint__body">
-          <Timer seconds={60} onTimerEnd={endGame} />
+          <div className="sprint__score">Score: {score}</div>
+          <Timer className="sprint__timer" seconds={60} onTimerEnd={endGame} />
           <div className="animation-wrap">
             <TransitionGroup>
               <CSSTransition key={word.id} timeout={500} classNames="slide">
@@ -123,15 +123,19 @@ const SprintGame = ({ onGameEnd, gameEnded, setAnswersResults, setResult }) => {
             </TransitionGroup>
           </div>
           <div className="animation-wrap">
-            <TransitionGroup>
+            <TransitionGroup className="animation-wrap">
               <CSSTransition key={word.id} timeout={500} classNames="slide">
                 <div className="sprint__translation">{word.shownTranslate}</div>
               </CSSTransition>
             </TransitionGroup>
           </div>
           <div>
-            <button onClick={() => checkAnswer(false)}>не верно</button>
-            <button onClick={() => checkAnswer(true)}>верно</button>
+            <Button className="sprint__button" variant="contained" color="secondary" onClick={() => checkAnswer(false)}>
+              не верно
+            </Button>
+            <Button className="sprint__button" variant="contained" color="primary" onClick={() => checkAnswer(true)}>
+              верно
+            </Button>
           </div>
         </div>
       </div>
