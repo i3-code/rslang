@@ -55,7 +55,7 @@ export default function Layout(props) {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {props.children}
-          <div className={classes.toolbar} />
+          {pathname.includes('/games/') ? <div /> : <div className={classes.toolbar} />}
         </main>
       </div>
       <Footer />
