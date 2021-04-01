@@ -50,6 +50,32 @@ const getNameByPath = (path) => {
   return mainIcons[name] || additionalIcons[name] || ['404'];
 };
 
+const generateList = (iconsArray, path, classes) =>{
+  return (
+    <List>
+      {Object.entries(iconsArray).map(([link, [text, icon]]) => {
+        const selected = (path === getNameByPath(link));
+        return (
+          <NavLink
+            key={text}
+            to={link}
+            className={classes.link}
+            activeClassName={classes.selected}
+            exact={true}
+            replace={selected}
+          >
+              <ListItem button selected={selected}>
+                <Tooltip title={text} placement="right" arrow>
+                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
+                </Tooltip>
+                <ListItemText primary={text} />
+              </ListItem>
+          </NavLink>
+      )})}
+    </List>
+  );
+};
+
 export default function Header() {
   const location = useLocation();
   const path = getNameByPath(location.pathname);
@@ -115,49 +141,9 @@ export default function Header() {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {Object.entries(mainIcons).map(([link, [text, icon]]) => {
-            const selected = (path === getNameByPath(link));
-            return (
-              <NavLink
-                key={text}
-                to={link}
-                className={classes.link}
-                activeClassName={classes.selected}
-                exact={true}
-                replace={selected}
-              >
-                  <ListItem button selected={selected}>
-                    <Tooltip title={text} placement="right" arrow>
-                      <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary={text} />
-                  </ListItem>
-              </NavLink>
-          )})}
-        </List>
+        {generateList(mainIcons, path, classes)}
         <Divider />
-        <List>
-          {Object.entries(additionalIcons).map(([link, [text, icon]]) => {
-            const selected = (path === getNameByPath(link));
-            return (
-              <NavLink
-                key={text}
-                to={link}
-                className={classes.link}
-                activeClassName={classes.selected}
-                exact={true}
-                replace={selected}
-              >
-                <ListItem button selected={selected}>
-                  <Tooltip title={text} placement="right" arrow>
-                    <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
-                  </Tooltip>
-                  <ListItemText primary={text} />
-                </ListItem>
-              </NavLink>
-          )})}
-        </List>
+        {generateList(additionalIcons, path, classes)}
       </Drawer>
     </Grid>
   );
