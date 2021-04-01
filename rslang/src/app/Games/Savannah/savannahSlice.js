@@ -19,6 +19,7 @@ export const savannahSlice = createSlice({
     rightAnswers: [],
     wrongAnswers: [],
     guardAllowed: true,
+    getAnswer: false,
   },
   reducers: {
     incrementTimer: (state) => {
@@ -40,6 +41,7 @@ export const savannahSlice = createSlice({
       state.quiz = action.payload;
     },
     nextRound: (state) => {
+      state.getAnswer = false;
       state.guardAllowed = true;
       if (state.questionNumber >= state.quiz.length - 1) {
         state.result = calculatePercentResult(state.quiz.filter((q) => q.status).length, state.quiz.length);
@@ -49,11 +51,7 @@ export const savannahSlice = createSlice({
         return;
       }
       state.timer = 0;
-      document.getElementById('savannah-game-question').classList.remove('active');
       state.questionNumber++;
-      setTimeout(function () {
-        document.getElementById('savannah-game-question').classList.add('active');
-      }, 50);
     },
     setAnswer: (state, action) => {
       state.guardAllowed = false;
@@ -65,7 +63,7 @@ export const savannahSlice = createSlice({
         }
         playAnswerSound(true);
         setAnswerAnimation('game-answer', action.payload.index, 'right-answer', state.duration);
-        setAnswerAnimation('game-question-wrapper', 0, 'finished', state.duration);
+        state.getAnswer = true;
       } else {
         if (checkContainAnswerArray(state.wrongAnswers, quiz.question)) {
           state.wrongAnswers.push(quiz);
@@ -101,6 +99,7 @@ export const selectRightAnswers = (state) => state.savannahGame.rightAnswers;
 export const selectWrongAnswers = (state) => state.savannahGame.wrongAnswers;
 export const selectGuardAllowed = (state) => state.savannahGame.guardAllowed;
 export const selectDuration = (state) => state.savannahGame.duration;
+export const selectGetAnswer = (state) => state.savannahGame.getAnswer;
 
 export const {
   incrementTimer,

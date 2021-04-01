@@ -18,11 +18,11 @@
   -ms-user-select: none;
   user-select: none;
 }
+
 .game-answer:hover {
   background: hsla(0,0%,100%,.1);
   border-radius: 7px;
 }
-
 
 .game-answer.right-answer {
   background: hsla(120,100%,50%,0.3);
@@ -59,12 +59,7 @@
 }
 
 .game-question.active {
-  /*animation: fail 7s linear 1 normal running 0s none;*/
-}
-
-.game-question-wrapper.finished {
-  transition: 1s;
-  opacity: 0;
+  animation: fail 7s linear 1 normal running 0s none;
 }
 
 @keyframes fail {
@@ -76,4 +71,13 @@
     top: 300px;
     transform: scale3d(1, 1, 1);
   }
+}
+
+.hide-question-wrapper-enter {
+  opacity:0;
+  transition: 1s;
+}
+.hide-question-wrapper-active {
+  opacity:1;
+  transition: 1s;
 }
