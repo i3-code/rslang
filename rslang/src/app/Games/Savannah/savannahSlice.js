@@ -124,7 +124,6 @@ export const fetchWordsForQuiz = (url) => async (dispatch) => {
     shuffle(words);
     const quizWords = words.slice(0, 5);
     const quizPrepare = [];
-    console.log(quizWords);
     quizWords.forEach((word, index) => {
       quizPrepare.push({
         id: index + 1,
