@@ -1,11 +1,11 @@
 import SavannahQuestion from './SavannahQuestion/SavannahQuestion';
-import Answers from '../../components/Answers/Answers';
+import SavannahAnswers from './SavannahAnswers/SavannahAnswers';
 
 const SavannahQuiz = () => {
   return (
     <>
       <SavannahQuestion />
-      <Answers />
+      <SavannahAnswers />
     </>
   );
 };
