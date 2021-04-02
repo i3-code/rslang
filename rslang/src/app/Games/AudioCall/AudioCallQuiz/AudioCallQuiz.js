@@ -1,11 +1,11 @@
 import AudioQuestion from './AudioQuestion/AudioQuestion';
-import Answers from '../../components/Answers/Answers';
+import AudioCallAnswers from './AudioCallAnswers/AudioCallAnswers';
 
 const AudioCallQuiz = () => {
   return (
     <>
       <AudioQuestion />
-      <Answers />
+      <AudioCallAnswers />
     </>
   );
 };
