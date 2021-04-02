@@ -22,33 +22,36 @@ const initialState = localStorage.getItem(saveName)
         4: [],
         5: [],
       },
+      learnedWords: {
+        0: [],
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+        5: [],
+      },
     };
+
+const reducerFunc = (array, state, action) => {
+  const { groupNum, pageNum, id } = action.payload;
+  const newState = { ...state };
+  if (!newState[array][groupNum][pageNum]) newState[array][groupNum][pageNum] = [];
+  const wordsArray = newState[array][groupNum][pageNum];
+  if (!wordsArray.includes(id)) wordsArray.push(id);
+  saveState(saveName, newState);
+};
 
 export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setDeletedWords: (state, action) => {
-      const { groupNum, pageNum, id } = action.payload;
-      const newState = { ...state };
-      if (!newState.deletedWords[groupNum][pageNum]) newState.deletedWords[groupNum][pageNum] = [];
-      const wordsArray = newState.deletedWords[groupNum][pageNum];
-      if (!wordsArray.includes(id)) wordsArray.push(id);
-      saveState(saveName, newState);
-    },
-    setHardWords: (state, action) => {
-      const { groupNum, pageNum, id } = action.payload;
-      console.log(action.payload);
-      const newState = { ...state };
-      if (!newState.hardWords[groupNum][pageNum]) newState.hardWords[groupNum][pageNum] = [];
-      const wordsArray = newState.hardWords[groupNum][pageNum];
-      if (!wordsArray.includes(id)) wordsArray.push(id);
-      saveState(saveName, newState);
-    },
+    setDeletedWords: (state, action) => reducerFunc('deletedWords', state, action),
+    setHardWords: (state, action) => reducerFunc('hardWords', state, action),
+    setLearnedWords: (state, action) => reducerFunc('learnedWords', state, action),
   },
 });
 
-export const { setDeletedWords, setHardWords } = appSlice.actions;
+export const { setDeletedWords, setHardWords, setLearnedWords } = appSlice.actions;
 
 export const deletedWords = (state) => state.app.deletedWords;
 export const hardWords = (state) => state.app.hardWords;

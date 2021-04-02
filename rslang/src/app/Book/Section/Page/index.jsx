@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { deletedWords } from '../../../../redux/appSlice';
 
 export default function Page({words, groupNum, pageNum}) {
-  console.log(pageNum);
   const deletedWordsList = useSelector(deletedWords);
 
   const filterFunc = (id) => {
