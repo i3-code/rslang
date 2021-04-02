@@ -29,16 +29,19 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     setDeletedWords: (state, action) => {
-      const { groupNum, id } = action.payload;
+      const { groupNum, pageNum, id } = action.payload;
       const newState = { ...state };
-      const wordsArray = newState.deletedWords[groupNum];
+      if (!newState.deletedWords[groupNum][pageNum]) newState.deletedWords[groupNum][pageNum] = [];
+      const wordsArray = newState.deletedWords[groupNum][pageNum];
       if (!wordsArray.includes(id)) wordsArray.push(id);
       saveState(saveName, newState);
     },
     setHardWords: (state, action) => {
-      const { groupNum, id } = action.payload;
+      const { groupNum, pageNum, id } = action.payload;
+      console.log(action.payload);
       const newState = { ...state };
-      const wordsArray = newState.hardWords[groupNum];
+      if (!newState.hardWords[groupNum][pageNum]) newState.hardWords[groupNum][pageNum] = [];
+      const wordsArray = newState.hardWords[groupNum][pageNum];
       if (!wordsArray.includes(id)) wordsArray.push(id);
       saveState(saveName, newState);
     },

@@ -20,7 +20,7 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, groupNum}) {
+export default function Word({currentWord, groupNum, pageNum}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate} = currentWord;
 
@@ -86,10 +86,13 @@ export default function Word({currentWord, groupNum}) {
     return {__html: text};
   }
 
-  const isHard = () => hardWordsList[groupNum].includes(id);
-  const handleHard = () => dispatch(setHardWords({groupNum, id}));
-  const handleDeleted = () => dispatch(setDeletedWords({groupNum, id}));
+  const isHard = () => {
+    const hardWordsArray = hardWordsList[groupNum][pageNum] || [];
+    return hardWordsArray.includes(id);
+  };
 
+  const handleHard = () => dispatch(setHardWords({groupNum, pageNum, id}));
+  const handleDeleted = () => dispatch(setDeletedWords({groupNum, pageNum, id}));
 
   return (
     <Card className={`${classes.root} ${ isHard() ? classes.hard : ''} ${classes[borderColor[groupNum]]}`}>
