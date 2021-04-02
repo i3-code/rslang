@@ -32,6 +32,7 @@ const defaultWord = { typing: null, correctTranslate: null, shownTranslate: null
 const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) => {
   const [scoreMultiplier, setScoreMultiplier] = useState(10);
   const [score, setScore] = useState(0);
+  const [bodyHighlight, setBodyHighlight] = useState(null);
   const [counter, setCounter] = useState(0);
   const [streak, setStreak] = useState(0);
   const [word, setWord] = useState(defaultWord);
@@ -39,7 +40,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [end, setEnd] = useState(false);
-
+  let timer;
   const generateNewWord = useCallback((index) => {
     let newWord;
     if (index < dataShuffled.length) {
@@ -54,16 +55,20 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
       setEnd(true);
     }
     return newWord;
-  },[]);
+  }, []);
 
-  const updateStreak = useCallback((incrementStreak = true) => {
+  const updateStreak = useCallback(
+    (incrementStreak = true) => {
       incrementStreak ? setStreak(streak + 1) : setStreak(0);
       const multiplierValue = incrementStreak ? (streak >= 11 ? 80 : streak >= 7 ? 40 : streak >= 3 ? 20 : 10) : 10;
       setScoreMultiplier(multiplierValue);
       if (incrementStreak) setScore(score + scoreMultiplier);
-    },[score, scoreMultiplier, streak]);
+    },
+    [score, scoreMultiplier, streak],
+  );
 
-  const checkAnswer = useCallback((suggestedAsCorrect) => {
+  const checkAnswer = useCallback(
+    (suggestedAsCorrect) => {
       const shownTranslationIsCorrect = word.shownTranslate === word.correctTranslate;
       const userWasCorrect =
         (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
@@ -77,14 +82,26 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
       userWasCorrect
         ? setCorrectAnswers([...correctAnswers, editedWord])
         : setWrongAnswers([...wrongAnswers, editedWord]);
-        setPrevWord(word);
-    },[correctAnswers, counter, updateStreak, word, wrongAnswers]);
+      highlightBody(userWasCorrect);
+      setPrevWord(word);
+    },
+    [correctAnswers, counter, updateStreak, word, wrongAnswers],
+  );
 
-  const keyboardEvents = useCallback((e) => {
-    if (e.key === 'ArrowLeft') checkAnswer(false);
-    if (e.key === 'ArrowRight') checkAnswer(true);
-  }, [checkAnswer]);
-
+  const keyboardEvents = useCallback(
+    (e) => {
+      if (e.key === 'ArrowLeft') checkAnswer(false);
+      if (e.key === 'ArrowRight') checkAnswer(true);
+    },
+    [checkAnswer],
+  );
+  const highlightBody = (isCorrect) => {
+    if (timer) clearTimeout(timer);
+    setBodyHighlight(isCorrect);
+    timer = setTimeout(() => {
+      setBodyHighlight(null);
+    }, 300);
+  };
   useEffect(() => {
     if (gameState === 'game' && prevWord === word) setWord(generateNewWord(counter));
   }, [counter, gameState, generateNewWord, prevWord, word]);
@@ -110,10 +127,13 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   const handleEnd = useCallback(() => {
     setEnd(true);
   }, []);
-
   const gameLayout = (
     <div className="sprint">
-      <div className="sprint__wrap">
+      <div
+        className={`sprint__wrap ${
+          bodyHighlight !== null ? (bodyHighlight ? 'sprint__wrap--correct' : 'sprint__wrap--wrong') : ''
+        }`}
+      >
         <Streak streak={streak} scoreMultiplier={scoreMultiplier} />
         <div className="sprint__body">
           <div className="sprint__score">Score: {score}</div>
