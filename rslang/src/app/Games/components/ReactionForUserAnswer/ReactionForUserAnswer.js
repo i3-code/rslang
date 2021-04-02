@@ -11,7 +11,7 @@ import {
   selectQuiz,
 } from '../../Savannah/savannahSlice';
 
-const ReactionForUserAnswer = ({ children, styles }) => {
+const ReactionForUserAnswer = ({ children, styles, autoClear = true }) => {
   const questionNumber = useSelector(selectQuestionNumber);
   const quiz = useSelector(selectQuiz);
   const duration = useSelector(selectDuration);
@@ -22,15 +22,16 @@ const ReactionForUserAnswer = ({ children, styles }) => {
   useEffect(() => {
     if (getAnswer) {
       if (getRightAnswer) {
-        setAnswerAnimation(styles.gameAnswer, currentAnswer, styles.rightAnswer, duration);
+        setAnswerAnimation(styles.gameAnswer, currentAnswer, styles.rightAnswer, duration, autoClear);
         playAnswerSound(true);
       } else {
-        setAnswerAnimation(styles.gameAnswer, currentAnswer, styles.wrongAnswer, duration);
+        setAnswerAnimation(styles.gameAnswer, currentAnswer, styles.wrongAnswer, duration, autoClear);
         setAnswerAnimation(
           styles.gameAnswer,
           quiz[questionNumber].answers.indexOf(quiz[questionNumber].rightAnswer),
           styles.rightAnswer,
           duration,
+          autoClear,
         );
         playAnswerSound(false);
       }
