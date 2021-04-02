@@ -40,7 +40,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [end, setEnd] = useState(false);
-  let timer;
+  const [lockInteraction, setLockInteraction] = useState(true);
   const generateNewWord = useCallback((index) => {
     let newWord;
     if (index < dataShuffled.length) {
@@ -66,26 +66,35 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
     },
     [score, scoreMultiplier, streak],
   );
-
+  const highlightBody = useCallback((isCorrect) => {
+    let timer;
+    if (timer) clearTimeout(timer);
+    setBodyHighlight(isCorrect);
+    timer = setTimeout(() => {
+      setBodyHighlight(null);
+    }, 300);
+  }, []);
   const checkAnswer = useCallback(
     (suggestedAsCorrect) => {
-      const shownTranslationIsCorrect = word.shownTranslate === word.correctTranslate;
-      const userWasCorrect =
-        (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
-      updateStreak(userWasCorrect);
-      setCounter(counter + 1);
-      const editedWord = {
-        audio: dataShuffled[counter].audio,
-        rightAnswer: dataShuffled[counter].wordTranslate,
-        question: dataShuffled[counter].word,
-      };
-      userWasCorrect
-        ? setCorrectAnswers([...correctAnswers, editedWord])
-        : setWrongAnswers([...wrongAnswers, editedWord]);
-      highlightBody(userWasCorrect);
-      setPrevWord(word);
+      if (!lockInteraction && counter < dataShuffled.length) {
+        const shownTranslationIsCorrect = word.shownTranslate === word.correctTranslate;
+        const userWasCorrect =
+          (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
+        updateStreak(userWasCorrect);
+        setCounter(counter + 1);
+        const editedWord = {
+          audio: dataShuffled[counter].audio,
+          rightAnswer: dataShuffled[counter].wordTranslate,
+          question: dataShuffled[counter].word,
+        };
+        userWasCorrect
+          ? setCorrectAnswers([...correctAnswers, editedWord])
+          : setWrongAnswers([...wrongAnswers, editedWord]);
+        highlightBody(userWasCorrect);
+        setPrevWord(word);
+      }
     },
-    [correctAnswers, counter, updateStreak, word, wrongAnswers],
+    [correctAnswers, counter, updateStreak, word, wrongAnswers, lockInteraction, highlightBody],
   );
 
   const keyboardEvents = useCallback(
@@ -95,13 +104,6 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
     },
     [checkAnswer],
   );
-  const highlightBody = (isCorrect) => {
-    if (timer) clearTimeout(timer);
-    setBodyHighlight(isCorrect);
-    timer = setTimeout(() => {
-      setBodyHighlight(null);
-    }, 300);
-  };
   useEffect(() => {
     if (gameState === 'game' && prevWord === word) setWord(generateNewWord(counter));
   }, [counter, gameState, generateNewWord, prevWord, word]);
@@ -147,7 +149,13 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
           </div>
           <div className="animation-wrap">
             <SwitchTransition>
-              <CSSTransition key={word.id} timeout={500} classNames="slide">
+              <CSSTransition
+                key={word.id}
+                timeout={500}
+                classNames="slide"
+                onEntered={() => setLockInteraction(false)}
+                onExit={() => setLockInteraction(true)}
+              >
                 <div className="sprint__translation">{word.shownTranslate}</div>
               </CSSTransition>
             </SwitchTransition>

@@ -21,7 +21,7 @@ const Sprint = () => {
   );
   const gameComponent = (
     <SprintGame
-      setGameState = {setGameState}
+      setGameState={setGameState}
       gameState={gameState}
       setResult={setResult}
       setAnswersResults={setAnswersResults}
@@ -39,7 +39,7 @@ const Sprint = () => {
   );
   return (
     <SwitchTransition>
-      <CSSTransition in={gameState} key={gameState} timeout={500} classNames="zoom">
+      <CSSTransition in={true} key={gameState} timeout={500} classNames="zoom">
         {gameState === 'start' ? startComponent : gameState === 'end' ? resultComponent : gameComponent}
       </CSSTransition>
     </SwitchTransition>
