@@ -4,6 +4,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 
+import Page from './Page';
+
 import {deletedWords, hardWords} from '../../redux/appSlice';
 
 import useStyles from './styles';
@@ -49,13 +51,13 @@ export default function SimpleTabs() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} >
-        <div>AAA</div>
+        <Page words={hardW}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <Page words={delW}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <Page words={hardW}/>
       </TabPanel>
     </div>
   );
