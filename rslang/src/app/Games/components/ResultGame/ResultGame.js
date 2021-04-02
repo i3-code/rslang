@@ -2,10 +2,24 @@ import styles from './ResultGame.module.css';
 import { NavLink } from 'react-router-dom';
 import urls from '../../../../constants/urls';
 
+
 const ResultGame = ({ rightAnswers, wrongAnswers, restartGame, result }) => {
   const playWord = async (word) => {
     await new Audio(`${urls.base}/${word.audio}`).play();
   };
+
+  const ResultWord = ({word}) => {
+    return(
+      <div className={styles.answerWrapper}>
+        <span className={styles.wrapperAnswerAudio}>
+          <div className={styles.answerAudio} onClick={() => playWord(word)} />
+        </span>
+        <div className={styles.answerEng}>{word.question}</div>
+        <span className={styles.answerTr}> — </span>
+        <div className={styles.answerTrans}>{word.rightAnswer}</div>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.wrapperResultGame}>
@@ -17,14 +31,7 @@ const ResultGame = ({ rightAnswers, wrongAnswers, restartGame, result }) => {
             {wrongAnswers.length}
           </div>
           {wrongAnswers.map((word, index) => (
-            <div className={styles.answerWrapper} key={index}>
-              <span className={styles.wrapperAnswerAudio}>
-                <div className={styles.answerAudio} onClick={() => playWord(word)} />
-              </span>
-              <div className={styles.answerEng}>{word.question}</div>
-              <span className={styles.answerTr}> — </span>
-              <div className={styles.answerTrans}>{word.rightAnswer}</div>
-            </div>
+            <ResultWord key={index} word={word} />
           ))}
           <div className={styles.answersLine} />
           <div className={`${styles.resultAnswers} ${styles.right}`}>
@@ -32,14 +39,7 @@ const ResultGame = ({ rightAnswers, wrongAnswers, restartGame, result }) => {
             {rightAnswers.length}
           </div>
           {rightAnswers.map((word, index) => (
-            <div className={styles.answerWrapper} key={index}>
-              <span className={styles.wrapperAnswerAudio}>
-                <div className={styles.answerAudio} onClick={() => playWord(word)} />
-              </span>
-              <div className={styles.answerEng}>{word.question}</div>
-              <span className={styles.answerTr}> — </span>
-              <div className={styles.answerTrans}>{word.rightAnswer}</div>
-            </div>
+            <ResultWord key={index} word={word} />
           ))}
         </div>
       </div>
