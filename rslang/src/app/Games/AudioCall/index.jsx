@@ -30,7 +30,6 @@ export default function AudioCall() {
 
   useEffect(() => {
     if (start) {
-      console.log('START');
       (async () => {
         await dispatch(fetchWordsForQuiz(urls.words.all));
       })();
