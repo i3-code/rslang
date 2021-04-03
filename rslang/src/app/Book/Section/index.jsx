@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Container, Grid, Box, Link } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
+import PaginationItem from '@material-ui/lab/PaginationItem';
 
 import Loading from '../../../components/partials/Loading';
 
@@ -12,13 +13,15 @@ import useStyles from './style';
 import urls from '../../../constants/urls';
 
 import { page, setPage } from '../bookSlice';
+import { inactivePagination } from '../../../redux/appSlice';
 
 export default function Section(props) {
-  const groupNum = Number(props?.match?.params?.group)  || 0;
+  const groupNum = Number(props?.match?.params?.group) || 0;
   const [pageNum, setPageNum] = useState(useSelector(page)[groupNum] || 1);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
   const dispatch = useDispatch();
+  const inactivePages =useSelector(inactivePagination)
 
   const classes = useStyles();
 
@@ -44,6 +47,18 @@ export default function Section(props) {
   },[groupNum, pageNum])
 
 
+  useEffect(() => {
+    const pagesBtn = document.querySelectorAll('button');
+    console.log(pagesBtn)
+    let pagesBtnFiltered = [];
+    for (let i = 0; i < pagesBtn.length; i++) {
+      if (inactivePages[groupNum] && inactivePages[groupNum].includes(+pagesBtn[i].innerText)) {
+        pagesBtnFiltered.push(pagesBtn[i])
+      }
+    }
+    pagesBtnFiltered.forEach(btn => { btn.classList.add(`${classes.notActive}`); btn.disabled = true})
+  },[groupNum, pageNum, inactivePages, classes.notActive])
+
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
@@ -59,6 +74,7 @@ export default function Section(props) {
          showLastButton
          className={classes.pagination}
         />
+        <PaginationItem />
         <Box className={classes.linkwrapper}>
           <Link href="#/games/savannah" underline='none' className={classes.link}> Саванна </Link>
           <Link href="#/games/audiocall" underline='none' className={classes.link}> Аудиовызов </Link>

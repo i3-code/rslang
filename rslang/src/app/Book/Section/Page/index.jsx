@@ -13,10 +13,12 @@ export default function Page({words, groupNum, pageNum}) {
     return !deletedWordsList[groupNum].includes(id);
   }
 
+  const filteredWords = words ? words.filter((word) => filterFunc(word.id)) : {}
+
   return (
     <Grid>
-      { words && words.filter((word) => filterFunc(word.id))
-        .map((word) => <Word currentWord={word} groupNum={groupNum} key={word.id}/>)
+      { words && filteredWords
+        .map((word) => <Word currentWord={word} groupNum={groupNum} key={word.id} wordsOnPage={filteredWords.length} pageNum={pageNum}/>)
       }
     </Grid>
   );

@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     display: 'flex',
     justifyContent: 'space-around',
+  },
+  notActive: {
+    cursor: 'not-allowed',
   }
 })
 )
