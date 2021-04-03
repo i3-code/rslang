@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
+import {setHardWords, setDeletedWords, setInactivePagination, hardWords } from '../../../../../redux/appSlice';
 import { translate, controls } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
@@ -20,7 +20,7 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, groupNum}) {
+export default function Word({currentWord, groupNum, pageNum, wordsOnPage}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate} = currentWord;
 
@@ -36,59 +36,51 @@ export default function Word({currentWord, groupNum}) {
   const [isAudioExample, setIsAudioExample] = useState(false);
 
   const soundPrefix = urls.base;
-  const [playAudioExample, playAudioExampleData] = useSound(`${soundPrefix}/${audioExample}`);
-  const [playAudioMeaning, playAudioMeaningData] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
-  const [playAudio, playAudioData] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
+  const [playAudioExample, { stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`);
+  const [playAudioMeaning, { stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
+  const [playAudio, { stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
 
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioData;
     if (isAudio) {
-      if (isPlaying) stop();
       playAudio();
       setIsAudio(false);
     }
-
-    return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudio, playAudio, playAudioData]);
+  }, [isAudio, playAudio]);
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioMeaningData;
     if (isAudioMeaning) {
-      if (isPlaying) stop();
       playAudioMeaning();
       setIsAudioMeaning(false);
     }
-
-    return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudioMeaning, playAudioMeaning, playAudioMeaningData]);
+  }, [isAudioMeaning, playAudioMeaning]);
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioExampleData;
     if (isAudioExample) {
-      if (isPlaying) stop();
       playAudioExample();
       setIsAudioExample(false);
     }
+  }, [isAudioExample, playAudioExample]);
 
-    return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudioExample, playAudioExample, playAudioExampleData]);
-
-  const handleAudio = () => setIsAudio(true);
+  const handleAudio = () => {
+    stopAudio()
+    setIsAudio(true)
+  };
 
   const createMarkup = (text) => {
     return {__html: text};
   }
 
+  const checkNumberOfWordsOnPage = () => {
+    if (wordsOnPage === 1) {
+      dispatch(setInactivePagination({groupNum, pageNum}))
+    }
+
+  }
+
   const isHard = () => hardWordsList[groupNum].includes(id);
   const handleHard = () => dispatch(setHardWords({groupNum, id}));
-  const handleDeleted = () => dispatch(setDeletedWords({groupNum, id}));
+  const handleDeleted = () => { dispatch(setDeletedWords({groupNum, id})); checkNumberOfWordsOnPage() };
 
 
   return (
