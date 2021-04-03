@@ -10,15 +10,18 @@ const AudioQuestion = () => {
   const quiz = useSelector(selectQuiz);
   const getAnswer = useSelector(selectGetAnswer);
 
-  const playWord = async () => {
-    await new Audio(`${urls.base}/${quiz[questionNumber].audio}`).play();
-  };
-
+  const playSound = new Audio(`${urls.base}/${quiz[questionNumber].audio}`);
   const [animationButton, setAnimationButton] = useState(false);
 
   useEffect(() => {
-    (async () => await playWord())();
+    let playPromise = playSound.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {}).catch(() => {});
+    }
     setAnimationButton((prev) => !prev);
+    return () => {
+      playSound.pause();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionNumber]);
 
@@ -38,7 +41,7 @@ const AudioQuestion = () => {
               <button
                 className={styles.miniAudioButton}
                 onClick={async () => {
-                  await playWord();
+                  await playSound.play();
                 }}
               />
               <div>{quiz[questionNumber].question}</div>
@@ -59,7 +62,7 @@ const AudioQuestion = () => {
               className={styles.audioButton}
               onClick={async () => {
                 setAnimationButton((prev) => !prev);
-                await playWord();
+                await playSound.play();
               }}
             />
           </CSSTransition>

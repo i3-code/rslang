@@ -26,12 +26,15 @@ export default function AudioCall() {
   const rightAnswers = useSelector(selectRightAnswers);
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
+  const loading = useSelector(selectLoading);
 
   useEffect(() => {
-    (async () => {
-      await dispatch(fetchWordsForQuiz(urls.words.all));
-    })();
-  }, [statistics, dispatch]);
+    if (start) {
+      (async () => {
+        await dispatch(fetchWordsForQuiz(urls.words.all));
+      })();
+    }
+  }, [start, dispatch]);
 
   return (
     <div
@@ -40,10 +43,12 @@ export default function AudioCall() {
     >
       <div className={styles.audioCallWrapper}>
         <div className={styles.audioCall}>
-          {useSelector(selectLoading) ? (
-            <Loading />
-          ) : start ? (
-            <AudioCallQuiz />
+          {start ? (
+            loading ? (
+              <Loading />
+            ) : (
+              <AudioCallQuiz />
+            )
           ) : statistics ? (
             <ResultGame
               rightAnswers={rightAnswers}

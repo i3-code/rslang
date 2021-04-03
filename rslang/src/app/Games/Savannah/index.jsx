@@ -35,12 +35,15 @@ export default function Savannah() {
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
   const guardAllowed = useSelector(selectGuardAllowed);
+  const loading = useSelector(selectLoading);
 
   useEffect(() => {
-    (async () => {
-      await dispatch(fetchWordsForQuiz(urls.words.all));
-    })();
-  }, [statistics, dispatch]);
+    if (start) {
+      (async () => {
+        await dispatch(fetchWordsForQuiz(urls.words.all));
+      })();
+    }
+  }, [start, dispatch]);
 
   useEffect(() => {
     if (start) {
@@ -66,10 +69,12 @@ export default function Savannah() {
     >
       <div className={styles.savannahWrapper}>
         <div className={styles.savannah}>
-          {useSelector(selectLoading) ? (
-            <Loading />
-          ) : start ? (
-            <SavannahQuiz />
+          {start ? (
+            loading ? (
+              <Loading />
+            ) : (
+              <SavannahQuiz />
+            )
           ) : statistics ? (
             <ResultGame
               rightAnswers={rightAnswers}
