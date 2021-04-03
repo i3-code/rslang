@@ -48,10 +48,11 @@ export default function Section(props) {
 
 
   useEffect(() => {
-    const pagesBtn = document.querySelectorAll('button.MuiPaginationItem-page');
+    const pagesBtn = document.querySelectorAll('button');
+    console.log(pagesBtn)
     let pagesBtnFiltered = [];
     for (let i = 0; i < pagesBtn.length; i++) {
-      if (inactivePages[groupNum].includes(+pagesBtn[i].innerText)) {
+      if (inactivePages[groupNum] && inactivePages[groupNum].includes(+pagesBtn[i].innerText)) {
         pagesBtnFiltered.push(pagesBtn[i])
       }
     }

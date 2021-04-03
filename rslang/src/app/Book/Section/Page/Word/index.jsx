@@ -36,51 +36,36 @@ export default function Word({currentWord, groupNum, pageNum, wordsOnPage}) {
   const [isAudioExample, setIsAudioExample] = useState(false);
 
   const soundPrefix = urls.base;
-  const [playAudioExample, playAudioExampleData] = useSound(`${soundPrefix}/${audioExample}`);
-  const [playAudioMeaning, playAudioMeaningData] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
-  const [playAudio, playAudioData] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
+  const [playAudioExample, { stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`);
+  const [playAudioMeaning, { stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
+  const [playAudio, { stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
 
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioData;
     if (isAudio) {
-      if (isPlaying) stop();
       playAudio();
       setIsAudio(false);
     }
-
-    return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudio, playAudio, playAudioData]);
+  }, [isAudio, playAudio]);
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioMeaningData;
     if (isAudioMeaning) {
-      if (isPlaying) stop();
       playAudioMeaning();
       setIsAudioMeaning(false);
     }
-
-    return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudioMeaning, playAudioMeaning, playAudioMeaningData]);
+  }, [isAudioMeaning, playAudioMeaning]);
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioExampleData;
     if (isAudioExample) {
-      if (isPlaying) stop();
       playAudioExample();
       setIsAudioExample(false);
     }
+  }, [isAudioExample, playAudioExample]);
 
-    return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudioExample, playAudioExample, playAudioExampleData]);
-
-  const handleAudio = () => setIsAudio(true);
+  const handleAudio = () => {
+    stopAudio()
+    setIsAudio(true)
+  };
 
   const createMarkup = (text) => {
     return {__html: text};
