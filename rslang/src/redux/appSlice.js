@@ -43,5 +43,6 @@ export const { setDeletedWords, setHardWords, setLearnedWords } = appSlice.actio
 
 export const deletedWords = (state) => state.app.deletedWords;
 export const hardWords = (state) => state.app.hardWords;
+export const learnedWords = (state) => state.app.learnedWords;
 
 export default appSlice.reducer;
