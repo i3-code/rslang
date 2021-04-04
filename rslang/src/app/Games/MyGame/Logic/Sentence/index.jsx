@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Word from '../Word';
+import Word from './Word';
+import {
+  selectCount,
+  setAnswer,
+  setCheckTrue,
+  nextSentence,
+  selectLearningWord,
+  setCheckFalse,
+  selectShuffleSentence,
+} from '../../myGameSlice';
 
 import Button from '@material-ui/core/Button';
 import { Grid } from '@material-ui/core';
 
 import useStyles from './styles';
 
-const Sentence = ({ sentenceSplit, onCheck, onClickNext, sentenceRef, currentSentences, answer, check }) => {
+const Sentence = ({ sentenceRef}) => {
+  const sentenceSplit= useSelector(selectShuffleSentence)
   const [words, setWords] = useState(sentenceSplit);
   const classes = useStyles();
-
+  const dispatch = useDispatch();
+  const count = useSelector(selectCount);
+  const learningWord=useSelector(selectLearningWord);
   useEffect(() => {
     setWords(sentenceSplit);
-  }, [currentSentences]);
+  }, [sentenceSplit]);
 
   function handleOnDragEnd(e) {
     if (!e.destination) return;
@@ -23,10 +36,17 @@ const Sentence = ({ sentenceSplit, onCheck, onClickNext, sentenceRef, currentSen
     setWords(newSentence);
   }
 
+  const onCheck = () => {
+    dispatch(setCheckTrue());
+    dispatch(setAnswer({ answer: words.join(' '), count: count }));
+    setTimeout(() => {
+      dispatch(setCheckFalse())
+    }, 1000);
+  };
+
   return (
-    <Grid width="100%">
+    <Grid className={classes.root}>
       <Grid ref={sentenceRef}>
-        <Grid className={classes.answer}>{check && <Grid>{answer ? 'Верно!' : 'Не верно!'}</Grid>}</Grid>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Droppable droppableId="playingField" direction="horizontal ">
             {(provided) => (
@@ -35,7 +55,13 @@ const Sentence = ({ sentenceSplit, onCheck, onClickNext, sentenceRef, currentSen
                   let id = `el+${i}`;
                   return (
                     <Draggable key={id} draggableId={id} index={i}>
-                      {(provided) => <Word word={el} provided={provided} />}
+                      {(provided) => (
+                        <Word
+                          word={el}
+                          provided={provided}
+                          setColor={learningWord === el || learningWord === el.substring(0, el.length - 1)}
+                        />
+                      )}
                     </Draggable>
                   );
                 })}
@@ -46,10 +72,10 @@ const Sentence = ({ sentenceSplit, onCheck, onClickNext, sentenceRef, currentSen
         </DragDropContext>
       </Grid>
       <Grid container direction="row" justify="center">
-        <Button className={classes.button} onClick={() => onCheck(words)}>
+        <Button className={classes.buttonRight} onClick={onCheck}>
           Проверить
         </Button>
-        <Button className={classes.button} onClick={onClickNext}>
+        <Button className={classes.buttonNext} onClick={() => dispatch(nextSentence({ count: count }))}>
           Дальше
         </Button>
       </Grid>
