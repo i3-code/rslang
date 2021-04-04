@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { playAnswerSound } from '../../../../functions/games/answerSound';
 import { Button } from '@material-ui/core';
 import data from '../data-example';
 import Timer from '../../components/Timer';
@@ -92,6 +93,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
           : setWrongAnswers([...wrongAnswers, editedWord]);
         highlightBody(userWasCorrect);
         setPrevWord(word);
+        playAnswerSound(userWasCorrect);
       }
     },
     [correctAnswers, counter, updateStreak, word, wrongAnswers, lockInteraction, highlightBody],
