@@ -1,39 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Container, Grid, Box, Link } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
+import PaginationItem from '@material-ui/lab/PaginationItem';
 
 import Loading from '../../../components/partials/Loading';
 
 import Page from './Page';
 import useStyles from './style';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { page, setPage } from '../bookSlice';
+import urls from '../../../constants/urls';
 
-const storageInfo = localStorage.getItem('rslang20') ? JSON.parse(localStorage.getItem('rslang20')) : { page: 0, group: 0 };
+import { page, setPage } from '../bookSlice';
+import { inactivePagination } from '../../../redux/appSlice';
 
 export default function Section(props) {
-  const group = props?.match?.params?.group  || 0;
-  const [pageNum, setPageNum] = useState(useSelector(page) || 1);
+  const groupNum = Number(props?.match?.params?.group) || 0;
+  const [pageNum, setPageNum] = useState(useSelector(page)[groupNum] || 1);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
   const dispatch = useDispatch();
+  const inactivePages =useSelector(inactivePagination)
 
   const classes = useStyles();
 
   const handleChange = (event, value) => {
+    if (pageNum === value) return;
     setLoading(true);
     setPageNum(value);
-    storageInfo.page = value;
-    localStorage.setItem('rslang20', JSON.stringify(storageInfo));
-    dispatch(setPage({pageNum: value}))
+    dispatch(setPage({pageNum: value, groupNum}));
   };
 
   useEffect(() => {
     const fetchData = async () => {
       axios
-      .get(`https://react-rslang.herokuapp.com/words?group=${group}&page=${pageNum - 1}`)
+      .get(`${urls.words.all}?group=${groupNum}&page=${pageNum - 1}`)
       .then((response) => {
         setWords(response.data);
         setLoading(false);
@@ -42,13 +44,25 @@ export default function Section(props) {
     };
 
     fetchData();
-  },[group, pageNum])
+  },[groupNum, pageNum])
 
+
+  useEffect(() => {
+    const pagesBtn = document.querySelectorAll('button');
+    console.log(pagesBtn)
+    let pagesBtnFiltered = [];
+    for (let i = 0; i < pagesBtn.length; i++) {
+      if (inactivePages[groupNum] && inactivePages[groupNum].includes(+pagesBtn[i].innerText)) {
+        pagesBtnFiltered.push(pagesBtn[i])
+      }
+    }
+    pagesBtnFiltered.forEach(btn => { btn.classList.add(`${classes.notActive}`); btn.disabled = true})
+  },[groupNum, pageNum, inactivePages, classes.notActive])
 
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
-        { (loading) ? <Loading /> : <Page words={words} /> }
+        { (loading) ? <Loading /> : <Page {...{words, groupNum, pageNum}} /> }
         <Pagination
          count={30}
          variant="outlined"
@@ -60,6 +74,7 @@ export default function Section(props) {
          showLastButton
          className={classes.pagination}
         />
+        <PaginationItem />
         <Box className={classes.linkwrapper}>
           <Link href="#/games/savannah" underline='none' className={classes.link}> Саванна </Link>
           <Link href="#/games/audiocall" underline='none' className={classes.link}> Аудиовызов </Link>

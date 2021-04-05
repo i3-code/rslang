@@ -21,6 +21,13 @@ const palettes = {
   '/games/audiocall' : '#4099ff',
   '/games/sprint' : '#ff5370',
   '/games/ourgame' : '#2ed8b6',
+
+  '/book/0' : '#4099ff',
+  '/book/1' : '#2ed8b6',
+  '/book/2' : '#ffb64d',
+  '/book/3' : '#ff5370',
+  '/book/4' : '#c882e2',
+  '/book/5' : '#f9f53e',
 }
 
 const getThemeByName = (pathname) => {

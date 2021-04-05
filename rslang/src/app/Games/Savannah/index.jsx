@@ -19,6 +19,8 @@ import {
   restartGame,
   selectResult,
   startGame,
+  selectGuardAllowed,
+  timeFinished,
 } from './savannahSlice';
 
 export default function Savannah() {
@@ -32,12 +34,16 @@ export default function Savannah() {
   const rightAnswers = useSelector(selectRightAnswers);
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
+  const guardAllowed = useSelector(selectGuardAllowed);
+  const loading = useSelector(selectLoading);
 
   useEffect(() => {
-    (async () => {
-      await dispatch(fetchWordsForQuiz(urls.words));
-    })();
-  }, [statistics, dispatch]);
+    if (start) {
+      (async () => {
+        await dispatch(fetchWordsForQuiz(urls.words.all));
+      })();
+    }
+  }, [start, dispatch]);
 
   useEffect(() => {
     if (start) {
@@ -50,10 +56,11 @@ export default function Savannah() {
   }, [start, dispatch]);
 
   useEffect(() => {
-    if (timer >= TIMER_LIMIT) {
+    if (timer >= TIMER_LIMIT && guardAllowed) {
+      dispatch(timeFinished());
       dispatch(nextRound());
     }
-  }, [timer, dispatch]);
+  }, [timer, dispatch, guardAllowed]);
 
   return (
     <div
@@ -62,10 +69,12 @@ export default function Savannah() {
     >
       <div className={styles.savannahWrapper}>
         <div className={styles.savannah}>
-          {useSelector(selectLoading) ? (
-            <Loading />
-          ) : start ? (
-            <SavannahQuiz />
+          {start ? (
+            loading ? (
+              <Loading />
+            ) : (
+              <SavannahQuiz />
+            )
           ) : statistics ? (
             <ResultGame
               rightAnswers={rightAnswers}

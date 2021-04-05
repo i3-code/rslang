@@ -4,6 +4,7 @@ import Card from '../../components/partials/Card';
 import Savannah from './Savannah';
 import Sprint from './Sprint';
 import MyGame from './MyGame';
+import AudioCall from './AudioCall';
 
 const cardsArray = [
   {
@@ -36,6 +37,7 @@ const games = {
   savannah: <Savannah />,
   sprint: <Sprint />,
   sort: <MyGame/>,
+  audiocall: <AudioCall />,
 };
 
 export default function Games(props) {

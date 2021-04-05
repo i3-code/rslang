@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
+import { playAnswerSound } from '../../../functions/games/answerSound';
+import { checkContainAnswerArray } from '../../../functions/games/answerContain';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
   initialState: {
+    duration: 1000,
     timer: 0,
     result: 0,
     loading: true,
@@ -14,6 +17,10 @@ export const savannahSlice = createSlice({
     statistics: null,
     rightAnswers: [],
     wrongAnswers: [],
+    guardAllowed: true,
+    getAnswer: false,
+    currentAnswer: 0,
+    getRightAnswer: false,
   },
   reducers: {
     incrementTimer: (state) => {
@@ -35,6 +42,8 @@ export const savannahSlice = createSlice({
       state.quiz = action.payload;
     },
     nextRound: (state) => {
+      state.getAnswer = false;
+      state.guardAllowed = true;
       if (state.questionNumber >= state.quiz.length - 1) {
         state.result = calculatePercentResult(state.quiz.filter((q) => q.status).length, state.quiz.length);
         state.start = false;
@@ -43,18 +52,24 @@ export const savannahSlice = createSlice({
         return;
       }
       state.timer = 0;
-      document.getElementById('savannah-game-question').classList.remove('active');
       state.questionNumber++;
-      setTimeout(function () {
-        document.getElementById('savannah-game-question').classList.add('active');
-      }, 50);
     },
     setAnswer: (state, action) => {
-      if (state.quiz[action.payload.questionNumber].rightAnswer === action.payload.answer) {
-        state.quiz[action.payload.questionNumber].status = true;
-        state.rightAnswers.push(state.quiz[action.payload.questionNumber]);
+      state.guardAllowed = false;
+      state.getAnswer = true;
+      state.currentAnswer = action.payload.index;
+      const quiz = state.quiz[action.payload.questionNumber];
+      if (quiz.rightAnswer === action.payload.answer) {
+        quiz.status = true;
+        if (checkContainAnswerArray(state.rightAnswers, quiz.question)) {
+          state.rightAnswers.push(quiz);
+        }
+        state.getRightAnswer = true;
       } else {
-        state.wrongAnswers.push(state.quiz[action.payload.questionNumber]);
+        state.getRightAnswer = false;
+        if (checkContainAnswerArray(state.wrongAnswers, quiz.question)) {
+          state.wrongAnswers.push(quiz);
+        }
       }
     },
     restartGame: (state) => {
@@ -62,6 +77,12 @@ export const savannahSlice = createSlice({
       state.questionNumber = 0;
       state.statistics = null;
       state.start = true;
+    },
+    timeFinished: (state) => {
+      if (checkContainAnswerArray(state.wrongAnswers, state.quiz[state.questionNumber].question)) {
+        state.wrongAnswers.push(state.quiz[state.questionNumber]);
+      }
+      playAnswerSound(false);
     },
   },
 });
@@ -75,6 +96,11 @@ export const selectStart = (state) => state.savannahGame.start;
 export const selectStatistics = (state) => state.savannahGame.statistics;
 export const selectRightAnswers = (state) => state.savannahGame.rightAnswers;
 export const selectWrongAnswers = (state) => state.savannahGame.wrongAnswers;
+export const selectGuardAllowed = (state) => state.savannahGame.guardAllowed;
+export const selectDuration = (state) => state.savannahGame.duration;
+export const selectGetAnswer = (state) => state.savannahGame.getAnswer;
+export const selectGetRightAnswer = (state) => state.savannahGame.getRightAnswer;
+export const selectCurrentAnswer = (state) => state.savannahGame.currentAnswer;
 
 export const {
   incrementTimer,
@@ -86,6 +112,7 @@ export const {
   setAnswer,
   startGame,
   restartGame,
+  timeFinished,
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch) => {
@@ -105,6 +132,7 @@ export const fetchWordsForQuiz = (url) => async (dispatch) => {
         rightAnswer: word.wordTranslate,
         status: false,
         audio: word.audio,
+        image: word.image,
       });
     });
     dispatch(setQuiz(quizPrepare));
