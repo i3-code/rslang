@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import {
   fetchWordsForQuiz,
+  resetData,
   restartGame,
   selectLoading,
   selectResult,
@@ -55,6 +56,7 @@ export default function AudioCall() {
               wrongAnswers={wrongAnswers}
               restartGame={() => dispatch(restartGame())}
               result={result}
+              resetData={() => dispatch(resetData())}
             />
           ) : (
             <StartGameMenu

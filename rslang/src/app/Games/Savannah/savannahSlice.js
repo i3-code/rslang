@@ -84,6 +84,19 @@ export const savannahSlice = createSlice({
       }
       playAnswerSound(false);
     },
+    resetData: (state) => {
+      state.timer = 0;
+      state.questionNumber = 0;
+      state.statistics = null;
+      state.quiz = [];
+      state.rightAnswers = [];
+      state.wrongAnswers = [];
+      state.getAnswer = false;
+      state.currentAnswer = 0;
+      state.getRightAnswer = false;
+      state.start = false;
+      state.loading = true;
+    },
   },
 });
 
@@ -113,6 +126,7 @@ export const {
   startGame,
   restartGame,
   timeFinished,
+  resetData,
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch) => {

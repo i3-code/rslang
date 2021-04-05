@@ -21,6 +21,7 @@ import {
   startGame,
   selectGuardAllowed,
   timeFinished,
+  resetData,
 } from './savannahSlice';
 
 export default function Savannah() {
@@ -81,6 +82,7 @@ export default function Savannah() {
               wrongAnswers={wrongAnswers}
               restartGame={() => dispatch(restartGame())}
               result={result}
+              resetData={() => dispatch(resetData())}
             />
           ) : (
             <StartGameMenu
