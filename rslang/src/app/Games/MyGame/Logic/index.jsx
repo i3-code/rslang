@@ -46,7 +46,7 @@ export default function Logic() {
 
   useEffect(() => {
     (async () => {
-      await dispatch(fetchSentences(`${urls.words}?group=${level}&page=${pageNum - 1}`));
+      await dispatch(fetchSentences(`${urls.words.all}?group=${level}&page=${pageNum - 1}`));
     })();
   }, [level, pageNum, dispatch]);
 
