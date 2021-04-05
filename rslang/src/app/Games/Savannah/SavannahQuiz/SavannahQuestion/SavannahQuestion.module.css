@@ -46,3 +46,9 @@
     opacity:1;
     transition: 1s;
 }
+
+@media (max-width: 1100px) {
+    .gameQuestion {
+        left: 50px;
+    }
+}
