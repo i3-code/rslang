@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+
 import { Container, Grid, Box, Link } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
@@ -10,30 +10,15 @@ import Loading from '../../../components/partials/Loading';
 import Page from './Page';
 import useStyles from './style';
 
-import urls from '../../../constants/urls';
-
 import { page, setPage } from '../bookSlice';
 import { deletedWords } from '../../../redux/appSlice';
 
-const cache = {};
-const totalPages = 30;
-const totalWords = 600;
+import fetchPage from '../../../functions/fetchPage';
 
-const fetchPage = async (request) => {
-  if (cache[request]) return cache[request];
-  return new Promise((resolve, reject) => {
-    axios
-    .get(request)
-    .then((response) => {
-      cache[request] = response.data;
-      resolve(cache[request]);
-    })
-    .catch((error) => {
-      console.log(error);
-      return null;
-    });
-  });
-}
+import { WORDS_ON_PAGE, PAGES_IN_GROUP} from '../../../constants';
+
+const totalPages = PAGES_IN_GROUP / WORDS_ON_PAGE;
+
 
 export default function Section(props) {
   const groupNum = Number(props?.match?.params?.group) || 0;
@@ -53,7 +38,7 @@ export default function Section(props) {
 
   const isDisabled = (page) => {
     const deletedArray = deletedWordsList[groupNum][page] || [];
-    return deletedArray.length === totalWords / totalPages;
+    return deletedArray.length === WORDS_ON_PAGE;
   }
 
   const handleChange = (event, value) => {
@@ -65,11 +50,10 @@ export default function Section(props) {
 
   useEffect(() => {
     const getWords = async () => {
-    const request = `${urls.words.all}?group=${groupNum}&page=${pageNum - 1}`;
-    const reqWords = await fetchPage(request);
-    const words = reqWords.filter((word) => filterFunc(word.id));
-    setWords(words);
-    setLoading(false);
+      const reqWords = await fetchPage(groupNum, pageNum);
+      const words = reqWords.filter((word) => filterFunc(word.id));
+      setWords(words);
+      setLoading(false);
     };
     getWords();
   },[filterFunc, groupNum, pageNum]);
@@ -97,6 +81,7 @@ export default function Section(props) {
          showLastButton
          className={classes.pagination}
          renderItem={getPaginationItem}
+         siblingCount={5}
         />
         <PaginationItem />
         <Box className={classes.linkwrapper}>
