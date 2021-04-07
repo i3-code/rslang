@@ -12,7 +12,7 @@ import useStyles from './style';
 
 import urls from '../../../constants/urls';
 
-import { page, setPage } from '../bookSlice';
+import {page, setCurrentDataForGames, setPage} from '../bookSlice';
 import { inactivePagination } from '../../../redux/appSlice';
 
 export default function Section(props) {
@@ -75,10 +75,10 @@ export default function Section(props) {
         />
         <PaginationItem />
         <Box className={classes.linkwrapper}>
-          <Link href="#/games/savannah" underline='none' className={classes.link}> Саванна </Link>
-          <Link href="#/games/audiocall" underline='none' className={classes.link}> Аудиовызов </Link>
-          <Link href="#/games/sprint" underline='none' className={classes.link}> Спринт </Link>
-          <Link href="#/games/ourgame" underline='none' className={classes.link}> Своя игра </Link>
+          <Link href="#/games/savannah" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Саванна </Link>
+          <Link href="#/games/audiocall" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Аудиовызов </Link>
+          <Link href="#/games/sprint" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Спринт </Link>
+          <Link href="#/games/ourgame" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Своя игра </Link>
         </Box>
       </Container>
     </Grid>
