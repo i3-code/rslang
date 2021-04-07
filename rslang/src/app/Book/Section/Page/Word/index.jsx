@@ -20,7 +20,7 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, groupNum, pageNum}) {
+export default function Word({currentWord, groupNum, pageNum, canPlay, setCanPlay}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate} = currentWord;
 
@@ -36,7 +36,7 @@ export default function Word({currentWord, groupNum, pageNum}) {
   const [isAudioExample, setIsAudioExample] = useState(false);
 
   const soundPrefix = urls.base;
-  const [playAudioExample, { isPlaying: isAudioExamplePlaying, stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`);
+  const [playAudioExample, { isPlaying: isAudioExamplePlaying, stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`, {onend: ()=> setCanPlay(true)});
   const [playAudioMeaning, { isPlaying: isAudioMeaningPlaying, stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
   const [playAudio, { isPlaying: isAudioPlaying, stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
 
@@ -71,7 +71,10 @@ export default function Word({currentWord, groupNum, pageNum}) {
   }, [isAudioExample, isAudioExamplePlaying, playAudioExample, stopAudioExample]);
 
   const handleAudio = () => {
-    setIsAudio(true);
+    if (canPlay) {
+      setIsAudio(true);
+      setCanPlay(false);
+    }
   };
 
   const createMarkup = (text) => {
