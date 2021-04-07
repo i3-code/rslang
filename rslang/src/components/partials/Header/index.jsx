@@ -46,7 +46,8 @@ const additionalIcons = {
 };
 
 const getNameByPath = (path) => {
-  const name = path.slice(0, path.lastIndexOf('/')) || path;
+  let name = path.slice(0, path.lastIndexOf('/')) || path;
+  if (name.includes('games')) name = '/games';
   return mainIcons[name] || additionalIcons[name] || ['404'];
 };
 

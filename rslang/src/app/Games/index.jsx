@@ -41,11 +41,11 @@ const games = {
 };
 
 export default function Games(props) {
-  const gameName = props?.match?.params?.game;
-  const game = games[gameName];
+  const {game, group, page} = props?.match?.params;
+  const gameName = games[game] || null;
 
   return (
-    game || (
+    gameName || (
       <Container>
         <Grid container direction="row" justify="space-evenly" alignItems="center">
           {cardsArray.map((card, i) => (

@@ -81,6 +81,7 @@ export default function Section(props) {
     />
   }
 
+  const postfix = `${groupNum}/${pageNum}`;
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
@@ -99,10 +100,10 @@ export default function Section(props) {
         />
         <PaginationItem />
         <Box className={classes.linkwrapper}>
-          <Link href="#/games/savannah" underline='none' className={classes.link}> Саванна </Link>
-          <Link href="#/games/audiocall" underline='none' className={classes.link}> Аудиовызов </Link>
-          <Link href="#/games/sprint" underline='none' className={classes.link}> Спринт </Link>
-          <Link href="#/games/ourgame" underline='none' className={classes.link}> Своя игра </Link>
+          <Link href={`#/games/savannah/${postfix}`} className={classes.link}> Саванна </Link>
+          <Link href={`#/games/audiocall/${postfix}`} className={classes.link}> Аудиовызов </Link>
+          <Link href={`#/games/sprint/${postfix}`} className={classes.link}> Спринт </Link>
+          <Link href={`#/games/sort/${postfix}`} className={classes.link}> Сортировка </Link>
         </Box>
       </Container>
     </Grid>
