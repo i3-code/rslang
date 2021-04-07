@@ -2,7 +2,7 @@ import styles from './ResultGame.module.css';
 import { NavLink } from 'react-router-dom';
 import urls from '../../../../constants/urls';
 
-const ResultGame = ({ rightAnswers, wrongAnswers, restartGame, result, resetData = () => {} }) => {
+const ResultGame = ({ rightAnswers, wrongAnswers, restartGame, result }) => {
   const playWord = async (word) => {
     await new Audio(`${urls.base}/${word.audio}`).play();
   };
@@ -45,7 +45,7 @@ const ResultGame = ({ rightAnswers, wrongAnswers, restartGame, result, resetData
       <div className={styles.buttonContinue} onClick={() => restartGame()}>
         Продолжить тренировку
       </div>
-      <NavLink className={styles.buttonBack} onClick={() => resetData()} to="/games">
+      <NavLink className={styles.buttonBack} to="/games">
         К списку тренировок
       </NavLink>
     </div>
