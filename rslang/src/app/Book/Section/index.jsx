@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Container, Grid, Box, Link } from '@material-ui/core';
@@ -13,17 +13,48 @@ import useStyles from './style';
 import urls from '../../../constants/urls';
 
 import { page, setPage } from '../bookSlice';
-import { inactivePagination } from '../../../redux/appSlice';
+import { deletedWords } from '../../../redux/appSlice';
+
+const cache = {};
+const totalPages = 30;
+const totalWords = 600;
+
+const fetchPage = async (request) => {
+  if (cache[request]) return cache[request];
+  return new Promise((resolve, reject) => {
+    axios
+    .get(request)
+    .then((response) => {
+      cache[request] = response.data;
+      resolve(cache[request]);
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
+    });
+  });
+}
 
 export default function Section(props) {
   const groupNum = Number(props?.match?.params?.group) || 0;
   const [pageNum, setPageNum] = useState(useSelector(page)[groupNum] || 1);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
+  const deletedWordsList = useSelector(deletedWords);
+
   const dispatch = useDispatch();
-  const inactivePages = useSelector(inactivePagination);
 
   const classes = useStyles();
+
+  const filterFunc = useCallback((id) => {
+    const deletedArray = deletedWordsList[groupNum][pageNum] || [];
+    return !deletedArray.includes(id);
+  }, [deletedWordsList, groupNum, pageNum]);
+
+  const isDisabled = (page) => {
+    const deletedArray = deletedWordsList[groupNum][page] || [];
+    return deletedArray.length === totalWords / totalPages;
+  }
 
   const handleChange = (event, value) => {
     if (pageNum === value) return;
@@ -33,37 +64,29 @@ export default function Section(props) {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      axios
-      .get(`${urls.words.all}?group=${groupNum}&page=${pageNum - 1}`)
-      .then((response) => {
-        setWords(response.data);
-        setLoading(false);
-      })
-      .catch((error) => console.log(error));
+    const getWords = async () => {
+    const request = `${urls.words.all}?group=${groupNum}&page=${pageNum - 1}`;
+    const reqWords = await fetchPage(request);
+    const words = reqWords.filter((word) => filterFunc(word.id));
+    setWords(words);
+    setLoading(false);
     };
+    getWords();
+  },[filterFunc, groupNum, pageNum]);
 
-    fetchData();
-  },[groupNum, pageNum])
-
-
-  useEffect(() => {
-    const pagesBtn = document.querySelectorAll('button');
-    let pagesBtnFiltered = [];
-    for (let i = 0; i < pagesBtn.length; i++) {
-      if (inactivePages[groupNum] && inactivePages[groupNum].includes(+pagesBtn[i].innerText)) {
-        pagesBtnFiltered.push(pagesBtn[i]);
-      }
-    }
-    pagesBtnFiltered.forEach(btn => { btn.classList.add(`${classes.notActive}`); btn.disabled = true})
-  },[groupNum, pageNum, inactivePages, classes.notActive])
+  const getPaginationItem = (item) => {
+    return <PaginationItem
+      {...item}
+      disabled={isDisabled(item.page)}
+    />
+  }
 
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
         { (loading) ? <Loading /> : <Page {...{words, groupNum, pageNum}} /> }
         <Pagination
-         count={30}
+         count={totalPages}
          variant="outlined"
          color="primary"
          size="large"
@@ -72,6 +95,7 @@ export default function Section(props) {
          showFirstButton
          showLastButton
          className={classes.pagination}
+         renderItem={getPaginationItem}
         />
         <PaginationItem />
         <Box className={classes.linkwrapper}>
