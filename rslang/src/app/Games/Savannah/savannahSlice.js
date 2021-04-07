@@ -96,6 +96,7 @@ export const savannahSlice = createSlice({
       state.getRightAnswer = false;
       state.start = false;
       state.loading = true;
+      state.guardAllowed = true;
     },
   },
 });

@@ -1,5 +1,6 @@
 import styles from './AudioCall.module.css';
 import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import {
   fetchWordsForQuiz,
@@ -28,6 +29,7 @@ export default function AudioCall() {
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
   const loading = useSelector(selectLoading);
+  let history = useHistory();
 
   useEffect(() => {
     if (start) {
@@ -35,7 +37,15 @@ export default function AudioCall() {
         await dispatch(fetchWordsForQuiz(urls.words.all));
       })();
     }
-  }, [start, dispatch]);
+
+    return () => {
+      let currentPath = history.location.pathname.split('/');
+      currentPath = currentPath[currentPath.length - 1];
+      if (currentPath !== 'audiocall') {
+        dispatch(resetData());
+      }
+    };
+  }, [start, dispatch, history]);
 
   return (
     <div
@@ -56,7 +66,6 @@ export default function AudioCall() {
               wrongAnswers={wrongAnswers}
               restartGame={() => dispatch(restartGame())}
               result={result}
-              resetData={() => dispatch(resetData())}
             />
           ) : (
             <StartGameMenu
