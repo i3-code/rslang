@@ -36,35 +36,42 @@ export default function Word({currentWord, groupNum, pageNum, wordsOnPage}) {
   const [isAudioExample, setIsAudioExample] = useState(false);
 
   const soundPrefix = urls.base;
-  const [playAudioExample, { stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`);
-  const [playAudioMeaning, { stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
-  const [playAudio, { stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
-
+  const [playAudioExample, { isPlaying: isAudioExamplePlaying, stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`);
+  const [playAudioMeaning, { isPlaying: isAudioMeaningPlaying, stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
+  const [playAudio, { isPlaying: isAudioPlaying, stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
 
   useEffect(() => {
     if (isAudio) {
       playAudio();
       setIsAudio(false);
     }
-  }, [isAudio, playAudio]);
+    return () => {
+      if (isAudioPlaying) stopAudio();
+    }
+  }, [isAudio, isAudioPlaying, playAudio, stopAudio]);
 
   useEffect(() => {
     if (isAudioMeaning) {
       playAudioMeaning();
       setIsAudioMeaning(false);
     }
-  }, [isAudioMeaning, playAudioMeaning]);
+    return () => {
+      if (isAudioMeaningPlaying) stopAudioMeaning();
+    }
+  }, [isAudioMeaning, isAudioMeaningPlaying, playAudioMeaning, stopAudioMeaning]);
 
   useEffect(() => {
     if (isAudioExample) {
       playAudioExample();
       setIsAudioExample(false);
     }
-  }, [isAudioExample, playAudioExample]);
+    return () => {
+      if (isAudioExamplePlaying) stopAudioExample();
+    }
+  }, [isAudioExample, isAudioExamplePlaying, playAudioExample, stopAudioExample]);
 
   const handleAudio = () => {
-    stopAudio()
-    setIsAudio(true)
+    setIsAudio(true);
   };
 
   const createMarkup = (text) => {

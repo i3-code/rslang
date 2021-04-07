@@ -79,3 +79,10 @@
     margin-left: -15px;
     transition: all .3s ease;
 }
+
+@media (max-width: 1100px) {
+    .nextButton {
+        top: -290px;
+        margin-left: -65px;
+    }
+}

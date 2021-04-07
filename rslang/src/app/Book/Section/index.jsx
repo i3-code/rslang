@@ -21,7 +21,7 @@ export default function Section(props) {
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
   const dispatch = useDispatch();
-  const inactivePages =useSelector(inactivePagination)
+  const inactivePages = useSelector(inactivePagination);
 
   const classes = useStyles();
 
@@ -49,11 +49,10 @@ export default function Section(props) {
 
   useEffect(() => {
     const pagesBtn = document.querySelectorAll('button');
-    console.log(pagesBtn)
     let pagesBtnFiltered = [];
     for (let i = 0; i < pagesBtn.length; i++) {
       if (inactivePages[groupNum] && inactivePages[groupNum].includes(+pagesBtn[i].innerText)) {
-        pagesBtnFiltered.push(pagesBtn[i])
+        pagesBtnFiltered.push(pagesBtn[i]);
       }
     }
     pagesBtnFiltered.forEach(btn => { btn.classList.add(`${classes.notActive}`); btn.disabled = true})
