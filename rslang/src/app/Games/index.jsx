@@ -5,11 +5,13 @@ import Savannah from './Savannah';
 import Sprint from './Sprint';
 import MyGame from './MyGame';
 import AudioCall from './AudioCall';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+
 
 import Loading from '../../components/partials/Loading';
 
-import { deletedWords } from '../../redux/appSlice';
+import { deletedWords, learnedWords ,setLearnedWords } from '../../redux/appSlice';
 
 import fetchPage from '../../functions/fetchPage';
 
@@ -70,6 +72,7 @@ export default function Games(props) {
   const [loading, setLoading] = useState(true);
   const [crawledPage, setCrawledPage] = useState(Number(page));
   const [words, setWords] = useState([]);
+  const dispatch = useDispatch();
 
   const deletedWordsList = useSelector(deletedWords);
 
@@ -87,6 +90,10 @@ export default function Games(props) {
         setWords(newWords);
         setCrawledPage(crawledPage - 1);
       } else {
+        words.forEach(word => {
+          const {group: groupNum, page: pageNum, id} = word;
+          dispatch(setLearnedWords({groupNum, pageNum, id}));
+        });
         setLoading(false);
       }
     };
