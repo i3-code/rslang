@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
+import {setHardWords, setDeletedWords, setInactivePagination, hardWords } from '../../../../../redux/appSlice';
 import { translate, controls } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
@@ -36,51 +36,43 @@ export default function Word({currentWord, groupNum, pageNum}) {
   const [isAudioExample, setIsAudioExample] = useState(false);
 
   const soundPrefix = urls.base;
-  const [playAudioExample, playAudioExampleData] = useSound(`${soundPrefix}/${audioExample}`);
-  const [playAudioMeaning, playAudioMeaningData] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
-  const [playAudio, playAudioData] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
-
+  const [playAudioExample, { isPlaying: isAudioExamplePlaying, stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`);
+  const [playAudioMeaning, { isPlaying: isAudioMeaningPlaying, stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
+  const [playAudio, { isPlaying: isAudioPlaying, stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioData;
     if (isAudio) {
-      if (isPlaying) stop();
       playAudio();
       setIsAudio(false);
     }
-
     return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudio, playAudio, playAudioData]);
+      if (isAudioPlaying) stopAudio();
+    }
+  }, [isAudio, isAudioPlaying, playAudio, stopAudio]);
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioMeaningData;
     if (isAudioMeaning) {
-      if (isPlaying) stop();
       playAudioMeaning();
       setIsAudioMeaning(false);
     }
-
     return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudioMeaning, playAudioMeaning, playAudioMeaningData]);
+      if (isAudioMeaningPlaying) stopAudioMeaning();
+    }
+  }, [isAudioMeaning, isAudioMeaningPlaying, playAudioMeaning, stopAudioMeaning]);
 
   useEffect(() => {
-    const { isPlaying, stop } = playAudioExampleData;
     if (isAudioExample) {
-      if (isPlaying) stop();
       playAudioExample();
       setIsAudioExample(false);
     }
-
     return () => {
-      if (isPlaying) stop();
-    };
-  }, [isAudioExample, playAudioExample, playAudioExampleData]);
+      if (isAudioExamplePlaying) stopAudioExample();
+    }
+  }, [isAudioExample, isAudioExamplePlaying, playAudioExample, stopAudioExample]);
 
-  const handleAudio = () => setIsAudio(true);
+  const handleAudio = () => {
+    setIsAudio(true);
+  };
 
   const createMarkup = (text) => {
     return {__html: text};
