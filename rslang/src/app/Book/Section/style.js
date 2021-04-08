@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     '& > ul': {
       justifyContent: 'center',
-    }
+    },
   },
   link: {
     padding: theme.spacing(1),
@@ -28,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: 'initial',
     },
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'none',
+    },
   },
   linkwrapper: {
     marginTop: theme.spacing(2),
@@ -36,8 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   notActive: {
     cursor: 'not-allowed',
-  }
-})
-)
+  },
+}));
 
 export default useStyles;
