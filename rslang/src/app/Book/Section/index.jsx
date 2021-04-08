@@ -12,7 +12,7 @@ import useStyles from './style';
 
 import urls from '../../../constants/urls';
 
-import { page, setPage } from '../bookSlice';
+import {page, setCurrentDataForGames, setPage} from '../bookSlice';
 import { inactivePagination } from '../../../redux/appSlice';
 
 export default function Section(props) {
@@ -21,7 +21,7 @@ export default function Section(props) {
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
   const dispatch = useDispatch();
-  const inactivePages =useSelector(inactivePagination)
+  const inactivePages = useSelector(inactivePagination);
 
   const classes = useStyles();
 
@@ -49,11 +49,10 @@ export default function Section(props) {
 
   useEffect(() => {
     const pagesBtn = document.querySelectorAll('button');
-    console.log(pagesBtn)
     let pagesBtnFiltered = [];
     for (let i = 0; i < pagesBtn.length; i++) {
       if (inactivePages[groupNum] && inactivePages[groupNum].includes(+pagesBtn[i].innerText)) {
-        pagesBtnFiltered.push(pagesBtn[i])
+        pagesBtnFiltered.push(pagesBtn[i]);
       }
     }
     pagesBtnFiltered.forEach(btn => { btn.classList.add(`${classes.notActive}`); btn.disabled = true})
@@ -76,10 +75,10 @@ export default function Section(props) {
         />
         <PaginationItem />
         <Box className={classes.linkwrapper}>
-          <Link href="#/games/savannah" underline='none' className={classes.link}> Саванна </Link>
-          <Link href="#/games/audiocall" underline='none' className={classes.link}> Аудиовызов </Link>
-          <Link href="#/games/sprint" underline='none' className={classes.link}> Спринт </Link>
-          <Link href="#/games/ourgame" underline='none' className={classes.link}> Своя игра </Link>
+          <Link href="#/games/savannah" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Саванна </Link>
+          <Link href="#/games/audiocall" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Аудиовызов </Link>
+          <Link href="#/games/sprint" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Спринт </Link>
+          <Link href="#/games/ourgame" underline='none' className={classes.link} onClick={()=>dispatch(setCurrentDataForGames({words, groupNum, pageNum}))}> Своя игра </Link>
         </Box>
       </Container>
     </Grid>
