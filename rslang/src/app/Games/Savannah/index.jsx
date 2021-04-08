@@ -7,6 +7,8 @@ import SavannahQuiz from './SavannahQuiz/SavannahQuiz';
 import Loading from '../../../components/partials/Loading';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import ResultGame from '../components/ResultGame/ResultGame';
+import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
+import { currentDataForGames } from '../../Book/bookSlice';
 import {
   fetchWordsForQuiz,
   selectTimer,
@@ -38,6 +40,7 @@ export default function Savannah() {
   const result = useSelector(selectResult);
   const guardAllowed = useSelector(selectGuardAllowed);
   const loading = useSelector(selectLoading);
+  const haveDataFromBook = Object.keys(useSelector(currentDataForGames)).length;
   let history = useHistory();
 
   useEffect(() => {
@@ -94,14 +97,17 @@ export default function Savannah() {
               result={result}
             />
           ) : (
-            <StartGameMenu
-              title="Саванна"
-              note="Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь."
-              startGame={() => dispatch(startGame())}
-              colorText="#00c49d"
-              colorTextButton="#fff"
-              colorButtonBackground="#00c49d"
-            />
+            <div style={{ textAlign: 'center' }}>
+              <StartGameMenu
+                title="Саванна"
+                note="Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь."
+                startGame={() => dispatch(startGame())}
+                colorText="#f9f53e"
+                colorTextButton="rgba(0, 0, 0, 0.87)"
+                colorButtonBackground="#f9f53e"
+              />
+              {haveDataFromBook ? '' : <LevelDifficult color="#f9f53e" />}
+            </div>
           )}
         </div>
       </div>
