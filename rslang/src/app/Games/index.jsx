@@ -88,7 +88,6 @@ export default function Games(props) {
         setWords(newWords);
         setCrawledPage(crawledPage - 1);
       } else {
-        console.log(words);
         words.forEach(word => {
           const {group, page, id} = word;
           dispatch(setLearnedWords({groupNum: group, pageNum: +page + 1, id}));
