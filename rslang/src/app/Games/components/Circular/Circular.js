@@ -11,6 +11,8 @@ const useStyles = makeStyles({
     position: 'absolute',
     bottom: '15%',
     textAlign: 'center',
+    right: 0,
+    left: 0,
   },
   title: {
     color: 'white',
