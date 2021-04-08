@@ -24,6 +24,8 @@ export const savannahSlice = createSlice({
     getRightAnswer: false,
     level: 0,
     pageNum: 0,
+    progress: 0,
+    percentRightAnswers: 0,
   },
   reducers: {
     incrementTimer: (state) => {
@@ -74,6 +76,11 @@ export const savannahSlice = createSlice({
           state.wrongAnswers.push(quiz);
         }
       }
+      let questionNum = state.questionNumber;
+      questionNum++;
+      state.progress = (questionNum / state.quiz.length) * 100;
+      state.percentRightAnswers =
+        (state.rightAnswers.length / (state.rightAnswers.length + state.wrongAnswers.length)) * 100;
     },
     restartGame: (state) => {
       if (state.pageNum < 31) {
@@ -89,6 +96,7 @@ export const savannahSlice = createSlice({
       state.questionNumber = 0;
       state.statistics = null;
       state.start = true;
+      state.progress = 0;
     },
     timeFinished: (state) => {
       if (checkContainAnswerArray(state.wrongAnswers, state.quiz[state.questionNumber].question)) {
@@ -111,6 +119,8 @@ export const savannahSlice = createSlice({
       state.guardAllowed = true;
       state.level = 0;
       state.pageNum = 0;
+      state.progress = 0;
+      state.percentRightAnswers = 0;
     },
     setLevel: (state, action) => {
       state.level = action.payload;
@@ -135,6 +145,8 @@ export const selectDuration = (state) => state.savannahGame.duration;
 export const selectGetAnswer = (state) => state.savannahGame.getAnswer;
 export const selectGetRightAnswer = (state) => state.savannahGame.getRightAnswer;
 export const selectCurrentAnswer = (state) => state.savannahGame.currentAnswer;
+export const selectProgress = (state) => state.savannahGame.progress;
+export const selectPercentRightAnswers = (state) => state.savannahGame.percentRightAnswers;
 
 export const {
   incrementTimer,
