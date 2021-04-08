@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
-import useStyles from './style';
+import React from 'react';
 
 export default function Word({currentWord}) {
-  const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
-    textExample, textExampleTranslate} = currentWord;
+  const {word} = currentWord;
   return (
     <div>{word}</div>
   );
