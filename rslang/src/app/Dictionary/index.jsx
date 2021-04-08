@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 
 import Page from './Page';
 
-import {deletedWords, hardWords} from '../../redux/appSlice';
+import {deletedWords, hardWords, learnedWords} from '../../redux/appSlice';
 
 import useStyles from './styles';
 import { useSelector } from 'react-redux';
@@ -31,8 +31,9 @@ function TabPanel(props) {
 }
 
 export default function SimpleTabs() {
-  const delW = useSelector(deletedWords);
-  const hardW = useSelector(hardWords);
+  const learnedWordsList = useSelector(learnedWords);
+  const deletedWordsList = useSelector(deletedWords);
+  const hardWordsList = useSelector(hardWords);
 
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -51,13 +52,13 @@ export default function SimpleTabs() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} >
-        <Page words={hardW}/>
+        <Page words={learnedWordsList}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Page words={delW}/>
+        <Page words={hardWordsList}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Page words={hardW}/>
+        <Page words={deletedWordsList}/>
       </TabPanel>
     </div>
   );

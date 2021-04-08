@@ -7,11 +7,9 @@ import MyGame from './MyGame';
 import AudioCall from './AudioCall';
 import { useDispatch, useSelector } from 'react-redux';
 
-
-
 import Loading from '../../components/partials/Loading';
 
-import { deletedWords, learnedWords ,setLearnedWords } from '../../redux/appSlice';
+import { deletedWords, setLearnedWords } from '../../redux/appSlice';
 
 import fetchPage from '../../functions/fetchPage';
 
@@ -90,9 +88,10 @@ export default function Games(props) {
         setWords(newWords);
         setCrawledPage(crawledPage - 1);
       } else {
+        console.log(words);
         words.forEach(word => {
-          const {group: groupNum, page: pageNum, id} = word;
-          dispatch(setLearnedWords({groupNum, pageNum, id}));
+          const {group, page, id} = word;
+          dispatch(setLearnedWords({groupNum: group, pageNum: +page + 1, id}));
         });
         setLoading(false);
       }

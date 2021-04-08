@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import Pagination from '@material-ui/lab/Pagination';
 
-
 import useStyles from './style';
 
 const pageGroups = {
@@ -16,6 +15,7 @@ const pageGroups = {
 
 
 export default function Page({words}) {
+  console.log(words);
   const [pageNum, setPageNum] = useState(1);
   const classes = useStyles();
 
@@ -31,7 +31,7 @@ export default function Page({words}) {
       {...item}
       className={classes[pageColor]}
     />
-  }
+  };
 
   return (
     <div>
