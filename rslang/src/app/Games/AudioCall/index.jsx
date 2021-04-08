@@ -1,5 +1,6 @@
 import styles from './AudioCall.module.css';
 import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import {
   fetchWordsForQuiz,
@@ -18,6 +19,8 @@ import Loading from '../../../components/partials/Loading';
 import ResultGame from '../components/ResultGame/ResultGame';
 import urls from '../../../constants/urls';
 import AudioCallQuiz from './AudioCallQuiz/AudioCallQuiz';
+import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
+import { currentDataForGames } from '../../Book/bookSlice';
 
 export default function AudioCall() {
   const dispatch = useDispatch();
@@ -28,6 +31,8 @@ export default function AudioCall() {
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
   const loading = useSelector(selectLoading);
+  let history = useHistory();
+  const haveDataFromBook = Object.keys(useSelector(currentDataForGames)).length;
 
   useEffect(() => {
     if (start) {
@@ -35,7 +40,15 @@ export default function AudioCall() {
         await dispatch(fetchWordsForQuiz(urls.words.all));
       })();
     }
-  }, [start, dispatch]);
+
+    return () => {
+      let currentPath = history.location.pathname.split('/');
+      currentPath = currentPath[currentPath.length - 1];
+      if (currentPath !== 'audiocall') {
+        dispatch(resetData());
+      }
+    };
+  }, [start, dispatch, history]);
 
   return (
     <div
@@ -56,17 +69,19 @@ export default function AudioCall() {
               wrongAnswers={wrongAnswers}
               restartGame={() => dispatch(restartGame())}
               result={result}
-              resetData={() => dispatch(resetData())}
             />
           ) : (
-            <StartGameMenu
-              title="Аудиовызов"
-              note="Тренировка улучшает восприятие речи на слух."
-              startGame={() => dispatch(startGame())}
-              colorText="#deb887"
-              colorTextButton="#fff"
-              colorButtonBackground="#deb887"
-            />
+            <div style={{ textAlign: 'center' }}>
+              <StartGameMenu
+                title="Аудиовызов"
+                note="Тренировка улучшает восприятие речи на слух."
+                startGame={() => dispatch(startGame())}
+                colorText="#4099ff"
+                colorTextButton="#fff"
+                colorButtonBackground="#4099ff"
+              />
+              {haveDataFromBook ? '' : <LevelDifficult color="#4099ff" />}
+            </div>
           )}
         </div>
       </div>

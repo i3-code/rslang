@@ -19,7 +19,6 @@ import { WORDS_ON_PAGE, PAGES_IN_GROUP} from '../../../constants';
 
 const totalPages = PAGES_IN_GROUP / WORDS_ON_PAGE;
 
-
 export default function Section(props) {
   const groupNum = Number(props?.match?.params?.group) || 0;
   const [pageNum, setPageNum] = useState(useSelector(page)[groupNum] || 1);
