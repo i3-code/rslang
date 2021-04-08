@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
 import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
-import {resetCurrentDataForGames} from "../../Book/bookSlice";
+import { resetCurrentDataForGames } from '../../Book/bookSlice';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
@@ -22,6 +22,8 @@ export const savannahSlice = createSlice({
     getAnswer: false,
     currentAnswer: 0,
     getRightAnswer: false,
+    level: 0,
+    pageNum: 0,
   },
   reducers: {
     incrementTimer: (state) => {
@@ -74,6 +76,15 @@ export const savannahSlice = createSlice({
       }
     },
     restartGame: (state) => {
+      if (state.pageNum < 31) {
+        state.pageNum++;
+      } else if (state.level < 7) {
+        state.pageNum = 1;
+        state.level++;
+      } else {
+        state.pageNum = 1;
+        state.level = 0;
+      }
       state.timer = 0;
       state.questionNumber = 0;
       state.statistics = null;
@@ -98,6 +109,14 @@ export const savannahSlice = createSlice({
       state.start = false;
       state.loading = true;
       state.guardAllowed = true;
+      state.level = 0;
+      state.pageNum = 0;
+    },
+    setLevel: (state, action) => {
+      state.level = action.payload;
+    },
+    setPageNum: (state, action) => {
+      state.pageNum = action.payload;
     },
   },
 });
@@ -129,23 +148,23 @@ export const {
   restartGame,
   timeFinished,
   resetData,
+  setLevel,
+  setPageNum,
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
   try {
     dispatch(startLoading());
     let dataFromBook = getState().book.currentDataForGames;
-    let words = [];
-    if (Object.keys(dataFromBook).length === 0) {
-      const fetchedData = await axios.get(url);
-      words = fetchedData.data;
-    } else if (dataFromBook.words.length > 10) {
-      words = [...dataFromBook.words];
-      dispatch(resetCurrentDataForGames())
-    } else {
-      const fetchedData = await axios.get(`${url}?group=${dataFromBook.groupNum}&page=${dataFromBook.pageNum - 2}`);
-      words = fetchedData.data;
+    if (Object.keys(dataFromBook).length !== 0) {
+      dispatch(setLevel(dataFromBook.groupNum));
+      dispatch(setPageNum(dataFromBook.pageNum - 1));
+      dispatch(resetCurrentDataForGames());
     }
+    let group = getState().savannahGame.level;
+    let page = getState().savannahGame.pageNum;
+    const fetchedData = await axios.get(`${url}?group=${group}&page=${page}`);
+    let words = fetchedData.data;
     const answerVariations = words.map((word) => word.wordTranslate);
     shuffle(words);
     const quizWords = words.slice(0, 5);

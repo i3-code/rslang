@@ -19,6 +19,8 @@ import Loading from '../../../components/partials/Loading';
 import ResultGame from '../components/ResultGame/ResultGame';
 import urls from '../../../constants/urls';
 import AudioCallQuiz from './AudioCallQuiz/AudioCallQuiz';
+import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
+import { currentDataForGames } from '../../Book/bookSlice';
 
 export default function AudioCall() {
   const dispatch = useDispatch();
@@ -30,6 +32,7 @@ export default function AudioCall() {
   const result = useSelector(selectResult);
   const loading = useSelector(selectLoading);
   let history = useHistory();
+  const haveDataFromBook = Object.keys(useSelector(currentDataForGames)).length;
 
   useEffect(() => {
     if (start) {
@@ -68,14 +71,17 @@ export default function AudioCall() {
               result={result}
             />
           ) : (
-            <StartGameMenu
-              title="Аудиовызов"
-              note="Тренировка улучшает восприятие речи на слух."
-              startGame={() => dispatch(startGame())}
-              colorText="#deb887"
-              colorTextButton="#fff"
-              colorButtonBackground="#deb887"
-            />
+            <div style={{ textAlign: 'center' }}>
+              <StartGameMenu
+                title="Аудиовызов"
+                note="Тренировка улучшает восприятие речи на слух."
+                startGame={() => dispatch(startGame())}
+                colorText="#4099ff"
+                colorTextButton="#fff"
+                colorButtonBackground="#4099ff"
+              />
+              {haveDataFromBook ? '' : <LevelDifficult color="#4099ff" />}
+            </div>
           )}
         </div>
       </div>
