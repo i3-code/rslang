@@ -5,13 +5,13 @@ import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import {
   fetchWordsForQuiz,
   resetData,
-  restartGame,
+  restartGame, selectDataFromBook,
   selectLoading,
   selectResult,
   selectRightAnswers,
   selectStart,
   selectStatistics,
-  selectWrongAnswers,
+  selectWrongAnswers, setDataFromBook, setLevel, setPageNum,
   startGame,
 } from '../Savannah/savannahSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,6 @@ import ResultGame from '../components/ResultGame/ResultGame';
 import urls from '../../../constants/urls';
 import AudioCallQuiz from './AudioCallQuiz/AudioCallQuiz';
 import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
-import { currentDataForGames } from '../../Book/bookSlice';
 
 export default function AudioCall() {
   const dispatch = useDispatch();
@@ -31,10 +30,19 @@ export default function AudioCall() {
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
   const loading = useSelector(selectLoading);
+  const haveDataFromBook = useSelector(selectDataFromBook);
   let history = useHistory();
-  const haveDataFromBook = Object.keys(useSelector(currentDataForGames)).length;
 
   useEffect(() => {
+    const params = new URLSearchParams(history.location.search);
+    const groupNum = params.get('groupNum');
+    const pageNum = params.get('pageNum');
+    if (groupNum && pageNum) {
+      dispatch(setLevel(groupNum));
+      dispatch(setPageNum(pageNum));
+      dispatch(setDataFromBook(true));
+      history.replace(history.location.pathname)
+    }
     if (start) {
       (async () => {
         await dispatch(fetchWordsForQuiz(urls.words.all));
