@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core';
 
 import Word from './Word';
 
-export default function Page({words, groupNum, pageNum}) {
+export default function Page({words}) {
   const [canPlay, setCanPlay] = useState(true);
 
   return (
@@ -11,8 +11,6 @@ export default function Page({words, groupNum, pageNum}) {
       { words && words.map((word) =>
         <Word
           currentWord={word}
-          groupNum={groupNum}
-          pageNum={pageNum}
           canPlay={canPlay}
           setCanPlay={setCanPlay}
           key={word.id}

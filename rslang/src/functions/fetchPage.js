@@ -3,8 +3,8 @@ import urls from '../constants/urls';
 
 const cache = {};
 
-export const fetchPage = async (groupNum = 0, pageNum = 1) => {
-  const request = `${urls.words.all}?group=${groupNum}&page=${pageNum - 1}`;
+export const fetchPage = async (groupNum = 0, pageNum = 0) => {
+  const request = `${urls.words.all}?group=${groupNum}&page=${pageNum}`;
   if (cache[request]) return cache[request];
   return new Promise((resolve, reject) => {
     axios
