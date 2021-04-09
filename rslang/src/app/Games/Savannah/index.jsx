@@ -8,7 +8,6 @@ import Loading from '../../../components/partials/Loading';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import ResultGame from '../components/ResultGame/ResultGame';
 import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
-import { currentDataForGames } from '../../Book/bookSlice';
 import {
   fetchWordsForQuiz,
   selectTimer,
@@ -25,6 +24,10 @@ import {
   selectGuardAllowed,
   timeFinished,
   resetData,
+  selectDataFromBook,
+  setLevel,
+  setPageNum,
+  setDataFromBook,
 } from './savannahSlice';
 
 export default function Savannah() {
@@ -34,16 +37,28 @@ export default function Savannah() {
   const timer = useSelector(selectTimer);
   const start = useSelector(selectStart);
   const statistics = useSelector(selectStatistics);
-
   const rightAnswers = useSelector(selectRightAnswers);
   const wrongAnswers = useSelector(selectWrongAnswers);
   const result = useSelector(selectResult);
   const guardAllowed = useSelector(selectGuardAllowed);
   const loading = useSelector(selectLoading);
-  const haveDataFromBook = Object.keys(useSelector(currentDataForGames)).length;
+  const haveDataFromBook = useSelector(selectDataFromBook);
+  const setLevelDifficult = (value) => {
+    dispatch(setLevel(value));
+  };
+
   let history = useHistory();
 
   useEffect(() => {
+    const params = new URLSearchParams(history.location.search);
+    const groupNum = params.get('groupNum');
+    const pageNum = params.get('pageNum');
+    if (groupNum && pageNum) {
+      dispatch(setLevel(groupNum));
+      dispatch(setPageNum(pageNum));
+      dispatch(setDataFromBook(true));
+      history.replace(history.location.pathname);
+    }
     if (start) {
       (async () => {
         await dispatch(fetchWordsForQuiz(urls.words.all));
@@ -106,7 +121,7 @@ export default function Savannah() {
                 colorTextButton="rgba(0, 0, 0, 0.87)"
                 colorButtonBackground="#f9f53e"
               />
-              {haveDataFromBook ? '' : <LevelDifficult color="#f9f53e" />}
+              {haveDataFromBook ? '' : <LevelDifficult setLevel={setLevelDifficult} color="#f9f53e" />}
             </div>
           )}
         </div>

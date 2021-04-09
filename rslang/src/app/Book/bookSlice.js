@@ -16,7 +16,6 @@ const initialState = localStorage.getItem(saveName)
         4: 0,
         5: 0,
       },
-      currentDataForGames: {},
     };
 
 export const bookSlice = createSlice({
@@ -36,12 +35,6 @@ export const bookSlice = createSlice({
       state.page[groupNum] = pageNum;
       saveState(saveName, state);
     },
-    setCurrentDataForGames: (state, action) => {
-      state.currentDataForGames = action.payload;
-    },
-    resetCurrentDataForGames: (state) => {
-      state.currentDataForGames = {};
-    },
   },
 });
 
@@ -49,13 +42,10 @@ export const {
   setTranslate,
   setControls,
   setPage,
-  setCurrentDataForGames,
-  resetCurrentDataForGames,
 } = bookSlice.actions;
 
 export const translate = (state) => state.book.translate;
 export const controls = (state) => state.book.controls;
 export const page = (state) => state.book.page;
-export const currentDataForGames = (state) => state.book.currentDataForGames;
 
 export default bookSlice.reducer;
