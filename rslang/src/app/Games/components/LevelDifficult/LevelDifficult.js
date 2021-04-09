@@ -5,15 +5,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import useStyles from './styles';
-import { useDispatch } from 'react-redux';
-import { setLevel } from '../../Savannah/savannahSlice';
 
-export default function FormControlLabelPlacement({ color = '#f9f53e' }) {
+export default function FormControlLabelPlacement({ setLevel, color = '#f9f53e' }) {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const changeLevel = (e) => {
-    dispatch(setLevel(e.target.value - 1));
+    setLevel(e.target.value - 1);
   };
 
   return (

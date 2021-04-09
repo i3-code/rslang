@@ -5,13 +5,17 @@ import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import {
   fetchWordsForQuiz,
   resetData,
-  restartGame, selectDataFromBook,
+  restartGame,
+  selectDataFromBook,
   selectLoading,
   selectResult,
   selectRightAnswers,
   selectStart,
   selectStatistics,
-  selectWrongAnswers, setDataFromBook, setLevel, setPageNum,
+  selectWrongAnswers,
+  setDataFromBook,
+  setLevel,
+  setPageNum,
   startGame,
 } from '../Savannah/savannahSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,6 +35,9 @@ export default function AudioCall() {
   const result = useSelector(selectResult);
   const loading = useSelector(selectLoading);
   const haveDataFromBook = useSelector(selectDataFromBook);
+  const setLevelDifficult = (value) => {
+    dispatch(setLevel(value));
+  };
   let history = useHistory();
 
   useEffect(() => {
@@ -41,7 +48,7 @@ export default function AudioCall() {
       dispatch(setLevel(groupNum));
       dispatch(setPageNum(pageNum));
       dispatch(setDataFromBook(true));
-      history.replace(history.location.pathname)
+      history.replace(history.location.pathname);
     }
     if (start) {
       (async () => {
@@ -88,7 +95,7 @@ export default function AudioCall() {
                 colorTextButton="#fff"
                 colorButtonBackground="#4099ff"
               />
-              {haveDataFromBook ? '' : <LevelDifficult color="#4099ff" />}
+              {haveDataFromBook ? '' : <LevelDifficult setLevel={setLevelDifficult} color="#4099ff" />}
             </div>
           )}
         </div>

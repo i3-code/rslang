@@ -43,6 +43,9 @@ export default function Savannah() {
   const guardAllowed = useSelector(selectGuardAllowed);
   const loading = useSelector(selectLoading);
   const haveDataFromBook = useSelector(selectDataFromBook);
+  const setLevelDifficult = (value) => {
+    dispatch(setLevel(value));
+  };
 
   let history = useHistory();
 
@@ -118,7 +121,7 @@ export default function Savannah() {
                 colorTextButton="rgba(0, 0, 0, 0.87)"
                 colorButtonBackground="#f9f53e"
               />
-              {haveDataFromBook ? '' : <LevelDifficult color="#f9f53e" />}
+              {haveDataFromBook ? '' : <LevelDifficult setLevel={setLevelDifficult} color="#f9f53e" />}
             </div>
           )}
         </div>
