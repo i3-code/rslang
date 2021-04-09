@@ -7,7 +7,7 @@ import urls from '../../../../constants/urls';
 import Loading from '../../../../components/partials/Loading';
 import Sentence from './Sentence';
 import LinearDeterminate from '../../components/LinearDeterminate/LinearDeterminate';
-import Circular from "../../components/Circular/Circular";
+import Circular from '../../components/Circular/Circular';
 
 import {
   selectCount,
@@ -42,6 +42,8 @@ export default function Logic() {
   const loading = useSelector(selectLoading);
   const currentSentences = useSelector(selectCurrentSentences);
   const sentenceRef = useRef(null);
+  const progress = useSelector(selectProgress);
+  const percentRightAnswers = useSelector(selectPercentRightAnswers);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -74,22 +76,22 @@ export default function Logic() {
       {loading ? (
         <Loading />
       ) : (
-        <Grid container direction="column" alignItems="center" width="100%">
-          <LinearDeterminate selectProgress={selectProgress}/>
-            <Grid  className={classes.answer}>
-              {check &&
-                (answer ? (
-                  <Grid className={classes.answer} style={{ color: 'green' }}>
-                    Верно!
-                  </Grid>
-                ) : (
-                  <Grid className={classes.answer} style={{ color: 'red' }}>
-                    Не верно!
-                  </Grid>
-                ))}
-            </Grid>
+        <Grid className={classes.root}>
+          <LinearDeterminate progress={progress} />
+          <Grid className={classes.answer}>
+            {check &&
+              (answer ? (
+                <Grid className={classes.answer} style={{ color: '#2ed8b6' }}>
+                  Верно!
+                </Grid>
+              ) : (
+                <Grid className={classes.answer} style={{ color: '#EE2929' }}>
+                  Не верно!
+                </Grid>
+              ))}
+          </Grid>
           <Sentence sentenceRef={sentenceRef} />
-          <Circular selectPercentRightAnswers={selectPercentRightAnswers}/>
+          <Circular percentRightAnswers={percentRightAnswers} />
         </Grid>
       )}
     </Container>

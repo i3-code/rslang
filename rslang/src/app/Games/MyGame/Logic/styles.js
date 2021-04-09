@@ -1,9 +1,15 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+  root:{
+    display: 'flex',
+    flexDirection:"column",
+    alignItems:"center",
+     width:"100%",
+  },
   answer:{
-    marginTop: '-5em',
-    marginBottom: '1em',
+    marginTop: 50,
+    marginBottom: 50,
     height: 50,
     animation: `$answer 3000ms ${theme.transitions.easing.easeInOut}`,
     fontWeight: 'bold',
@@ -21,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   answerHidden:{
-    marginTop: '-5em',
-    marginBottom: '1em',
+    marginTop: 50,
+    marginBottom: 50,
         height: 50,
     opacity: 0,
     animation: `$answer 3000ms ${theme.transitions.easing.easeInOut}`,

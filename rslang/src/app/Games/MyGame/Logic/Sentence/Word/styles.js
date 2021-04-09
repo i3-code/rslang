@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   word: {
-    color: 'red',
+    color: '#EE2929',
     border: 'solid 1px #F0FEF9',
     textAlign: 'center',
     justifyContent: 'center',
