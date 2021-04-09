@@ -21,7 +21,7 @@ const totalPages = PAGES_IN_GROUP / WORDS_ON_PAGE;
 
 export default function Section(props) {
   const groupNum = Number(props?.match?.params?.group) || 0;
-  const [pageNum, setPageNum] = useState(useSelector(page)[groupNum] || 1);
+  const [pageNum, setPageNum] = useState(useSelector(page)[groupNum] || 0);
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState(null);
   const deletedWordsList = useSelector(deletedWords);
@@ -41,10 +41,11 @@ export default function Section(props) {
   }
 
   const handleChange = (event, value) => {
-    if (pageNum === value) return;
+    const newValue = value - 1;
+    if (pageNum === newValue) return;
     setLoading(true);
-    setPageNum(value);
-    dispatch(setPage({pageNum: value, groupNum}));
+    setPageNum(newValue);
+    dispatch(setPage({pageNum: newValue, groupNum}));
   };
 
   useEffect(() => {
@@ -68,13 +69,13 @@ export default function Section(props) {
   return (
     <Grid>
       <Container className={classes.bookWrapper}>
-        { (loading) ? <Loading /> : <Page {...{words, groupNum, pageNum}} /> }
+        { (loading) ? <Loading /> : <Page words={words} /> }
         <Pagination
          count={totalPages}
          variant="outlined"
          color="primary"
          size="large"
-         page={pageNum}
+         page={pageNum + 1}
          onChange={handleChange}
          showFirstButton
          showLastButton

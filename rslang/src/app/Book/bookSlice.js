@@ -9,14 +9,14 @@ const initialState = localStorage.getItem(saveName)
       translate: true,
       controls: true,
       page: {
-        0: 1,
-        1: 1,
-        2: 1,
-        3: 1,
-        4: 1,
-        5: 1,
+        0: 0,
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
       },
-    currentDataForGames: {}
+      currentDataForGames: {},
     };
 
 export const bookSlice = createSlice({
@@ -37,15 +37,21 @@ export const bookSlice = createSlice({
       saveState(saveName, state);
     },
     setCurrentDataForGames: (state, action) => {
-      state.currentDataForGames = action.payload
+      state.currentDataForGames = action.payload;
     },
-    resetCurrentDataForGames: state => {
-      state.currentDataForGames = {}
-    }
+    resetCurrentDataForGames: (state) => {
+      state.currentDataForGames = {};
+    },
   },
 });
 
-export const { setTranslate, setControls, setPage, setCurrentDataForGames, resetCurrentDataForGames } = bookSlice.actions;
+export const {
+  setTranslate,
+  setControls,
+  setPage,
+  setCurrentDataForGames,
+  resetCurrentDataForGames,
+} = bookSlice.actions;
 
 export const translate = (state) => state.book.translate;
 export const controls = (state) => state.book.controls;
