@@ -50,17 +50,19 @@ const AudioCallAnswers = () => {
   return (
     <ReactionForUserAnswer styles={styles} autoClear={false}>
       <GuardBoard guardAllowed={guardAllowed}>
-        {quiz[questionNumber].answers.map((answer, index) => (
-          <div
-            className={styles.gameAnswer}
-            key={index}
-            onClick={() => {
-              dispatch(setAnswer({ answer, questionNumber, index }));
-            }}
-          >
-            {index + 1}. {answer}
-          </div>
-        ))}
+        <div className={styles.answerWrapper}>
+          {quiz[questionNumber].answers.map((answer, index) => (
+            <div
+              className={styles.gameAnswer}
+              key={index}
+              onClick={() => {
+                dispatch(setAnswer({ answer, questionNumber, index }));
+              }}
+            >
+              {index + 1}. {answer}
+            </div>
+          ))}
+        </div>
       </GuardBoard>
       {getAnswer && (
         <div className={styles.nextButtonWrapper}>

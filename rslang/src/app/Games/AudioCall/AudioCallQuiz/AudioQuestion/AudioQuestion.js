@@ -29,7 +29,7 @@ const AudioQuestion = () => {
     <div className={styles.gameQuestionWrapper}>
       <div className={styles.gameQuestion}>
         {getAnswer ? (
-          <div>
+          <div className={styles.gameQuestionDescription}>
             <div>
               <img
                 className={styles.imageQuestion}

@@ -6,11 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
-    position: 'absolute',
-    bottom: '15%',
+    marginTop: '50px',
     textAlign: 'center',
-    right: 0,
-    left: 0,
   },
   title: {
     color: 'white',

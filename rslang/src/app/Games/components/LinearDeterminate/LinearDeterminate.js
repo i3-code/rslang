@@ -6,7 +6,10 @@ const useStyles = makeStyles({
   root: {
     width: '50%',
     position: 'absolute',
-    top: '110px',
+    top: '30px',
+    right: '0',
+    left: '0',
+    margin: 'auto',
   },
 });
 
