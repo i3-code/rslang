@@ -24,6 +24,7 @@ const Sentence = ({ sentenceRef}) => {
   const dispatch = useDispatch();
   const count = useSelector(selectCount);
   const learningWord=useSelector(selectLearningWord);
+
   useEffect(() => {
     setWords(sentenceSplit);
   }, [sentenceSplit]);
@@ -59,7 +60,7 @@ const Sentence = ({ sentenceRef}) => {
                         <Word
                           word={el}
                           provided={provided}
-                          setColor={learningWord === el || learningWord === el.substring(0, el.length - 1)}
+                          setColor={(el.indexOf(learningWord)>-1)}
                         />
                       )}
                     </Draggable>

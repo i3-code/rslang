@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   word: {
     color: 'red',
-    border: 'solid 1px black ',
+    border: 'solid 1px #F0FEF9',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
     },
 },
     cell: {
-    border: 'solid 1px black ',
+    border: 'solid 1px #F0FEF9',
+    color: '#F0FEF9',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',

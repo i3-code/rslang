@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle} from '../../../functions/math';
-import correct from './audio/correct.mp3';
-
-let audioCorrect = new Audio(correct);
+import { playAnswerSound } from '../../../functions/games/answerSound';
 
 export const myGameSlice = createSlice({
   name: 'myGame',
   initialState: {
     rightAnswers:[],
     wrongAnswers:[],
-    chooseLevel: true,
+    dataFromBook: false,
     check:false,
     game: false,
     result : 0,
@@ -23,18 +21,22 @@ export const myGameSlice = createSlice({
     count : 0,
     currentSentences : null,
     learningWord: null,
-    mute: false,
     shuffleSentence: null,
+    progress: 0,
+    percentRightAnswers: 0,
   },
   reducers: {
     startLoading: (state) => {
       state.loading = true;
     },
+    setDataFromBook: (state, action) => {
+      state.dataFromBook = action.payload;
+    },
+    setPageNum: (state, action) => {
+      state.pageNum = action.payload;
+    },
     finishLoading: (state) => {
       state.loading = false;
-    },
-    setMute:(state)=>{
-state.mute=!state.mute;
     },
     setLearningWord: (state, action) =>{
       state.learningWord = action.payload;
@@ -58,8 +60,8 @@ state.mute=!state.mute;
 incrementCount: (state) => {
       state.count++;
     },
-      setLevel:(state, action)=>{
-state.lavel=action.payload;
+      setLevelMyGame:(state, action)=>{
+state.level=action.payload;
       },
     setCheckTrue: (state) => {
       state.check = true;
@@ -67,21 +69,22 @@ state.lavel=action.payload;
     setCheckFalse: (state) => {
       state.check = false;
     },
-    setChooseLevelFalse: (state) => {
-      state.chooseLevel = false;
-    },
     setSentences: (state, action) => {
         state.sentences = action.payload;
       },
     nextSentence: (state, action) =>{
       state.wrongAnswers.push(state.sentences[action.payload.count]);
+      playAnswerSound(false);
         state.count++;
         state.check=false;
+        let questionNum = state.count;
+        state.progress = (questionNum / state.sentences.length) * 100;
+        state.percentRightAnswers =
+          (state.rightAnswers.length / (state.rightAnswers.length + state.wrongAnswers.length)) * 100;
       },
     setAnswer: (state, action) => {
       if (state.sentences[action.payload.count].textExample === action.payload.answer){
-        if(state.mute)
-        audioCorrect.play()
+        playAnswerSound(true);
         state.answer=true;
         state.rightAnswers.push(state.sentences[action.payload.count]
           );
@@ -89,8 +92,13 @@ state.lavel=action.payload;
         else  {
           state.answer=false;
           state.wrongAnswers.push(state.sentences[action.payload.count] );
+          playAnswerSound(false);
       }
-      state.count++
+      state.count++;
+      let questionNum = state.count;
+      state.progress = (questionNum / state.sentences.length) * 100;
+      state.percentRightAnswers =
+        (state.rightAnswers.length / (state.rightAnswers.length + state.wrongAnswers.length)) * 100;
     },
     setResult: (state) =>{
 state.result=calculatePercentResult(state.rightAnswers.length, state.sentences.length)
@@ -98,13 +106,11 @@ state.result=calculatePercentResult(state.rightAnswers.length, state.sentences.l
     restartGame: (state) => {
     state.game=true;
     state.count= 0;
-    state.result=0;
-    state.wrongAnswers=[];
-    state.rightAnswers=[];
     state.currentSentences=null;
     state.sentences=null;
     state.finish=false;
     state.loading=true;
+    state.progress = 0;
     if (state.pageNum < 31) {
       state.pageNum++;
     } else if (state.level < 7) {
@@ -115,7 +121,28 @@ state.result=calculatePercentResult(state.rightAnswers.length, state.sentences.l
       state.level=0;
     }
     },
+    resetData: (state) => {
+      state.rightAnswers=[];
+      state.wrongAnswers=[];
+      state.check=false;
+      state.game=false;
+      state.result= 0;
+      state.loading=true;
+      state.sentences =null;
+      state.answer= false;
+      state.level= 0;
+      state.pageNum=1;
+      state.finish = false;
+      state.count =0;
+      state.currentSentences =null;
+      state.learningWord= null;
+      state.shuffleSentence=null;
+      state.progress= 0;
+      state.percentRightAnswers=0;
+      state.dataFromBook = false;
+    },
   },
+
 });
 
 export const selectCheck = (state) => state.myGame.check;
@@ -131,22 +158,21 @@ export const selectPageNum = (state) => state.myGame.pageNum;
 export const selectFinish = (state) => state.myGame.finish;
 export const selectCount = (state) => state.myGame.count;
 export const selectIsGame = (state) => state.myGame.game;
-export const chooseLevelRedux = (state) => state.myGame.chooseLevel;
 export const selectLearningWord = (state) => state.myGame.learningWord;
-export const selectMute = (state) => state.myGame.mute;
 export const selectShuffleSentence=(state)=> state.myGame.shuffleSentence;
-
+export const selectProgress = (state) => state.myGame.progress;
+export const selectPercentRightAnswers = (state) => state.myGame.percentRightAnswers;
+export const selectDataFromBook = (state) => state.savannahGame.dataFromBook;
 
 
 export const {
-  setMute,
   setCurrentSentences,
   setLearningWord,
     incrementCount,
+    setPageNum,
   startLoading,
   finishLoading,
-  setChooseLevelFalse,
-  setLevel,
+  setLevelMyGame,
   setCheckTrue,
   setCheckFalse,
   nextSentence,
@@ -158,11 +184,15 @@ export const {
   setGameFalse,
   setResult,
   setAnswer,
+  resetData,
+  setDataFromBook,
 } = myGameSlice.actions;
 
-export const fetchSentences = (url) => async (dispatch) => {
+export const fetchSentences = (url) => async (dispatch, getState) => {
   try {
-    const fetchedData = await axios.get(url);
+    let group = getState().savannahGame.level;
+    let page = getState().savannahGame.pageNum;
+    const fetchedData =  await axios.get(`${url}?group=${group}&page=${page}`);
     const sentences = fetchedData.data;
     shuffle(sentences);
     const newPrepare = [];
