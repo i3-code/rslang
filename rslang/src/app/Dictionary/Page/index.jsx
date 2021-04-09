@@ -56,6 +56,7 @@ const generatePages = (words) => {
 }
 
 export default function Page({words}) {
+  const [canPlay, setCanPlay] = useState(true);
   const [pageNum, setPageNum] = useState(1);
   const [pages] = useState(generatePages(words));
   const [totalPages] = useState(Object.keys(pages).length);
@@ -96,7 +97,12 @@ export default function Page({words}) {
   return (
     <Grid>
       {pageWords.map((currentWord) => {
-        return <Word currentWord={currentWord} key={currentWord.id} />;
+        return <Word
+            currentWord={currentWord}
+            key={currentWord.id}
+            canPlay={canPlay}
+            setCanPlay={setCanPlay}
+          />;
       })}
       <Pagination
          count={totalPages}

@@ -20,9 +20,9 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, groupNum, pageNum, canPlay, setCanPlay}) {
+export default function Word({currentWord, canPlay, setCanPlay}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
-    textExample, textExampleTranslate} = currentWord;
+    textExample, textExampleTranslate, group: groupNum, page: pageNum} = currentWord;
 
   const dispatch = useDispatch();
   const hardWordsList = useSelector(hardWords);

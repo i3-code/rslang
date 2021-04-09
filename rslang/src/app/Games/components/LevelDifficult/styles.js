@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   numberLevel: {
     marginTop: 5,
+    justifyContent: 'center',
   },
 }));
 
