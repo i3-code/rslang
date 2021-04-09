@@ -112,7 +112,7 @@ export default function Savannah() {
               result={result}
             />
           ) : (
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', marginTop: '100px' }}>
               <StartGameMenu
                 title="Саванна"
                 note="Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь."

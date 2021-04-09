@@ -47,20 +47,22 @@ const SavannahAnswers = () => {
   return (
     <ReactionForUserAnswer styles={styles}>
       <GuardBoard guardAllowed={guardAllowed}>
-        {quiz[questionNumber].answers.map((answer, index) => (
-          <div
-            className={styles.gameAnswer}
-            key={index}
-            onClick={() => {
-              dispatch(setAnswer({ answer, questionNumber, index }));
-              setTimeout(() => {
-                dispatch(nextRound());
-              }, duration);
-            }}
-          >
-            {index + 1}. {answer}
-          </div>
-        ))}
+        <div className={styles.answerWrapper}>
+          {quiz[questionNumber].answers.map((answer, index) => (
+            <div
+              className={styles.gameAnswer}
+              key={index}
+              onClick={() => {
+                dispatch(setAnswer({ answer, questionNumber, index }));
+                setTimeout(() => {
+                  dispatch(nextRound());
+                }, duration);
+              }}
+            >
+              {index + 1}. {answer}
+            </div>
+          ))}
+        </div>
       </GuardBoard>
     </ReactionForUserAnswer>
   );

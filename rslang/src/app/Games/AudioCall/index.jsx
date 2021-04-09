@@ -86,7 +86,7 @@ export default function AudioCall() {
               result={result}
             />
           ) : (
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', marginTop: '100px' }}>
               <StartGameMenu
                 title="Аудиовызов"
                 note="Тренировка улучшает восприятие речи на слух."
