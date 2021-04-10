@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container, Box, IconButton, Button, Typography, Grid, CardMedia } from '@material-ui/core';
+import { Container, IconButton } from '@material-ui/core';
 import {VolumeUp, VolumeOff} from '@material-ui/icons';
 import Loading from '../../../../components/partials/Loading';
 import urls from '../../../../constants/urls';
+import LinearDeterminate from '../../components/LinearDeterminate/LinearDeterminate';
+import Circular from '../../components/Circular/Circular';
 import useStyles from './style';
 import GameField from './GameField';
 import {
@@ -13,8 +15,7 @@ import {
   setFinishTrue,
   setGameFalse,
   selectCount,
-  selectRightAnswers,
-  selectAnswer,
+  selectPercentRightAnswers,
   selectLoading,
   selectLevel,
   selectPageNum,
@@ -22,6 +23,8 @@ import {
   fetchWords,
   selectWords,
   setRandomWords,
+  selectProgress,
+  selectCurrentWord,
 } from '../addGameSlice';
 
 export default function Game() {
@@ -30,48 +33,46 @@ export default function Game() {
   const count = useSelector(selectCount);
   const pageNum = useSelector(selectPageNum);
   const level = useSelector(selectLevel);
-  const rightAnswers = useSelector(selectRightAnswers);
-  const answer = useSelector(selectAnswer);
   const loading = useSelector(selectLoading);
   const mute = useSelector(selectMute);
-  const currentWords = useSelector(selectWords);
+  const words = useSelector(selectWords);
+  const progress = useSelector(selectProgress);
+  const percentRightAnswers = useSelector(selectPercentRightAnswers);
 
   useEffect(() => {
     (async () => {
-      await dispatch(fetchWords(`${urls.words.all}?group=${level}&page=${pageNum - 1}`));
+      await dispatch(fetchWords(urls.words.all));
     })();
   }, [level, pageNum, dispatch]);
 
   useEffect(() => {
-    if (currentWords !== null) {
+    if (words !== null) {
       dispatch(finishLoading());
       dispatch(setRandomWords());
     }
-  }, [currentWords , dispatch]);
+  }, [words , dispatch]);
 
   useEffect(() => {
-    if (count === null) return;
-    if (currentWords === null) return;
-    console.log(count, currentWords.length)
-    if (count === currentWords.length) {
+    if (words === null) return;
+    if (count === words.length) {
       dispatch(setResult());
       dispatch(setFinishTrue());
       dispatch(setGameFalse());
     }
-  }, [count, currentWords, dispatch]);
+  }, [count, words, dispatch]);
 
   return (
-    <Container>
+    <Container className={classes.root}>
       { loading ? (
        <Loading />
       ) : (
       <Container>
-         <IconButton onClick={() => dispatch(setMute())}>
-            {mute ? <VolumeOff /> : <VolumeUp />}
+         <LinearDeterminate progress={progress} />
+         <IconButton onClick={() => dispatch(setMute())} className={classes.btn}>
+            { mute ? <VolumeOff /> : <VolumeUp />}
           </IconButton>
-          <Typography>Уровень: {level + 1}</Typography>
-          <Typography>Счет: 1</Typography>
           <GameField/>
+          <Circular percentRightAnswers={percentRightAnswers} />
       </Container>
      )}
   </Container>

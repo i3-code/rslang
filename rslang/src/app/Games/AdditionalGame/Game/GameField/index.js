@@ -40,29 +40,33 @@ export default function Game() {
   }
 
   return (
-    <Container>
+    <Container className={classes.root}>
+      { words[countCurrent]
+        && <>
         <Box>
-          <Typography>{words[countCurrent].question}</Typography>
-          <Typography>{words[countCurrent].textExample}</Typography>
+          <Typography className={classes.word}>{words[countCurrent].question}</Typography>
+          <Typography className={classes.example}>{words[countCurrent].textExample}</Typography>
         </Box>
-        <Box>
-        { randomWords.map( (card, i) => (
-          <CardMedia
-            key={words[randomWords[i]].question}
-            className={classes.media}
-            image={`${urls.base}/${words[randomWords[i]].image}`}
-            onClick={(e) => {
-              clickHandler(e, i)
-              dispatch(setAnswer(i))
-              setTimeout(()=> {
-                dispatch(setCount())
-                dispatch(setRandomWords());
-                deleteClass()
-              }, 2000)
-            }}
-          />)
-        )}
+        <Box className={classes.cards}>
+          { randomWords.map( (card, i) => (
+            <CardMedia
+              key={words[randomWords[i]].question}
+              className={classes.media}
+              image={`${urls.base}/${words[randomWords[i]].image}`}
+              onClick={(e) => {
+                clickHandler(e, i)
+                dispatch(setAnswer(i))
+                setTimeout(()=> {
+                  dispatch(setCount())
+                  dispatch(setRandomWords());
+                  deleteClass()
+                }, 2000)
+              }}
+            />)
+          )}
         </Box>
+        </>
+      }
     </Container>
   )
 }

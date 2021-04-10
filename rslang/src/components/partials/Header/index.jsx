@@ -8,7 +8,7 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import { Grid } from '@material-ui/core';
+import { Grid, Tooltip } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,7 +20,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import HomeIcon from '@material-ui/icons/Home';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import BookIcon from '@material-ui/icons/Book';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 
@@ -33,7 +34,8 @@ import useStyles from './styles';
 
 const mainIcons = {
   '/': ['Главная', <HomeIcon />],
-  '/book': ['Учебник', <LibraryBooksIcon />],
+  '/book': ['Учебник', <MenuBookIcon />],
+  '/dictionary': ['Словарь', <BookIcon />],
   '/games': ['Игры', <SportsEsportsIcon />],
   '/stats': ['Статистика', <AssessmentIcon />],
 };
@@ -44,8 +46,35 @@ const additionalIcons = {
 };
 
 const getNameByPath = (path) => {
-  const name = path.slice(0, path.lastIndexOf('/')) || path;
+  let name = path.slice(0, path.lastIndexOf('/')) || path;
+  if (name.includes('games')) name = '/games';
   return mainIcons[name] || additionalIcons[name] || ['404'];
+};
+
+const generateList = (iconsArray, path, classes) =>{
+  return (
+    <List>
+      {Object.entries(iconsArray).map(([link, [text, icon]]) => {
+        const selected = (path === getNameByPath(link));
+        return (
+          <NavLink
+            key={text}
+            to={link}
+            className={classes.link}
+            activeClassName={classes.selected}
+            exact={true}
+            replace={selected}
+          >
+              <ListItem button selected={selected}>
+                <Tooltip title={text} placement="right" arrow>
+                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
+                </Tooltip>
+                <ListItemText primary={text} />
+              </ListItem>
+          </NavLink>
+      )})}
+    </List>
+  );
 };
 
 export default function Header() {
@@ -113,45 +142,9 @@ export default function Header() {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {Object.entries(mainIcons).map(([link, [text, icon]]) => {
-            const selected = (path === getNameByPath(link));
-            return (
-              <NavLink
-                key={text}
-                to={link}
-                className={classes.link}
-                activeClassName={classes.selected}
-                exact={true}
-                replace={selected}
-              >
-                <ListItem button selected={selected}>
-                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              </NavLink>
-          )})}
-        </List>
+        {generateList(mainIcons, path, classes)}
         <Divider />
-        <List>
-          {Object.entries(additionalIcons).map(([link, [text, icon]]) => {
-            const selected = (path === getNameByPath(link));
-            return (
-              <NavLink
-                key={text}
-                to={link}
-                className={classes.link}
-                activeClassName={classes.selected}
-                exact={true}
-                replace={selected}
-              >
-                <ListItem button selected={selected}>
-                  <ListItemIcon className={selected ? classes.selected : ''}>{icon}</ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              </NavLink>
-          )})}
-        </List>
+        {generateList(additionalIcons, path, classes)}
       </Drawer>
     </Grid>
   );

@@ -16,6 +16,7 @@ export const addGameSlice = createSlice({
     game: false,
     result : 0,
     loading : true,
+    currentWord: null,
     words : null,
     answer : false,
     level : 0,
@@ -24,6 +25,8 @@ export const addGameSlice = createSlice({
     count : 0,
     randomWords: null,
     mute: false,
+    progress: 0,
+    percentRightAnswers: 0,
   },
   reducers: {
     startLoading: (state) => {
@@ -31,6 +34,12 @@ export const addGameSlice = createSlice({
     },
     finishLoading: (state) => {
       state.loading = false;
+    },
+    setDataFromBook: (state, action) => {
+      state.dataFromBook = action.payload;
+    },
+    setPageNum: (state, action) => {
+      state.pageNum = action.payload;
     },
     setMute:(state)=>{
       state.mute=!state.mute;
@@ -47,11 +56,11 @@ export const addGameSlice = createSlice({
     setGameFalse:(state) =>{
       state.game = false;
     },
-    incrementCount: (state) => {
-      state.count++;
-    },
-    setLevel:(state, action)=>{
-      state.level=action.payload;
+    setCurrentWord: (state, action) =>{
+      state.currentWord = action.payload;
+   },
+    setLevelAddGame:(state, action)=>{
+      state.level = action.payload;
     },
     setChooseLevelFalse: (state) => {
       state.chooseLevel = false;
@@ -81,7 +90,11 @@ export const addGameSlice = createSlice({
       }
     },
     setCount: (state) => {
-      state.count++
+      ++state.count;
+      let questionNum = state.count;
+      state.progress = (questionNum / state.words.length) * 100;
+      state.percentRightAnswers =
+        (state.rightAnswers.length / (state.rightAnswers.length + state.wrongAnswers.length)) * 100;
     },
     setResult: (state) =>{
       state.result=calculatePercentResult(state.rightAnswers.length, state.words.length)
@@ -94,6 +107,7 @@ export const addGameSlice = createSlice({
     state.rightAnswers=[];
     state.words = null;
     state.randomWords = null;
+    state.progress = 0;
     state.finish=false;
     state.loading=true;
     if (state.pageNum < 31) {
@@ -106,12 +120,28 @@ export const addGameSlice = createSlice({
       state.level=0;
     }
     },
+    resetData: (state) => {
+      state.rightAnswers=[];
+      state.wrongAnswers=[];
+      state.game=false;
+      state.result= 0;
+      state.loading=true;
+      state.level= 0;
+      state.pageNum=1;
+      state.finish = false;
+      state.count =0;
+      state.progress= 0;
+      state.percentRightAnswers=0;
+      state.dataFromBook = false;
+      state.words = null;
+      state.randomWords = null;
+    },
   },
 });
 
 export const selectResult = (state) => state.addGame.result;
 export const selectLoading = (state) => state.addGame.loading;
-export const selectCurrentSentences = (state) => state.addGame.currentSentences;
+export const selectCurrentWord = (state) => state.addGame.currentWord;
 export const selectAnswer = (state) => state.addGame.answer;
 export const selectWords = (state) => state.addGame.words;
 export const selectRandomWords = (state) => state.addGame.randomWords;
@@ -124,14 +154,16 @@ export const selectCount = (state) => state.addGame.count;
 export const selectIsGame = (state) => state.addGame.game;
 export const chooseLevelRedux = (state) => state.addGame.chooseLevel;
 export const selectMute = (state) => state.addGame.mute;
+export const selectProgress = (state) => state.addGame.progress;
+export const selectPercentRightAnswers = (state) => state.addGame.percentRightAnswers;
+export const selectDataFromBook = (state) => state.addGame.dataFromBook;
 
 export const {
   setMute,
-  incrementCount,
   startLoading,
   finishLoading,
   setChooseLevelFalse,
-  setLevel,
+  setLevelAddGame,
   restartGame,
   setFinishFalse,
   setFinishTrue,
@@ -141,12 +173,18 @@ export const {
   setAnswer,
   setRandomWords,
   setWords,
-  setCount
+  setCount,
+  setDataFromBook,
+  setPageNum,
+  resetData,
+  setCurrentWord
 } = addGameSlice.actions;
 
-export const fetchWords = (url) => async (dispatch) => {
+export const fetchWords = (url) => async (dispatch, getState) => {
   try {
-    const fetchedData = await axios.get(url);
+    let group = getState().addGame.level;
+    let page = getState().addGame.pageNum;
+    const fetchedData = await axios.get(`${url}?group=${group}&page=${page}`);
     const data = fetchedData.data;
     const newWords = [];
     data.forEach((item, index) => {

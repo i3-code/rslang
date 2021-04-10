@@ -1,71 +1,21 @@
 import { makeStyles } from '@material-ui/core/styles';
+import image from './img/photo.jpg'
 
 const useStyles = makeStyles((theme) => ({
-  level:{
-      marginTop: 50,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
-  },
-  chooseLevel:{
-    marginBottom: '1em',
-    fontWeight: 'bold',
-    [theme.breakpoints.down('sm')]: {
-        fontSize: 10,
-      },
-      [theme.breakpoints.between('sm', 'md')]: {
-        fontSize: 12,
-      },
-      [theme.breakpoints.between('md', 'lg')]: {
-        fontSize: 15,
-      },
-      [theme.breakpoints.up('lg')]: {
-        fontSize: 20,
-      },
-  },
-  button: {
-    width: '30%',
-      margin: 10,
-      padding: 3,
-      textAlign: 'center',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 5,
-      display: 'flex',
-      fontWeight: 'bold',
-      [theme.breakpoints.down('sm')]: {
-          fontSize: 10,
-        },
-        [theme.breakpoints.between('sm', 'md')]: {
-          fontSize: 12,
-        },
-        [theme.breakpoints.between('md', 'lg')]: {
-          fontSize: 15,
-        },
-        [theme.breakpoints.up('lg')]: {
-          fontSize: 20,
-        },
-  },
-  media: {
-    width: 250,
-    height: 200,
-    borderRadius: 10,
-    border: '1px solid transparent',
-    '&:hover': {
-      border: '1px solid #fff'
-    }
-  },
-  correct: {
-    boxShadow: '0 0 15px #0bf71f',
-  },
-  wrong: {
-    boxShadow: '0 0 15px #d70909',
-  },
-  info: {
+  root:{
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundImage: `url(${image})`,
+    minHeight: '80vh',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+  },
+  wrapper: {
+    background: 'rgba(0, 0, 0, 0.5)',
+    width: '100%',
+    minHeight: '80vh',
+    position: 'relative',
   }
 }));
 

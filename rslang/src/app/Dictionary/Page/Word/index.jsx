@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
-import { translate, controls } from '../../../bookSlice';
+import {setHardWords, setDeletedWords, hardWords } from '../../../../redux/appSlice';
+import { translate, controls } from '../../../Book/bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import urls from '../../../../../constants/urls';
+import urls from '../../../../constants/urls';
 
 const borderColor = {
   0: 'blue',

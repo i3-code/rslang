@@ -2,11 +2,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root:{
-marginTop: '7em',
+    marginTop: '2em',
   },
-  
     buttonRight: {
-      marginTop: '5em',
+      marginTop: '2em',
       padding: 3,
       margin: 3,
     background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
@@ -30,7 +29,7 @@ marginTop: '7em',
       },
 },
 buttonNext: {
-  marginTop: '5em',
+  marginTop: '2em',
   margin: 3,
   padding: 3,
   background: 'linear-gradient(45deg,#FF5370,#ff869a)',

@@ -1,57 +1,20 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  level:{
-      marginTop: 50,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
+  root: {
+    marginTop: 50,
   },
-  chooseLevel:{
-    marginBottom: '1em',
-    fontWeight: 'bold',
-    [theme.breakpoints.down('sm')]: {
-        fontSize: 10,
-      },
-      [theme.breakpoints.between('sm', 'md')]: {
-        fontSize: 12,
-      },
-      [theme.breakpoints.between('md', 'lg')]: {
-        fontSize: 15,
-      },
-      [theme.breakpoints.up('lg')]: {
-        fontSize: 20,
-      },
-  },
-  button: {
-    width: '30%',
-      margin: 10,
-      padding: 3,
-      textAlign: 'center',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 5,
-      display: 'flex',
-      fontWeight: 'bold',
-      [theme.breakpoints.down('sm')]: {
-          fontSize: 10,
-        },
-        [theme.breakpoints.between('sm', 'md')]: {
-          fontSize: 12,
-        },
-        [theme.breakpoints.between('md', 'lg')]: {
-          fontSize: 15,
-        },
-        [theme.breakpoints.up('lg')]: {
-          fontSize: 20,
-        },
+  cards: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
   },
   media: {
     width: 250,
     height: 200,
     borderRadius: 10,
+    marginRight: 10,
+    marginBottom: 10,
     border: '1px solid transparent',
     '&:hover': {
       border: '1px solid #fff'
@@ -66,7 +29,18 @@ const useStyles = makeStyles((theme) => ({
   info: {
     display: 'flex',
     alignItems: 'center',
-  }
+  },
+  word: {
+    textAlign: 'center',
+    fontSize: '40px',
+    textShadow: '3px 3px 2px #000'
+  },
+  example: {
+    textAlign: 'center',
+    fontSize: '20px',
+    margin: '10px 0',
+    textShadow: '3px 3px 2px #000'
+  },
 }));
 
 export default useStyles;
