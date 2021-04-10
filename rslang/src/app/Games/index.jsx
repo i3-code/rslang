@@ -5,6 +5,7 @@ import Savannah from './Savannah';
 import Sprint from './Sprint';
 import MyGame from './MyGame';
 import AudioCall from './AudioCall';
+import AdditionalGame from './AdditionalGame';
 
 const cardsArray = [
   {
@@ -31,6 +32,12 @@ const cardsArray = [
     background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
     link: '/games/sort',
   },
+  {
+    img: './images/2.jpg',
+    name: 'Картинки',
+    background: 'linear-gradient(45deg,#C882E2,#C376DF)',
+    link: '/games/pictures',
+  },
 ];
 
 const games = {
@@ -38,6 +45,7 @@ const games = {
   sprint: <Sprint />,
   sort: <MyGame/>,
   audiocall: <AudioCall />,
+  pictures: <AdditionalGame />,
 };
 
 export default function Games(props) {

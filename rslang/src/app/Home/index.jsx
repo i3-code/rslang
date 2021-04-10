@@ -28,6 +28,11 @@ export default function Home() {
       name: 'Своя игра',
       background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
     },
+    {
+      img: './images/2.jpg',
+      name: 'Дополнительная игра',
+      background: 'linear-gradient(45deg,#C882E2,#C376DF)',
+    },
   ];
   return (
     <Grid container direction="column" alignItems="center">

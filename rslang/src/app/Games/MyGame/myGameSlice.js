@@ -83,6 +83,7 @@ state.lavel=action.payload;
         if(state.mute)
         audioCorrect.play()
         state.answer=true;
+        console.log(state.sentences[action.payload.count])
         state.rightAnswers.push(state.sentences[action.payload.count]
           );
         }
