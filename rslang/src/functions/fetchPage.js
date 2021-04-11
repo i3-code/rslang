@@ -5,8 +5,8 @@ const cache = {};
 
 export const fetchPage = async (groupNum = 0, pageNum = 0) => {
   const request = `${urls.words.all}?group=${groupNum}&page=${pageNum}`;
-  if (cache[request]) return cache[request];
   return new Promise((resolve, reject) => {
+    if (cache[request]) resolve(cache[request]);
     axios
       .get(request)
       .then((response) => {

@@ -14,6 +14,7 @@ import { deletedWords, setLearnedWords } from '../../redux/appSlice';
 import fetchPage from '../../functions/fetchPage';
 
 import { WORDS_ON_PAGE } from '../../constants';
+import { useHistory } from 'react-router';
 
 const cardsArray = [
   {
@@ -66,7 +67,12 @@ const games = (game, words) => {
 };
 
 export default function Games(props) {
-  const {game, group, page} = props?.match?.params;
+  const history = useHistory();
+  const params = new URLSearchParams(history.location.search);
+  const group = params.get('groupNum');
+  const page = params.get('pageNum');
+
+  const { game } = props?.match?.params;
   const [loading, setLoading] = useState(true);
   const [crawledPage, setCrawledPage] = useState(Number(page));
   const [words, setWords] = useState([]);
@@ -90,7 +96,7 @@ export default function Games(props) {
       } else {
         words.forEach(word => {
           const {group, page, id} = word;
-          dispatch(setLearnedWords({groupNum: group, pageNum: +page + 1, id}));
+          dispatch(setLearnedWords({groupNum: group, pageNum: Number(page), id}));
         });
         setLoading(false);
       }
