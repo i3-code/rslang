@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, IconButton } from '@material-ui/core';
-import {VolumeUp, VolumeOff} from '@material-ui/icons';
+import { VolumeUp, VolumeOff } from '@material-ui/icons';
 import Loading from '../../../../components/partials/Loading';
 import urls from '../../../../constants/urls';
 import LinearDeterminate from '../../components/LinearDeterminate/LinearDeterminate';
@@ -24,7 +24,6 @@ import {
   selectWords,
   setRandomWords,
   selectProgress,
-  selectCurrentWord,
 } from '../addGameSlice';
 
 export default function Game() {
@@ -50,7 +49,7 @@ export default function Game() {
       dispatch(finishLoading());
       dispatch(setRandomWords());
     }
-  }, [words , dispatch]);
+  }, [words, dispatch]);
 
   useEffect(() => {
     if (words === null) return;
@@ -63,18 +62,18 @@ export default function Game() {
 
   return (
     <Container className={classes.root}>
-      { loading ? (
-       <Loading />
+      {loading ? (
+        <Loading />
       ) : (
-      <Container>
-         <LinearDeterminate progress={progress} />
-         <IconButton onClick={() => dispatch(setMute())} className={classes.btn}>
-            { mute ? <VolumeOff /> : <VolumeUp />}
+        <Container>
+          <LinearDeterminate progress={progress} />
+          <IconButton onClick={() => dispatch(setMute())} className={classes.btn}>
+            {mute ? <VolumeOff /> : <VolumeUp />}
           </IconButton>
-          <GameField/>
+          <GameField />
           <Circular percentRightAnswers={percentRightAnswers} />
-      </Container>
-     )}
-  </Container>
-  )
+        </Container>
+      )}
+    </Container>
+  );
 }
