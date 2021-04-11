@@ -12,7 +12,7 @@ export default function Footer() {
   const location = useLocation();
   const classes = useStyles();
 
-  if (location.pathname.includes('/games')) return <div />;
+  if (location.pathname.includes('/games/')) return <div />;
 
   return (
     <Grid className={classes.root}>

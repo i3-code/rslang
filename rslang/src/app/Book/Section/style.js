@@ -16,28 +16,34 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     '& > ul': {
       justifyContent: 'center',
-    }
+    },
   },
   link: {
     padding: theme.spacing(1),
     backgroundColor: '#3f51b5',
     color: '#fff',
-    width: 120,
+    minWidth: 120,
     textAlign: 'center',
     borderRadius: 10,
+    marginBottom: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       width: 'initial',
+      minWidth: 80,
+    },
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'none',
     },
   },
   linkwrapper: {
     marginTop: theme.spacing(2),
     display: 'flex',
     justifyContent: 'space-around',
+    flexWrap: 'wrap'
   },
   notActive: {
     cursor: 'not-allowed',
-  }
-})
-)
+  },
+}));
 
 export default useStyles;

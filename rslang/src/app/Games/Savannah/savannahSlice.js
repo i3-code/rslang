@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
 import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
-import { resetCurrentDataForGames } from '../../Book/bookSlice';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
@@ -24,6 +23,7 @@ export const savannahSlice = createSlice({
     getRightAnswer: false,
     level: 0,
     pageNum: 0,
+    dataFromBook: false,
     progress: 0,
     percentRightAnswers: 0,
   },
@@ -121,12 +121,16 @@ export const savannahSlice = createSlice({
       state.pageNum = 0;
       state.progress = 0;
       state.percentRightAnswers = 0;
+      state.dataFromBook = false;
     },
     setLevel: (state, action) => {
       state.level = action.payload;
     },
     setPageNum: (state, action) => {
       state.pageNum = action.payload;
+    },
+    setDataFromBook: (state, action) => {
+      state.dataFromBook = action.payload;
     },
   },
 });
@@ -147,6 +151,7 @@ export const selectGetRightAnswer = (state) => state.savannahGame.getRightAnswer
 export const selectCurrentAnswer = (state) => state.savannahGame.currentAnswer;
 export const selectProgress = (state) => state.savannahGame.progress;
 export const selectPercentRightAnswers = (state) => state.savannahGame.percentRightAnswers;
+export const selectDataFromBook = (state) => state.savannahGame.dataFromBook;
 
 export const {
   incrementTimer,
@@ -162,17 +167,12 @@ export const {
   resetData,
   setLevel,
   setPageNum,
+  setDataFromBook
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
   try {
     dispatch(startLoading());
-    let dataFromBook = getState().book.currentDataForGames;
-    if (Object.keys(dataFromBook).length !== 0) {
-      dispatch(setLevel(dataFromBook.groupNum));
-      dispatch(setPageNum(dataFromBook.pageNum - 1));
-      dispatch(resetCurrentDataForGames());
-    }
     let group = getState().savannahGame.level;
     let page = getState().savannahGame.pageNum;
     const fetchedData = await axios.get(`${url}?group=${group}&page=${page}`);

@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Grid } from '@material-ui/core';
 import Card from '../../components/partials/Card';
 import Savannah from './Savannah';
 import Sprint from './Sprint';
 import MyGame from './MyGame';
 import AudioCall from './AudioCall';
+import AdditionalGame from './AdditionalGame';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Loading from '../../components/partials/Loading';
+
+import { deletedWords, setLearnedWords } from '../../redux/appSlice';
+
+import fetchPage from '../../functions/fetchPage';
+
+import { WORDS_ON_PAGE } from '../../constants';
 
 const cardsArray = [
   {
@@ -31,28 +41,73 @@ const cardsArray = [
     background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
     link: '/games/sort',
   },
+  {
+    img: './images/2.jpg',
+    name: 'Картинки',
+    background: 'linear-gradient(45deg,#C882E2,#C376DF)',
+    link: '/games/pictures',
+  },
 ];
 
-const games = {
-  savannah: <Savannah />,
-  sprint: <Sprint />,
-  sort: <MyGame/>,
-  audiocall: <AudioCall />,
+const games = (game, words) => {
+  switch(game) {
+    case('savannah'):
+      return <Savannah words={words} />
+    case('sprint'):
+      return <Sprint words={words} />
+    case('audiocall'):
+      return <AudioCall words={words} />
+    case('sort'):
+      return <MyGame words={words} />
+    case('pictures'):
+      return <AdditionalGame words={words} />
+    default:
+      return (
+        <Container>
+          <Grid container direction="row" justify="space-evenly" alignItems="center">
+            {cardsArray.map((card, i) => (
+              <Card key={card.name} {...card} />
+            ))}
+          </Grid>
+        </Container>
+      );
+  }
 };
 
 export default function Games(props) {
-  const gameName = props?.match?.params?.game;
-  const game = games[gameName];
+  const {game, group, page} = props?.match?.params;
+  const [loading, setLoading] = useState(true);
+  const [crawledPage, setCrawledPage] = useState(Number(page));
+  const [words, setWords] = useState([]);
+  const dispatch = useDispatch();
 
-  return (
-    game || (
-      <Container>
-        <Grid container direction="row" justify="space-evenly" alignItems="center">
-          {cardsArray.map((card, i) => (
-            <Card key={card.name} {...card} />
-          ))}
-        </Grid>
-      </Container>
-    )
-  );
+  const deletedWordsList = useSelector(deletedWords);
+
+  const filterFunc = useCallback((crawledPage, id) => {
+    const deletedArray = deletedWordsList[Number(group)][crawledPage] || [];
+    return !deletedArray.includes(id);
+  }, [deletedWordsList, group]);
+
+  useEffect(() => {
+    const asyncCrawler = async () => {
+      if (group && words.length < WORDS_ON_PAGE && crawledPage >= 0) {
+        const reqWords = await fetchPage(group, crawledPage);
+        const cWords = reqWords.filter((word) => filterFunc(crawledPage, word.id));
+        const newWords = words.concat(cWords).slice(0, WORDS_ON_PAGE);
+        setWords(newWords);
+        setCrawledPage(crawledPage - 1);
+      } else {
+        words.forEach(word => {
+          const {group, page, id} = word;
+          dispatch(setLearnedWords({groupNum: group, pageNum: +page + 1, id}));
+        });
+        setLoading(false);
+      }
+    };
+
+    if (loading) asyncCrawler();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, crawledPage]);
+
+  return (loading) ? <Loading /> : games(game, words);
 }

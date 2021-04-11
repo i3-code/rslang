@@ -20,7 +20,7 @@ const palettes = {
   '/games/savannah' : '#f9f53e',
   '/games/audiocall' : '#4099ff',
   '/games/sprint' : '#ff5370',
-  '/games/ourgame' : '#2ed8b6',
+  '/games/sort' : '#2ed8b6',
 
   '/book/0' : '#4099ff',
   '/book/1' : '#2ed8b6',
@@ -30,8 +30,12 @@ const palettes = {
   '/book/5' : '#f9f53e',
 }
 
+const cleanPath = (pathname) => {
+  return pathname.replace(/(\/)(savannah|audiocall|sprint|sort)(.*)/, `$1$2`);
+}
+
 const getThemeByName = (pathname) => {
-  const color = palettes[pathname];
+  const color = palettes[cleanPath(pathname)];
   if (!color) return createMuiTheme({});
   return createMuiTheme({
     palette: {
@@ -55,7 +59,7 @@ export default function Layout(props) {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {props.children}
-          <div className={classes.toolbar} />
+          {pathname.includes('/games/') ? <div /> : <div className={classes.toolbar} />}
         </main>
       </div>
       <Footer />

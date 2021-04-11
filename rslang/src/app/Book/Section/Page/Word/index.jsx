@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, setInactivePagination, hardWords } from '../../../../../redux/appSlice';
+import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
 import { translate, controls } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
@@ -20,9 +20,9 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, groupNum, pageNum, wordsOnPage}) {
+export default function Word({currentWord, canPlay, setCanPlay}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
-    textExample, textExampleTranslate} = currentWord;
+    textExample, textExampleTranslate, group: groupNum, page: pageNum} = currentWord;
 
   const dispatch = useDispatch();
   const hardWordsList = useSelector(hardWords);
@@ -36,7 +36,7 @@ export default function Word({currentWord, groupNum, pageNum, wordsOnPage}) {
   const [isAudioExample, setIsAudioExample] = useState(false);
 
   const soundPrefix = urls.base;
-  const [playAudioExample, { isPlaying: isAudioExamplePlaying, stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`);
+  const [playAudioExample, { isPlaying: isAudioExamplePlaying, stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`, {onend: ()=> setCanPlay(true)});
   const [playAudioMeaning, { isPlaying: isAudioMeaningPlaying, stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
   const [playAudio, { isPlaying: isAudioPlaying, stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
 
@@ -71,24 +71,23 @@ export default function Word({currentWord, groupNum, pageNum, wordsOnPage}) {
   }, [isAudioExample, isAudioExamplePlaying, playAudioExample, stopAudioExample]);
 
   const handleAudio = () => {
-    setIsAudio(true);
+    if (canPlay) {
+      setIsAudio(true);
+      setCanPlay(false);
+    }
   };
 
   const createMarkup = (text) => {
     return {__html: text};
   }
 
-  const checkNumberOfWordsOnPage = () => {
-    if (wordsOnPage === 1) {
-      dispatch(setInactivePagination({groupNum, pageNum}))
-    }
+  const isHard = () => {
+    const hardWordsArray = hardWordsList[groupNum][pageNum] || [];
+    return hardWordsArray.includes(id);
+  };
 
-  }
-
-  const isHard = () => hardWordsList[groupNum].includes(id);
-  const handleHard = () => dispatch(setHardWords({groupNum, id}));
-  const handleDeleted = () => { dispatch(setDeletedWords({groupNum, id})); checkNumberOfWordsOnPage() };
-
+  const handleHard = () => dispatch(setHardWords({groupNum, pageNum, id}));
+  const handleDeleted = () => dispatch(setDeletedWords({groupNum, pageNum, id}));
 
   return (
     <Card className={`${classes.root} ${ isHard() ? classes.hard : ''} ${classes[borderColor[groupNum]]}`}>

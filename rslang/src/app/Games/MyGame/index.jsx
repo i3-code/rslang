@@ -1,11 +1,14 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container, Box, Button, Grid } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { Container, Grid } from '@material-ui/core';
 
 import useStyles from './styles';
 
 import ResultGame from '../components/ResultGame/ResultGame';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import Logic from './Logic';
+import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
 import {
   selectFinish,
   restartGame,
@@ -14,52 +17,47 @@ import {
   selectRightAnswers,
   selectWrongAnswers,
   selectResult,
-  setLevel,
-  chooseLevelRedux,
-  setChooseLevelFalse,
+  setLevelMyGame,
+  resetData,
+  selectDataFromBook,
+  setPageNum,
+  setDataFromBook,
 } from './myGameSlice';
 
-export default function MyGame(props) {
+export default function MyGame() {
   const dispatch = useDispatch();
+  let history = useHistory();
   const classes = useStyles();
   const result = useSelector(selectResult);
   const finish = useSelector(selectFinish);
   const rightAnswers = useSelector(selectRightAnswers);
   const wrongAnswers = useSelector(selectWrongAnswers);
   const game = useSelector(selectIsGame);
-  const chooseLevel = useSelector(chooseLevelRedux);
+  const haveDataFromBook = useSelector(selectDataFromBook);
 
-  const levelNumber = [
-    'linear-gradient(45deg,#4099ff,#73b4ff',
-    'linear-gradient(45deg,#2ed8b6,#59e0c5)',
-    'linear-gradient(45deg,#FFB64D,#ffcb80)',
-    'linear-gradient(45deg,#FF5370,#ff869a)',
-    'linear-gradient(45deg,#C882E2,#C376DF)',
-    'linear-gradient(45deg,#F9F53E,#FBF969)',
-  ];
-
-  const changeLevel = (e) => {
-    dispatch(setLevel(e));
-    dispatch(setChooseLevelFalse());
-  };
+  useEffect(() => {
+    const params = new URLSearchParams(history.location.search);
+    const groupNum = params.get('groupNum');
+    const pageNum = params.get('pageNum');
+    if (groupNum && pageNum) {
+      dispatch(setLevelMyGame(groupNum));
+      dispatch(setPageNum(pageNum));
+      dispatch(setDataFromBook(true));
+      history.replace(history.location.pathname);
+    }
+    return () => {
+      let currentPath = history.location.pathname.split('/');
+      currentPath = currentPath[currentPath.length - 1];
+      if (currentPath !== 'sort') {
+        dispatch(resetData());
+      }
+    };
+  }, [dispatch, history]);
 
   return (
     <Container className={classes.root}>
       {game ? (
-        <Box className={classes.root}>
-          {chooseLevel ? (
-            <Grid className={classes.level}>
-              <Grid className={classes.chooseLevel}>Выберите уровень сложности:</Grid>
-              {levelNumber.map((el, i) => (
-                <Button className={classes.button} key={i} style={{ background: el }} onClick={() => changeLevel(i)}>
-                  Уровень {i + 1}
-                </Button>
-              ))}
-            </Grid>
-          ) : (
-            <Logic />
-          )}
-        </Box>
+        <Logic />
       ) : finish ? (
         <ResultGame
           rightAnswers={rightAnswers}
@@ -68,14 +66,17 @@ export default function MyGame(props) {
           result={result}
         />
       ) : (
-        <StartGameMenu
-          title="Сортировка"
-          note="Тренировка Сортировка развивает словарный запас. Чем больше предложений составишь правильно, тем больше очков опыта получишь."
-          startGame={() => dispatch(setGameTrue())}
-          colorText="#73b4ff"
-          colorTextButton="#fff"
-          colorButtonBackground="#73b4ff"
-        />
+        <Grid style={{ textAlign: 'center' }}>
+          <StartGameMenu
+            title="Сортировка"
+            note="Тренировка Сортировка развивает словарный запас. Чем больше предложений составишь правильно, тем больше очков опыта получишь."
+            startGame={() => dispatch(setGameTrue())}
+            colorText="#F0FEF9"
+            colorTextButton="#fff"
+            colorButtonBackground="#2ed8b6"
+          />
+          {!haveDataFromBook && <LevelDifficult color="#F0FEF9" setLevel={setLevelMyGame} />}
+        </Grid>
       )}
     </Container>
   );
