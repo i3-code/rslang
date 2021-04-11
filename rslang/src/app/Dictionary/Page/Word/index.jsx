@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, hardWords } from '../../../../redux/appSlice';
+import { setHardWords, setDeletedWords, hardWords } from '../../../../redux/appSlice';
+import { getWords } from '../../../../redux/wordsSlice';
 import { translate, controls } from '../../../Book/bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
@@ -28,6 +29,8 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
   const hardWordsList = useSelector(hardWords);
   const showTranslate = useSelector(translate);
   const showControls = useSelector(controls);
+  const words = useSelector(getWords);
+  const wordStats = words[id] || { correct: 0, wrong: 0 };
 
   const classes = useStyles();
 
@@ -130,7 +133,8 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
             </Tooltip>
           </CardActions>}
 
-          <Typography>Результаты</Typography>
+          <Typography>Верно: {wordStats.correct}</Typography>
+          <Typography>Неверно: {wordStats.wrong}</Typography>
           </div>
       </div>
     </Card>
