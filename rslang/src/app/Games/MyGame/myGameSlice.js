@@ -86,6 +86,7 @@ state.level=action.payload;
       if (state.sentences[action.payload.count].textExample === action.payload.answer){
         playAnswerSound(true);
         state.answer=true;
+        console.log(state.sentences[action.payload.count])
         state.rightAnswers.push(state.sentences[action.payload.count]
           );
         }

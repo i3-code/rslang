@@ -5,6 +5,7 @@ import Savannah from './Savannah';
 import Sprint from './Sprint';
 import MyGame from './MyGame';
 import AudioCall from './AudioCall';
+import AdditionalGame from './AdditionalGame';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from '../../components/partials/Loading';
@@ -41,6 +42,12 @@ const cardsArray = [
     background: 'linear-gradient(45deg,#2ed8b6,#59e0c5)',
     link: '/games/sort',
   },
+  {
+    img: './images/2.jpg',
+    name: 'Картинки',
+    background: 'linear-gradient(45deg,#C882E2,#C376DF)',
+    link: '/games/pictures',
+  },
 ];
 
 const games = (game, words) => {
@@ -53,6 +60,8 @@ const games = (game, words) => {
       return <AudioCall words={words} />
     case('sort'):
       return <MyGame words={words} />
+    case('pictures'):
+      return <AdditionalGame words={words} />
     default:
       return (
         <Container>

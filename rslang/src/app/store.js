@@ -5,6 +5,7 @@ import appReducer from '../redux/appSlice';
 import bookReducer from './Book/bookSlice';
 import myGame from './Games/MyGame/myGameSlice';
 import wordsReducer from '../redux/wordsSlice';
+import addGame from './Games/AdditionalGame/addGameSlice';
 
 export default configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
     book: bookReducer,
     myGame: myGame,
     words: wordsReducer,
+    addGame: addGame,
   },
 });

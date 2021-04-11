@@ -89,6 +89,7 @@ export default function Section(props) {
           <Link href={`#/games/audiocall${postfix}`} className={classes.link}> Аудиовызов </Link>
           <Link href={`#/games/sprint${postfix}`} className={classes.link}> Спринт </Link>
           <Link href={`#/games/sort${postfix}`} className={classes.link}> Сортировка </Link>
+          <Link href={`#/games/pictures${postfix}`} className={classes.link}> Картинки </Link>
         </Box>
       </Container>
     </Grid>

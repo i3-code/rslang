@@ -6,6 +6,7 @@ const ResultGame = ({ rightAnswers, wrongAnswers, restartGame, result }) => {
   const playWord = async (word) => {
     await new Audio(`${urls.base}/${word.audio}`).play();
   };
+  console.log(wrongAnswers)
 
   const ResultWord = ({ word }) => {
     return (
