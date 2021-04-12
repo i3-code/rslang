@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import {setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
+import { getUser } from '../../../../../redux/userSlice';
+import { setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
 import { translate, controls } from '../../../bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
@@ -10,6 +11,7 @@ import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import urls from '../../../../../constants/urls';
+import { WordsService } from '../../../../../services/words.service';
 
 const borderColor = {
   0: 'blue',
@@ -20,13 +22,28 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, canPlay, setCanPlay}) {
-  const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
-    textExample, textExampleTranslate, group: groupNum, page: pageNum} = currentWord;
+export default function Word({ currentWord, canPlay, setCanPlay }) {
+  const {
+    id,
+    audio,
+    audioMeaning,
+    audioExample,
+    image,
+    word,
+    transcription,
+    wordTranslate,
+    textMeaning,
+    textMeaningTranslate,
+    textExample,
+    textExampleTranslate,
+    group: groupNum,
+    page: pageNum,
+  } = currentWord;
 
   const dispatch = useDispatch();
   const hardWordsList = useSelector(hardWords);
   const showTranslate = useSelector(translate);
+  const user = useSelector(getUser);
   const showControls = useSelector(controls);
 
   const classes = useStyles();
@@ -36,9 +53,17 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
   const [isAudioExample, setIsAudioExample] = useState(false);
 
   const soundPrefix = urls.base;
-  const [playAudioExample, { isPlaying: isAudioExamplePlaying, stop: stopAudioExample }] = useSound(`${soundPrefix}/${audioExample}`, {onend: ()=> setCanPlay(true)});
-  const [playAudioMeaning, { isPlaying: isAudioMeaningPlaying, stop: stopAudioMeaning }] = useSound(`${soundPrefix}/${audioMeaning}`, {onend: ()=> setIsAudioExample(true)});
-  const [playAudio, { isPlaying: isAudioPlaying, stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {onend: ()=> setIsAudioMeaning(true)});
+  const [
+    playAudioExample,
+    { isPlaying: isAudioExamplePlaying, stop: stopAudioExample },
+  ] = useSound(`${soundPrefix}/${audioExample}`, { onend: () => setCanPlay(true) });
+  const [
+    playAudioMeaning,
+    { isPlaying: isAudioMeaningPlaying, stop: stopAudioMeaning },
+  ] = useSound(`${soundPrefix}/${audioMeaning}`, { onend: () => setIsAudioExample(true) });
+  const [playAudio, { isPlaying: isAudioPlaying, stop: stopAudio }] = useSound(`${soundPrefix}/${audio}`, {
+    onend: () => setIsAudioMeaning(true),
+  });
 
   useEffect(() => {
     if (isAudio) {
@@ -47,7 +72,7 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
     }
     return () => {
       if (isAudioPlaying) stopAudio();
-    }
+    };
   }, [isAudio, isAudioPlaying, playAudio, stopAudio]);
 
   useEffect(() => {
@@ -57,7 +82,7 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
     }
     return () => {
       if (isAudioMeaningPlaying) stopAudioMeaning();
-    }
+    };
   }, [isAudioMeaning, isAudioMeaningPlaying, playAudioMeaning, stopAudioMeaning]);
 
   useEffect(() => {
@@ -67,7 +92,7 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
     }
     return () => {
       if (isAudioExamplePlaying) stopAudioExample();
-    }
+    };
   }, [isAudioExample, isAudioExamplePlaying, playAudioExample, stopAudioExample]);
 
   const handleAudio = () => {
@@ -78,23 +103,31 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
   };
 
   const createMarkup = (text) => {
-    return {__html: text};
-  }
+    return { __html: text };
+  };
 
   const isHard = () => {
     const hardWordsArray = hardWordsList[groupNum][pageNum] || [];
     return hardWordsArray.includes(id);
   };
 
-  const handleHard = () => dispatch(setHardWords({groupNum, pageNum, id}));
-  const handleDeleted = () => dispatch(setDeletedWords({groupNum, pageNum, id}));
+  const handleHard = () => {
+    dispatch(setHardWords({ groupNum, pageNum, id }));
+    if (user) {
+      WordsService.addUserWord(id, 'hard');
+    }
+  };
+
+  const handleDeleted = () => {
+    dispatch(setDeletedWords({ groupNum, pageNum, id }));
+    if (user) {
+      WordsService.deleteUserWord(id, true);
+    }
+  }
 
   return (
-    <Card className={`${classes.root} ${ isHard() ? classes.hard : ''} ${classes[borderColor[groupNum]]}`}>
-      <CardMedia
-        className={classes.media}
-        image={`${urls.base}/${image}`}
-      />
+    <Card className={`${classes.root} ${isHard() ? classes.hard : ''} ${classes[borderColor[groupNum]]}`}>
+      <CardMedia className={classes.media} image={`${urls.base}/${image}`} />
       <div className={classes.contentWrapper}>
         <CardContent className={classes.content}>
           <Typography className={classes.text}>
@@ -109,30 +142,33 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
           </Typography>
 
           <Typography dangerouslySetInnerHTML={createMarkup(textMeaning)} className={classes.text}></Typography>
-          {showTranslate && <Typography className={`${classes.bottomLine} ${classes.text}`}>{textMeaningTranslate}</Typography>}
+          {showTranslate && (
+            <Typography className={`${classes.bottomLine} ${classes.text}`}>{textMeaningTranslate}</Typography>
+          )}
 
           <Typography dangerouslySetInnerHTML={createMarkup(textExample)} className={classes.text}></Typography>
           {showTranslate && <Typography className={classes.text}>{textExampleTranslate}</Typography>}
         </CardContent>
 
         <div className={classes.actionsWrapper}>
-          {showControls &&
-           <CardActions disableSpacing>
-            <Tooltip title="В сложные">
-              <IconButton onClick={handleHard}>
-              <img src="https://img.icons8.com/material/24/000000/learning.png" alt='В сложные'/>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Удалить">
-              <IconButton onClick={handleDeleted}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </CardActions>}
+          {showControls && (
+            <CardActions disableSpacing>
+              <Tooltip title="В сложные">
+                <IconButton onClick={handleHard}>
+                  <img src="https://img.icons8.com/material/24/000000/learning.png" alt="В сложные" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Удалить">
+                <IconButton onClick={handleDeleted}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </CardActions>
+          )}
 
           <Typography>Результаты</Typography>
-          </div>
+        </div>
       </div>
     </Card>
-  )
+  );
 }
