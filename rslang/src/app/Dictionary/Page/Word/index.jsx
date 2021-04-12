@@ -22,7 +22,7 @@ const borderColor = {
   5: 'yellow',
 };
 
-export default function Word({currentWord, canPlay, setCanPlay}) {
+export default function Word({currentWord, removeWord, canPlay, setCanPlay}) {
   const {id, audio, audioMeaning, audioExample, image, word, transcription, wordTranslate, textMeaning, textMeaningTranslate,
     textExample, textExampleTranslate, group: groupNum, page: pageNum} = currentWord;
 
@@ -96,8 +96,15 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
     return deletedWordsArray.includes(id);
   };
 
-  const handleUnlearned = () => dispatch(setUnlearnedWords({groupNum, pageNum, id}));
-  const handleRestore = () => dispatch(setRestoredWords({groupNum, pageNum, id}));
+  const handleUnlearned = () => {
+    dispatch(setUnlearnedWords({groupNum, pageNum, id}));
+    removeWord(id);
+  };
+
+  const handleRestore = () => {
+    dispatch(setRestoredWords({groupNum, pageNum, id}));
+    removeWord(id);
+  };
 
 
   return (

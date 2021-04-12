@@ -15,7 +15,10 @@ const initialState = localStorage.getItem(saveName) ? JSON.parse(localStorage.ge
 
 const removeFromState = (state, array, groupNum, pageNum, id) => {
   const wordsArr = state[array][groupNum][pageNum];
-  if (wordsArr && wordsArr.includes(id)) wordsArr.splice(wordsArr.indexOf(id), 1);
+  if (wordsArr && wordsArr.includes(id)) {
+    wordsArr.splice(wordsArr.indexOf(id), 1);
+    console.log('found!');
+  }
 };
 
 const reducerFunc = (array, state, action) => {
@@ -32,8 +35,8 @@ const reducerFunc = (array, state, action) => {
 };
 
 const restoreFunc = (array, state, action) => {
-  const newState = { ...state };
   const { groupNum, pageNum, id } = action.payload;
+  const newState = { ...state };
   if (!newState[array][groupNum][pageNum]) return false;
   removeFromState(newState, array, groupNum, pageNum, id);
   saveState(saveName, newState);
