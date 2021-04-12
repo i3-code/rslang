@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import useStyles from './style';
 import useSound from 'use-sound';
 import { useSelector, useDispatch } from 'react-redux';
-import { setHardWords, setDeletedWords, hardWords } from '../../../../redux/appSlice';
+import { setRestoredWords, setUnlearnedWords, hardWords, deletedWords } from '../../../../redux/appSlice';
 import { getWords } from '../../../../redux/wordsSlice';
 import { translate, controls } from '../../../Book/bookSlice';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
-import DeleteIcon from '@material-ui/icons/Delete';
+import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
+import ClearAllIcon from '@material-ui/icons/ClearAll';
 
 import urls from '../../../../constants/urls';
 
@@ -27,6 +28,7 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
 
   const dispatch = useDispatch();
   const hardWordsList = useSelector(hardWords);
+  const deletedWordsList = useSelector(deletedWords);
   const showTranslate = useSelector(translate);
   const showControls = useSelector(controls);
   const words = useSelector(getWords);
@@ -89,8 +91,14 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
     return hardWordsArray.includes(id);
   };
 
-  const handleHard = () => dispatch(setHardWords({groupNum, pageNum, id}));
-  const handleDeleted = () => dispatch(setDeletedWords({groupNum, pageNum, id}));
+  const isDeleted = () => {
+    const deletedWordsArray = deletedWordsList[groupNum][pageNum] || [];
+    return deletedWordsArray.includes(id);
+  };
+
+  const handleUnlearned = () => dispatch(setUnlearnedWords({groupNum, pageNum, id}));
+  const handleRestore = () => dispatch(setRestoredWords({groupNum, pageNum, id}));
+
 
   return (
     <Card className={`${classes.root} ${ isHard() ? classes.hard : ''} ${classes[borderColor[groupNum]]}`}>
@@ -121,18 +129,21 @@ export default function Word({currentWord, canPlay, setCanPlay}) {
         <div className={classes.actionsWrapper}>
           {showControls &&
            <CardActions disableSpacing>
-            <Tooltip title="В сложные">
-              <IconButton onClick={handleHard}>
-              <img src="https://img.icons8.com/material/24/000000/learning.png" alt='В сложные'/>
-              </IconButton>
+             {isHard() &&
+              <Tooltip title="Убрать из сложных">
+                <IconButton onClick={handleUnlearned}>
+                  <ClearAllIcon />
+                </IconButton>
+              </Tooltip>
+             }
+            {isDeleted() &&
+              <Tooltip title="Восстановить">
+                <IconButton onClick={handleRestore}>
+                  <RestoreFromTrashIcon />
+                </IconButton>
             </Tooltip>
-            <Tooltip title="Удалить">
-              <IconButton onClick={handleDeleted}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
+            }
           </CardActions>}
-
           <Typography>Верно: {wordStats.correct}</Typography>
           <Typography>Неверно: {wordStats.wrong}</Typography>
           </div>
