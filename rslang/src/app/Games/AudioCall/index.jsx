@@ -24,8 +24,9 @@ import ResultGame from '../components/ResultGame/ResultGame';
 import urls from '../../../constants/urls';
 import AudioCallQuiz from './AudioCallQuiz/AudioCallQuiz';
 import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
+import ButtonFullScreen from '../components/ButtonFullScreen/ButtonFullScreen';
 
-export default function AudioCall() {
+export default function AudioCall({ fullScreenHandler }) {
   const dispatch = useDispatch();
   const start = useSelector(selectStart);
   const statistics = useSelector(selectStatistics);
@@ -72,6 +73,10 @@ export default function AudioCall() {
     >
       <div className={styles.audioCallWrapper}>
         <div className={styles.audioCall}>
+          <ButtonFullScreen
+            color="invert(58%) sepia(91%) saturate(2823%) hue-rotate(190deg) brightness(99%) contrast(104%)"
+            fullScreenHandler={fullScreenHandler}
+          />
           {start ? (
             loading ? (
               <Loading />

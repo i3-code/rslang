@@ -15,7 +15,9 @@ import { deletedWords, setLearnedWords } from '../../redux/appSlice';
 import fetchPage from '../../functions/fetchPage';
 
 import { WORDS_ON_PAGE } from '../../constants';
+
 import { useHistory } from 'react-router';
+import {FullScreen, useFullScreenHandle} from "react-full-screen";
 
 const cardsArray = [
   {
@@ -50,18 +52,18 @@ const cardsArray = [
   },
 ];
 
-const games = (game, words) => {
+const games = (game, words, fullScreenHandler) => {
   switch(game) {
     case('savannah'):
-      return <Savannah words={words} />
+      return <Savannah words={words} fullScreenHandler={fullScreenHandler} />
     case('sprint'):
-      return <Sprint words={words} />
+      return <Sprint words={words} fullScreenHandler={fullScreenHandler} />
     case('audiocall'):
-      return <AudioCall words={words} />
+      return <AudioCall words={words} fullScreenHandler={fullScreenHandler} />
     case('sort'):
-      return <MyGame words={words} />
+      return <MyGame words={words} fullScreenHandler={fullScreenHandler} />
     case('pictures'):
-      return <AdditionalGame words={words} />
+      return <AdditionalGame words={words} fullScreenHandler={fullScreenHandler} />
     default:
       return (
         <Container>
@@ -82,6 +84,8 @@ export default function Games(props) {
   const page = params.get('pageNum');
 
   const { game } = props?.match?.params;
+  const fullScreenHandler = useFullScreenHandle();
+
   const [loading, setLoading] = useState(true);
   const [crawledPage, setCrawledPage] = useState(Number(page));
   const [words, setWords] = useState([]);
@@ -115,5 +119,5 @@ export default function Games(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, crawledPage]);
 
-  return (loading) ? <Loading /> : games(game, words);
+  return (loading) ? <Loading /> :  <FullScreen handle={fullScreenHandler}>{games(game, words, fullScreenHandler)}</FullScreen>;
 }

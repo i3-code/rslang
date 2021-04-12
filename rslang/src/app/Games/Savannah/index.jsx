@@ -29,8 +29,9 @@ import {
   setPageNum,
   setDataFromBook,
 } from './savannahSlice';
+import ButtonFullScreen from '../components/ButtonFullScreen/ButtonFullScreen';
 
-export default function Savannah() {
+export default function Savannah({ fullScreenHandler }) {
   const dispatch = useDispatch();
   const TIMER_LIMIT = 7;
 
@@ -98,6 +99,10 @@ export default function Savannah() {
     >
       <div className={styles.savannahWrapper}>
         <div className={styles.savannah}>
+          <ButtonFullScreen
+            color="invert(92%) sepia(38%) saturate(2821%) hue-rotate(327deg) brightness(117%) contrast(95%)"
+            fullScreenHandler={fullScreenHandler}
+          />
           {start ? (
             loading ? (
               <Loading />
