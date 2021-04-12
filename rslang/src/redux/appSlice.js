@@ -11,9 +11,7 @@ const getEmptyState = () => ({
 });
 
 const saveName = 'app';
-const initialState = localStorage.getItem(saveName)
-  ? JSON.parse(localStorage.getItem(saveName))
-  : getEmptyState();
+const initialState = localStorage.getItem(saveName) ? JSON.parse(localStorage.getItem(saveName)) : getEmptyState();
 
 const removeFromState = (state, array, groupNum, pageNum, id) => {
   const wordsArr = state[array][groupNum][pageNum];
@@ -33,18 +31,38 @@ const reducerFunc = (array, state, action) => {
   saveState(saveName, newState);
 };
 
+const restoreFunc = (array, state, action) => {
+  const newState = { ...state };
+  const { groupNum, pageNum, id } = action.payload;
+  if (!newState[array][groupNum][pageNum]) return false;
+  removeFromState(newState, array, groupNum, pageNum, id);
+  saveState(saveName, newState);
+};
+
 export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setDeletedWords: (state, action) => reducerFunc('deletedWords', state, action),
-    setHardWords: (state, action) => reducerFunc('hardWords', state, action),
     setLearnedWords: (state, action) => reducerFunc('learnedWords', state, action),
     cleanState: () => saveState(saveName, getEmptyState()),
+    setDeletedWords: (state, action) => reducerFunc('deletedWords', state, action),
+    setHardWords: (state, action) => {
+      reducerFunc('hardWords', state, action);
+      reducerFunc('learnedWords', state, action);
+    },
+    setRestoredWords: (state, action) => restoreFunc('deletedWords', state, action),
+    setUnlearnedWords: (state, action) => restoreFunc('learnedWords', state, action),
   },
 });
 
-export const { setDeletedWords, setHardWords, setLearnedWords, cleanState } = appSlice.actions;
+export const {
+  setDeletedWords,
+  setHardWords,
+  setLearnedWords,
+  setRestoredWords,
+  setUnlearnedWords,
+  cleanState,
+} = appSlice.actions;
 
 export const deletedWords = (state) => state.app.deletedWords;
 export const hardWords = (state) => state.app.hardWords;
