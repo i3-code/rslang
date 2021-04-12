@@ -1,5 +1,8 @@
 import axios from 'axios';
 import urls from '../constants/urls';
+import { cleanState } from '../redux/appSlice';
+import store from '../app/store'
+import { WordsService } from './words.service';
 
 export class AuthService {
   static checkAuthorization = () => {
@@ -37,6 +40,7 @@ export class AuthService {
       const result = await axios.get(urls.auth.whoAmI, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      WordsService.getUserWords();
       return result;
     } catch (err) {
       return err;
@@ -45,6 +49,7 @@ export class AuthService {
 
   static logout = () => {
     localStorage.removeItem('token');
+    store.dispatch(cleanState());
   };
 
   static setRememberMe = (value) => {

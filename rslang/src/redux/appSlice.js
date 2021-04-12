@@ -2,23 +2,16 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import saveState from '../functions/saveState';
 
-const defaultWordsState = {
-  0: [],
-  1: [],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-};
+const getDefaultWordsState = () => [0, 1, 2, 3, 4, 5].reduce((map, group) => ({ ...map, [group]: [] }), {});
+
+const getEmptyState = () => ({
+  deletedWords: getDefaultWordsState(),
+  hardWords: getDefaultWordsState(),
+  learnedWords: getDefaultWordsState(),
+});
 
 const saveName = 'app';
-const initialState = localStorage.getItem(saveName)
-  ? JSON.parse(localStorage.getItem(saveName))
-  : {
-      deletedWords: { ...defaultWordsState },
-      hardWords: { ...defaultWordsState },
-      learnedWords: { ...defaultWordsState },
-    };
+const initialState = localStorage.getItem(saveName) ? JSON.parse(localStorage.getItem(saveName)) : getEmptyState();
 
 const removeFromState = (state, array, groupNum, pageNum, id) => {
   const wordsArr = state[array][groupNum][pageNum];
@@ -51,6 +44,7 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     setLearnedWords: (state, action) => reducerFunc('learnedWords', state, action),
+    cleanState: () => saveState(saveName, getEmptyState()),
     setDeletedWords: (state, action) => reducerFunc('deletedWords', state, action),
     setHardWords: (state, action) => {
       reducerFunc('hardWords', state, action);
@@ -61,7 +55,14 @@ export const appSlice = createSlice({
   },
 });
 
-export const { setDeletedWords, setHardWords, setLearnedWords, setRestoredWords, setUnlearnedWords } = appSlice.actions;
+export const {
+  setDeletedWords,
+  setHardWords,
+  setLearnedWords,
+  setRestoredWords,
+  setUnlearnedWords,
+  cleanState,
+} = appSlice.actions;
 
 export const deletedWords = (state) => state.app.deletedWords;
 export const hardWords = (state) => state.app.hardWords;
