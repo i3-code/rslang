@@ -70,6 +70,15 @@ export default function Page({words}) {
     setPage(pages[value]);
   };
 
+  const removeWord = (id) => {
+    setPageWords((prevState) => {
+      prevState.forEach((word, index) => {
+        if (word.id === id) prevState.splice(index, 1);
+      });
+      return prevState;
+    });
+  };
+
   const getPaginationItem = (item) => {
     let pageNum = item.page;
     if (pageNum < 1) pageNum = 1;
@@ -102,6 +111,7 @@ export default function Page({words}) {
             key={currentWord.id}
             canPlay={canPlay}
             setCanPlay={setCanPlay}
+            removeWord={removeWord}
           />;
       })}
       <Pagination
