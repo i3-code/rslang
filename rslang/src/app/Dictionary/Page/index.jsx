@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import Pagination from '@material-ui/lab/Pagination';
-import { Grid } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 
 import useStyles from './style';
 
@@ -95,7 +95,7 @@ export default function Page({words}) {
   if (!totalPages) return <Grid>Слов не найдено</Grid>;
 
   return (
-    <Grid>
+    <Container>
       {pageWords.map((currentWord) => {
         return <Word
             currentWord={currentWord}
@@ -114,7 +114,8 @@ export default function Page({words}) {
          showFirstButton
          showLastButton
          renderItem={getPaginationItem}
+         className={classes.pagination}
       />
-    </Grid>
+    </Container>
   )
 }

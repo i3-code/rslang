@@ -83,6 +83,12 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid #f9f53e',
     color: '#f9f53e',
   },
+  pagination: {
+    marginTop: theme.spacing(2),
+    '& > ul': {
+      justifyContent: 'center',
+    },
+  },
 }));
 
 export default useStyles;
