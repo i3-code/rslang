@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { playAnswerSound } from '../../../../functions/games/answerSound';
 import { Button } from '@material-ui/core';
+import LinearDeterminate from '../../components/LinearDeterminate/LinearDeterminate';
+import Circular from '../../components/Circular/Circular';
 import data from '../data-example';
 import Timer from '../../components/Timer';
 import { calculatePercentResult, shuffle } from '../../../../functions/math';
@@ -42,6 +44,8 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [end, setEnd] = useState(false);
   const [lockInteraction, setLockInteraction] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [percentRightAnswers, setPercentRightAnswers] = useState(0);
   const generateNewWord = useCallback((index) => {
     let newWord;
     if (index < dataShuffled.length) {
@@ -82,6 +86,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
         const userWasCorrect =
           (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
         updateStreak(userWasCorrect);
+        setProgress(((counter + 1) / dataShuffled.length) * 100);
         setCounter(counter + 1);
         const editedWord = {
           audio: dataShuffled[counter].audio,
@@ -133,6 +138,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   }, []);
   const gameLayout = (
     <div className="sprint">
+      <LinearDeterminate progress={progress} style={'margin-bottom:30px;'} />
       <div
         className={`sprint__wrap ${
           bodyHighlight !== null ? (bodyHighlight ? 'sprint__wrap--correct' : 'sprint__wrap--wrong') : ''
@@ -172,6 +178,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
           </div>
         </div>
       </div>
+      <Circular percentRightAnswers={counter > 0 ? (correctAnswers.length / counter) * 100 : 0} />
     </div>
   );
   return gameLayout;
