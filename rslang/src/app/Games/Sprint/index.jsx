@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { Grid, Container } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import ResultGame from '../components/ResultGame/ResultGame';
 import SprintGame from './SprintGame';
@@ -12,7 +12,7 @@ const Sprint = ({ fullScreenHandler }) => {
   const [gameState, setGameState] = useState('start');
   const [answersResults, setAnswersResults] = useState({ right: [], wrong: [] });
   const [result, setResult] = useState(null);
-  const [level, setLevel] = useState(0);
+  /* const [level, setLevel] = useState(0);  will be used later for difficulty picking */
   const resultComponent = (
     <ResultGame
       rightAnswers={answersResults.right}
@@ -39,7 +39,12 @@ const Sprint = ({ fullScreenHandler }) => {
         colorTextButton="#fff"
         colorButtonBackground="#ff5370"
       />
-      <LevelDifficult setLevel={setLevel} color="#ff5370" />
+      <LevelDifficult
+        setLevel={() => {
+          /*pseudofunc here*/
+        }}
+        color="#ff5370"
+      />
     </Grid>
   );
   return (

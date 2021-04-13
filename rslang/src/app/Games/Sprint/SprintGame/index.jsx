@@ -45,7 +45,6 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   const [end, setEnd] = useState(false);
   const [lockInteraction, setLockInteraction] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [percentRightAnswers, setPercentRightAnswers] = useState(0);
   const generateNewWord = useCallback((index) => {
     let newWord;
     if (index < dataShuffled.length) {
@@ -138,7 +137,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   }, []);
   const gameLayout = (
     <div className="sprint">
-      <LinearDeterminate progress={progress} style={'margin-bottom:30px;'} />
+      <LinearDeterminate progress={progress} style={{ marginBottom: '30px' }} />
       <div
         className={`sprint__wrap ${
           bodyHighlight !== null ? (bodyHighlight ? 'sprint__wrap--correct' : 'sprint__wrap--wrong') : ''
