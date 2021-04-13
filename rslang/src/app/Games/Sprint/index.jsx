@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { Grid } from '@material-ui/core';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
@@ -6,9 +7,12 @@ import ResultGame from '../components/ResultGame/ResultGame';
 import SprintGame from './SprintGame';
 import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
 import ButtonFullScreen from '../components/ButtonFullScreen/ButtonFullScreen';
+import { shuffle } from '../../../functions/math';
 import './styles.css';
 
 const Sprint = ({ fullScreenHandler, words }) => {
+  const [shuffledWords, setShuffledWords] = useState(words.length > 0 ? shuffle(words) : null);
+  const [shouldLoadWords] = useState(words.length === 0);
   const [gameState, setGameState] = useState('start');
   const [answersResults, setAnswersResults] = useState({ right: [], wrong: [] });
   const [result, setResult] = useState(null);
@@ -27,16 +31,24 @@ const Sprint = ({ fullScreenHandler, words }) => {
       gameState={gameState}
       setResult={setResult}
       setAnswersResults={setAnswersResults}
-      words={words}
-      level={level}
+      words={shuffledWords}
     />
   );
+  const startGame = async () => {
+    console.log(shouldLoadWords);
+    if (shouldLoadWords) {
+      const fetchedData = await axios.get(`https://react-rslang.herokuapp.com/words?group=${level}`);
+      let fetchedWords = fetchedData.data;
+      setShuffledWords(shuffle(fetchedWords));
+    }
+    setGameState('game');
+  };
   const startComponent = (
     <Grid style={{ textAlign: 'center' }} className="sprint-start-menu">
       <StartGameMenu
         title="Спринт"
         note='Суть проста: в игровом поле появляются английские слова, к которым предлагается перевод. Задача "спринтера" — определить, верен предложенный перевод или нет. И все это — на время!'
-        startGame={() => setGameState('game')}
+        startGame={() => startGame()}
         colorText="#ff5370"
         colorTextButton="#fff"
         colorButtonBackground="#ff5370"
@@ -44,6 +56,7 @@ const Sprint = ({ fullScreenHandler, words }) => {
       {words.length === 0 ? <LevelDifficult setLevel={setLevel} color="#ff5370" /> : null}
     </Grid>
   );
+
   return (
     <div className="sprint-wrap" style={{ backgroundImage: `url(https://i.imgur.com/7591jq9.jpg)` }}>
       <ButtonFullScreen
