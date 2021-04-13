@@ -1,7 +1,7 @@
 import urls from '../constants/urls';
 import { setDeletedWords, setHardWords, setLearnedWords } from '../redux/appSlice';
 import { RequestService } from './request.service';
-import store from '../app/store'
+import store from '../app/store';
 
 export const WORD_STATS = {
   FAIL: 'fail',
@@ -103,7 +103,6 @@ export class WordsService {
     try {
       const existWord = await WordsService.getUserWord(wordId);
       if (existWord) {
-        console.log(existWord);
         return RequestService.put(urls.words.byId(wordId), {
           ...existWord.userWord,
           optional: { ...existWord.userWord.optional, deleted },
@@ -117,13 +116,17 @@ export class WordsService {
 
   static addWordStat = async (wordId, stat) => {
     try {
-      let word = (await RequestService.get(urls.aggregatedWords.byId(wordId))).data[0];
-      if (!word.userWord) {
-        word = (await WordsService.addUserWord(wordId, 'easy')).data;
+      const existWord = await WordsService.getUserWord(wordId);
+      if (existWord) {
+        return RequestService.put(urls.words.byId(wordId), {
+          ...existWord.userWord,
+          optional: { ...existWord.userWord.optional, [stat]: existWord.userWord.optional[stat] + 1 },
+        });
+      } else {
+        return RequestService.post(urls.words.byId(wordId), {
+          optional: { ...WORD.optional, [stat]: 1 },
+        });
       }
-      const { userWord } = word;
-      const newUserWord = { ...userWord, optional: { ...userWord.optional, [stat]: userWord.optional[stat] + 1 } };
-      await RequestService.put(urls.words.byId(wordId), newUserWord);
     } catch (err) {
       console.log(err);
     }
