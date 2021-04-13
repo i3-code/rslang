@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core';
 import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import ResultGame from '../components/ResultGame/ResultGame';
 import SprintGame from './SprintGame';
+import Loading from '../../../components/partials/Loading';
 import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
 import ButtonFullScreen from '../components/ButtonFullScreen/ButtonFullScreen';
 import { shuffle } from '../../../functions/math';
@@ -35,13 +36,13 @@ const Sprint = ({ fullScreenHandler, words }) => {
     />
   );
   const startGame = async () => {
-    console.log(shouldLoadWords);
     if (shouldLoadWords) {
-      const fetchedData = await axios.get(`https://react-rslang.herokuapp.com/words?group=${level}`);
-      let fetchedWords = fetchedData.data;
-      setShuffledWords(shuffle(fetchedWords));
+      setGameState('loading');
+      await axios.get(`https://react-rslang.herokuapp.com/words?group=${level}`).then((res) => {
+        setShuffledWords(shuffle(res.data));
+        setGameState('game');
+      });
     }
-    setGameState('game');
   };
   const startComponent = (
     <Grid style={{ textAlign: 'center' }} className="sprint-start-menu">
@@ -66,7 +67,15 @@ const Sprint = ({ fullScreenHandler, words }) => {
       <div className="sprint-inner">
         <SwitchTransition>
           <CSSTransition in={true} key={gameState} timeout={500} classNames="zoom">
-            {gameState === 'start' ? startComponent : gameState === 'end' ? resultComponent : gameComponent}
+            {gameState === 'loading' ? (
+              <Loading />
+            ) : gameState === 'start' ? (
+              startComponent
+            ) : gameState === 'end' ? (
+              resultComponent
+            ) : (
+              gameComponent
+            )}
           </CSSTransition>
         </SwitchTransition>
       </div>
