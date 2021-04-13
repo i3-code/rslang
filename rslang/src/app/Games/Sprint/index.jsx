@@ -5,9 +5,10 @@ import StartGameMenu from '../components/StartGameMenu/StartGameMenu';
 import ResultGame from '../components/ResultGame/ResultGame';
 import SprintGame from './SprintGame';
 import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
+import ButtonFullScreen from '../components/ButtonFullScreen/ButtonFullScreen';
 import './styles.css';
 
-const Sprint = () => {
+const Sprint = ({ fullScreenHandler }) => {
   const [gameState, setGameState] = useState('start');
   const [answersResults, setAnswersResults] = useState({ right: [], wrong: [] });
   const [result, setResult] = useState(null);
@@ -43,6 +44,10 @@ const Sprint = () => {
   );
   return (
     <div className="sprint-wrap" style={{ backgroundImage: `url(https://i.imgur.com/7591jq9.jpg)` }}>
+      <ButtonFullScreen
+        color="invert(33%) sepia(38%) saturate(2821%) hue-rotate(327deg) brightness(117%) contrast(95%)"
+        fullScreenHandler={fullScreenHandler}
+      />
       <div className="sprint-inner">
         <SwitchTransition>
           <CSSTransition in={true} key={gameState} timeout={500} classNames="zoom">
