@@ -1,0 +1,19 @@
+.button {
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.button > img {
+    width: 25px;
+    height: 25px;
+}
