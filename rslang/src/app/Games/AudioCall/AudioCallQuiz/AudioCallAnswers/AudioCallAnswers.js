@@ -56,7 +56,7 @@ const AudioCallAnswers = () => {
               className={styles.gameAnswer}
               key={index}
               onClick={() => {
-                dispatch(setAnswer({ answer, questionNumber, index }));
+                dispatch(setAnswer( answer, questionNumber, index ));
               }}
             >
               {index + 1}. {answer}
