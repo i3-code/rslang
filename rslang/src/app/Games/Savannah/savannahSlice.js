@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
 import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
+import {setWords} from "../../../redux/wordsSlice";
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
@@ -59,7 +60,7 @@ export const savannahSlice = createSlice({
       state.timer = 0;
       state.questionNumber++;
     },
-    setAnswer: (state, action) => {
+    setAnswerReducer: (state, action) => {
       state.guardAllowed = false;
       state.getAnswer = true;
       state.currentAnswer = action.payload.index;
@@ -160,7 +161,7 @@ export const {
   incrementQuestionNumber,
   setQuiz,
   nextRound,
-  setAnswer,
+  setAnswerReducer,
   startGame,
   restartGame,
   timeFinished,
@@ -181,9 +182,9 @@ export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
     shuffle(words);
     const quizWords = words.slice(0, 5);
     const quizPrepare = [];
-    quizWords.forEach((word, index) => {
+    quizWords.forEach((word) => {
       quizPrepare.push({
-        id: index + 1,
+        id: word.id,
         question: word.word,
         answers: getRandomAnswers(word.wordTranslate, answerVariations),
         rightAnswer: word.wordTranslate,
@@ -194,6 +195,21 @@ export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
     });
     dispatch(setQuiz(quizPrepare));
     dispatch(finishLoading());
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const setAnswer = (answer, questionNumber, index)=> async (dispatch, getState) => {
+  try {
+    dispatch(setAnswerReducer({answer, questionNumber, index}))
+    const getRightAnswer = getState().savannahGame.getRightAnswer;
+    const quiz = getState().savannahGame.quiz;
+    if ( getRightAnswer ) {
+      dispatch(setWords({word: quiz[questionNumber], target: 'correct', amount: 1}))
+    } else {
+      dispatch(setWords({word: quiz[questionNumber], target: 'wrong', amount: 1}))
+    }
   } catch (e) {
     console.log(e);
   }

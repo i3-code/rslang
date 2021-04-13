@@ -53,7 +53,7 @@ const SavannahAnswers = () => {
               className={styles.gameAnswer}
               key={index}
               onClick={() => {
-                dispatch(setAnswer({ answer, questionNumber, index }));
+                dispatch(setAnswer( answer, questionNumber, index ));
                 setTimeout(() => {
                   dispatch(nextRound());
                 }, duration);
