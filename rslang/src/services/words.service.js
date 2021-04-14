@@ -1,12 +1,9 @@
 import urls from '../constants/urls';
 import { setDeletedWords, setHardWords, setLearnedWords } from '../redux/appSlice';
 import { RequestService } from './request.service';
-import store from '../app/store'
-
-export const WORD_STATS = {
-  FAIL: 'fail',
-  SUCCESS: 'success',
-};
+import store from '../app/store';
+import { setWords } from '../redux/wordsSlice';
+import { WORD_STATS } from '../constants';
 
 const WORD = {
   optional: {
@@ -25,7 +22,7 @@ export class WordsService {
     }
   };
 
-  static getUserWords = async (params = {}) => {
+  static getUserWords = async (params = {wordsPerPage: 3600}) => {
     try {
       const result = await RequestService.get(urls.aggregatedWords.all, {
         ...params,
@@ -37,6 +34,8 @@ export class WordsService {
           store.dispatch(setHardWords({ groupNum: word.group, pageNum: word.page, id: word._id }));
         }
         if (word.userWord?.optional?.fail || word.userWord?.optional?.success) {
+          store.dispatch(setWords({ word: word._id, target: WORD_STATS.CORRECT, amount: word.userWord?.optional?.success || 0 }));
+          store.dispatch(setWords({ word: word._id, target: WORD_STATS.WRONG, amount: word.userWord?.optional?.fail || 0 }));
           store.dispatch(setLearnedWords({ groupNum: word.group, pageNum: word.page, id: word._id }));
         }
         if (word.userWord?.optional?.deleted) {
@@ -103,7 +102,6 @@ export class WordsService {
     try {
       const existWord = await WordsService.getUserWord(wordId);
       if (existWord) {
-        console.log(existWord);
         return RequestService.put(urls.words.byId(wordId), {
           ...existWord.userWord,
           optional: { ...existWord.userWord.optional, deleted },
@@ -117,13 +115,17 @@ export class WordsService {
 
   static addWordStat = async (wordId, stat) => {
     try {
-      let word = (await RequestService.get(urls.aggregatedWords.byId(wordId))).data[0];
-      if (!word.userWord) {
-        word = (await WordsService.addUserWord(wordId, 'easy')).data;
+      const existWord = await WordsService.getUserWord(wordId);
+      if (existWord) {
+        return RequestService.put(urls.words.byId(wordId), {
+          ...existWord.userWord,
+          optional: { ...existWord.userWord.optional, [stat]: existWord.userWord.optional[stat] + 1 },
+        });
+      } else {
+        return RequestService.post(urls.words.byId(wordId), {
+          optional: { ...WORD.optional, [stat]: 1 },
+        });
       }
-      const { userWord } = word;
-      const newUserWord = { ...userWord, optional: { ...userWord.optional, [stat]: userWord.optional[stat] + 1 } };
-      await RequestService.put(urls.words.byId(wordId), newUserWord);
     } catch (err) {
       console.log(err);
     }
