@@ -19,12 +19,12 @@ import {
   selectResult,
   setLevelMyGame,
   resetData,
+  setGameFalse,
   selectDataFromBook,
-  setPageNum,
   setDataFromBook,
 } from './myGameSlice';
 
-export default function MyGame() {
+export default function MyGame({words, nextRoundFromBook}) {
   const dispatch = useDispatch();
   let history = useHistory();
   const classes = useStyles();
@@ -35,15 +35,13 @@ export default function MyGame() {
   const game = useSelector(selectIsGame);
   const haveDataFromBook = useSelector(selectDataFromBook);
 
+
   useEffect(() => {
-    const params = new URLSearchParams(history.location.search);
-    const groupNum = params.get('groupNum');
-    const pageNum = params.get('pageNum');
-    if (groupNum && pageNum) {
-      dispatch(setLevelMyGame(groupNum));
-      dispatch(setPageNum(pageNum));
+    if (words.length) {
+      dispatch(restartGame());
       dispatch(setDataFromBook(true));
-      history.replace(history.location.pathname);
+        dispatch(setGameFalse());
+        nextRoundFromBook();
     }
     return () => {
       let currentPath = history.location.pathname.split('/');
@@ -52,7 +50,7 @@ export default function MyGame() {
         dispatch(resetData());
       }
     };
-  }, [dispatch, history]);
+  }, [dispatch, history, words, nextRoundFromBook]);
 
   return (
     <Container className={classes.root}>

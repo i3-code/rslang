@@ -34,6 +34,7 @@ export const myGameSlice = createSlice({
     },
     setDataFromBook: (state, action) => {
       state.dataFromBook = action.payload;
+
     },
     setPageNum: (state, action) => {
       state.pageNum = action.payload;
@@ -174,7 +175,7 @@ export const selectLearningWord = (state) => state.myGame.learningWord;
 export const selectShuffleSentence=(state)=> state.myGame.shuffleSentence;
 export const selectProgress = (state) => state.myGame.progress;
 export const selectPercentRightAnswers = (state) => state.myGame.percentRightAnswers;
-export const selectDataFromBook = (state) => state.savannahGame.dataFromBook;
+export const selectDataFromBook = (state) => state.myGame.dataFromBook;
 
 
 export const {
