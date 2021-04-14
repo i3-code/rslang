@@ -7,9 +7,9 @@ import {
   selectCount,
   selectWords,
   selectRandomWords,
-  setAnswer,
   setRandomWords,
-  setCount
+  setCount,
+  checkAnswer
 } from '../../addGameSlice';
 
 export default function Game() {
@@ -55,7 +55,7 @@ export default function Game() {
               image={`${urls.base}/${words[randomWords[i]].image}`}
               onClick={(e) => {
                 clickHandler(e, i)
-                dispatch(setAnswer(i))
+                dispatch(checkAnswer(i))
                 setTimeout(()=> {
                   dispatch(setCount())
                   dispatch(setRandomWords());
