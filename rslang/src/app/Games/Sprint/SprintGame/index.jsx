@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { playAnswerSound } from '../../../../functions/games/answerSound';
 import { Button } from '@material-ui/core';
-import data from '../data-example';
+import LinearDeterminate from '../../components/LinearDeterminate/LinearDeterminate';
+import Circular from '../../components/Circular/Circular';
 import Timer from '../../components/Timer';
-import { calculatePercentResult, shuffle } from '../../../../functions/math';
+import { calculatePercentResult } from '../../../../functions/math';
 import './styles.css';
-
-const dataShuffled = shuffle(data);
 
 const Streak = ({ streak, scoreMultiplier }) => {
   const streakClass = streak >= 12 ? 'streak-03' : streak >= 8 ? 'streak-02' : streak >= 4 ? 'streak-01' : '';
@@ -29,7 +29,7 @@ const Streak = ({ streak, scoreMultiplier }) => {
 
 const defaultWord = { typing: null, correctTranslate: null, shownTranslate: null, id: null };
 
-const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) => {
+const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState, words }) => {
   const [scoreMultiplier, setScoreMultiplier] = useState(10);
   const [score, setScore] = useState(0);
   const [bodyHighlight, setBodyHighlight] = useState(null);
@@ -41,21 +41,25 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [end, setEnd] = useState(false);
   const [lockInteraction, setLockInteraction] = useState(true);
-  const generateNewWord = useCallback((index) => {
-    let newWord;
-    if (index < dataShuffled.length) {
-      const typing = dataShuffled[index].word;
-      const randomTranslate = dataShuffled[Math.floor(Math.random() * dataShuffled.length)].wordTranslate;
-      const correctTranslate = dataShuffled[index].wordTranslate;
-      const shownTranslate = Math.random() < 0.5 ? dataShuffled[index].wordTranslate : randomTranslate;
-      const id = dataShuffled[index].id;
-      newWord = { typing, correctTranslate, shownTranslate, id };
-    } else {
-      newWord = defaultWord;
-      setEnd(true);
-    }
-    return newWord;
-  }, []);
+  const [progress, setProgress] = useState(0);
+  const generateNewWord = useCallback(
+    (index) => {
+      let newWord;
+      if (index < words.length) {
+        const typing = words[index].word;
+        const randomTranslate = words[Math.floor(Math.random() * words.length)].wordTranslate;
+        const correctTranslate = words[index].wordTranslate;
+        const shownTranslate = Math.random() < 0.5 ? words[index].wordTranslate : randomTranslate;
+        const id = words[index].id;
+        newWord = { typing, correctTranslate, shownTranslate, id };
+      } else {
+        newWord = defaultWord;
+        setEnd(true);
+      }
+      return newWord;
+    },
+    [words],
+  );
 
   const updateStreak = useCallback(
     (incrementStreak = true) => {
@@ -76,25 +80,27 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   }, []);
   const checkAnswer = useCallback(
     (suggestedAsCorrect) => {
-      if (!lockInteraction && counter < dataShuffled.length) {
+      if (!lockInteraction && counter < words.length) {
         const shownTranslationIsCorrect = word.shownTranslate === word.correctTranslate;
         const userWasCorrect =
           (shownTranslationIsCorrect && suggestedAsCorrect) || (!shownTranslationIsCorrect && !suggestedAsCorrect);
         updateStreak(userWasCorrect);
+        setProgress(((counter + 1) / words.length) * 100);
         setCounter(counter + 1);
         const editedWord = {
-          audio: dataShuffled[counter].audio,
-          rightAnswer: dataShuffled[counter].wordTranslate,
-          question: dataShuffled[counter].word,
+          audio: words[counter].audio,
+          rightAnswer: words[counter].wordTranslate,
+          question: words[counter].word,
         };
         userWasCorrect
           ? setCorrectAnswers([...correctAnswers, editedWord])
           : setWrongAnswers([...wrongAnswers, editedWord]);
         highlightBody(userWasCorrect);
         setPrevWord(word);
+        playAnswerSound(userWasCorrect);
       }
     },
-    [correctAnswers, counter, updateStreak, word, wrongAnswers, lockInteraction, highlightBody],
+    [correctAnswers, counter, updateStreak, word, wrongAnswers, lockInteraction, highlightBody, words],
   );
 
   const keyboardEvents = useCallback(
@@ -118,19 +124,20 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
   useEffect(() => {
     if (end) {
       setGameState('end');
-      setResult(calculatePercentResult(correctAnswers.length, dataShuffled.length));
+      setResult(calculatePercentResult(correctAnswers.length, words.length));
       setAnswersResults({
         wrong: wrongAnswers,
         right: correctAnswers,
       });
     }
-  }, [correctAnswers, end, setAnswersResults, setGameState, setResult, wrongAnswers]);
+  }, [correctAnswers, end, setAnswersResults, setGameState, setResult, wrongAnswers, words]);
 
   const handleEnd = useCallback(() => {
     setEnd(true);
   }, []);
   const gameLayout = (
     <div className="sprint">
+      <LinearDeterminate progress={progress} style={{ marginBottom: '30px' }} />
       <div
         className={`sprint__wrap ${
           bodyHighlight !== null ? (bodyHighlight ? 'sprint__wrap--correct' : 'sprint__wrap--wrong') : ''
@@ -170,6 +177,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState }) =
           </div>
         </div>
       </div>
+      <Circular percentRightAnswers={counter > 0 ? (correctAnswers.length / counter) * 100 : 0} />
     </div>
   );
   return gameLayout;
