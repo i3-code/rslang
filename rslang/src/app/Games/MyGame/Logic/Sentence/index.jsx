@@ -4,12 +4,12 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Word from './Word';
 import {
   selectCount,
-  setAnswer,
   setCheckTrue,
   nextSentence,
   selectLearningWord,
   setCheckFalse,
   selectShuffleSentence,
+  checkAnswer,
 } from '../../myGameSlice';
 
 import Button from '@material-ui/core/Button';
@@ -39,7 +39,7 @@ const Sentence = ({ sentenceRef}) => {
 
   const onCheck = () => {
     dispatch(setCheckTrue());
-    dispatch(setAnswer({ answer: words.join(' '), count: count }));
+    dispatch(checkAnswer({ answer: words.join(' '), count: count }));
     setTimeout(() => {
       dispatch(setCheckFalse())
     }, 1000);

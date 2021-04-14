@@ -3,6 +3,7 @@ import urls from '../constants/urls';
 import { cleanState } from '../redux/appSlice';
 import store from '../app/store'
 import { WordsService } from './words.service';
+import { cleanWords } from '../redux/wordsSlice';
 
 export class AuthService {
   static checkAuthorization = () => {
@@ -50,6 +51,7 @@ export class AuthService {
   static logout = () => {
     localStorage.removeItem('token');
     store.dispatch(cleanState());
+    store.dispatch(cleanWords());
   };
 
   static setRememberMe = (value) => {

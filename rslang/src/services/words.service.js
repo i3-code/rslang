@@ -2,7 +2,7 @@ import urls from '../constants/urls';
 import { setDeletedWords, setHardWords, setLearnedWords } from '../redux/appSlice';
 import { RequestService } from './request.service';
 import store from '../app/store';
-import { setWords } from '../redux/wordsSlice';
+import { setWords, cleanWords } from '../redux/wordsSlice';
 import { WORD_STATS } from '../constants';
 
 const WORD = {
@@ -28,7 +28,7 @@ export class WordsService {
         ...params,
         filter: '{"$nor":[{"userWord":null}]}',
       });
-
+      store.dispatch(cleanWords());
       result.data[0].paginatedResults.forEach((word) => {
         if (word.userWord?.difficulty === 'hard') {
           store.dispatch(setHardWords({ groupNum: word.group, pageNum: word.page, id: word._id }));

@@ -15,9 +15,13 @@ export const wordsSlice = createSlice({
       state[word][target] += amount;
       saveState(saveName, state);
     },
+    cleanWords: (state) => {
+      saveState(saveName, {});
+      return {};
+    },
   },
 });
 
-export const { setWords } = wordsSlice.actions;
+export const { setWords, cleanWords } = wordsSlice.actions;
 export const getWords = (state) => state.words;
 export default wordsSlice.reducer;

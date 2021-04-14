@@ -3,6 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult } from '../../../functions/math';
 import correct from '../../../sounds/rightAnswer.mp3';
 import wrong from '../../../sounds/wrongAnswer.mp3';
+import { WORD_STATS } from '../../../constants';
+import { saveWordStat } from '../../../redux/saveSlice';
+import { setWords as setWordStat } from '../../../redux/wordsSlice';
 
 let audioCorrect = new Audio(correct);
 let audioWrong = new Audio(wrong);
@@ -180,6 +183,20 @@ export const {
   setCurrentWord
 } = addGameSlice.actions;
 
+export const checkAnswer = (action) => async (dispatch, getState) => {
+  try {
+    const state = getState().addGame;
+    const isCorrectAnswer = state.count === state.randomWords[action];
+    const target = isCorrectAnswer ? WORD_STATS.CORRECT : WORD_STATS.WRONG;
+    const wordId = state.words[state.count].wordId;
+    dispatch(setWordStat({ word: wordId, target, amount: 1 }));
+    dispatch(saveWordStat(wordId, target));
+    dispatch(setAnswer(action));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export const fetchWords = (url) => async (dispatch, getState) => {
   try {
     let group = getState().addGame.level;
@@ -191,6 +208,7 @@ export const fetchWords = (url) => async (dispatch, getState) => {
       newWords.push({
         id: index + 1,
         question: item.word,
+        wordId: item.id,
         rightAnswer: item.wordTranslate,
         audio: item.audio,
         textExample: item.textExample.replace(/<\/?[^>]+(>|$)/g, ''),
