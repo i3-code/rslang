@@ -44,7 +44,7 @@ export default function Home() {
         </CardContent>
         <CardMedia className={classes.cover} image="./images/mainPage/mainPage.jpg" title="Learning English" />
       </Card>
-      <Box mt={10}  className={classes.advantage}>
+      <Box mt={10} className={classes.advantage}>
         Мы создали это приложение для всех, кто хочет знать английский язык. Здесь есть все необходимое для того, чтобы
         изучать английские слова онлайн: мини-игры, электронный учебник, отслеживания индивидуального прогресса.
       </Box>
@@ -98,7 +98,12 @@ export default function Home() {
               Как пользоваться приложением
             </Typography>
           </CardContent>
-          <CardMedia className={classes.cover} image="./images/mainPage/statistic.png" title="Book" />
+          <CardMedia
+            className={classes.bookImg}
+            component="iframe"
+            image="https://www.youtube.com/embed/KPf10aFeV_g"
+            title="Book"
+          />
         </Card>
       </Box>
     </Grid>
