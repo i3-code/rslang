@@ -207,16 +207,17 @@ export const setAnswer = (answer, questionNumber, index) => async (dispatch, get
     dispatch(setAnswerReducer({ answer, questionNumber, index }));
     const getRightAnswer = getState().savannahGame.getRightAnswer;
     const quiz = getState().savannahGame.quiz;
+    const word = quiz[questionNumber].id;
     const isLogged = store.getState().user.value;
     if (getRightAnswer) {
-      dispatch(setWords({ word: quiz[questionNumber], target: 'correct', amount: 1 }));
+      dispatch(setWords({ word, target: 'correct', amount: 1 }));
       if(isLogged) {
-        WordsService.addWordStat(quiz[questionNumber].id, WORD_STATS.SUCCESS)
+        WordsService.addWordStat(word, WORD_STATS.SUCCESS)
       }
     } else {
-      dispatch(setWords({ word: quiz[questionNumber], target: 'wrong', amount: 1 }));
+      dispatch(setWords({ word, target: 'wrong', amount: 1 }));
       if(isLogged) {
-        WordsService.addWordStat(quiz[questionNumber].id, WORD_STATS.FAIL)
+        WordsService.addWordStat(word, WORD_STATS.FAIL)
       }
     }
   } catch (e) {

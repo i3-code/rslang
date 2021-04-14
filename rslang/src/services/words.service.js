@@ -2,6 +2,7 @@ import urls from '../constants/urls';
 import { setDeletedWords, setHardWords, setLearnedWords } from '../redux/appSlice';
 import { RequestService } from './request.service';
 import store from '../app/store';
+import { setWords } from '../redux/wordsSlice';
 
 export const WORD_STATS = {
   FAIL: 'fail',
@@ -25,7 +26,7 @@ export class WordsService {
     }
   };
 
-  static getUserWords = async (params = {}) => {
+  static getUserWords = async (params = {wordsPerPage: 3600}) => {
     try {
       const result = await RequestService.get(urls.aggregatedWords.all, {
         ...params,
@@ -37,6 +38,8 @@ export class WordsService {
           store.dispatch(setHardWords({ groupNum: word.group, pageNum: word.page, id: word._id }));
         }
         if (word.userWord?.optional?.fail || word.userWord?.optional?.success) {
+          store.dispatch(setWords({ word: word._id, target: 'correct', amount: word.userWord?.optional?.success || 0 }));
+          store.dispatch(setWords({ word: word._id, target: 'wrong', amount: word.userWord?.optional?.fail || 0 }));
           store.dispatch(setLearnedWords({ groupNum: word.group, pageNum: word.page, id: word._id }));
         }
         if (word.userWord?.optional?.deleted) {

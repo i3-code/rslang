@@ -15,10 +15,9 @@ export const wordsSlice = createSlice({
   reducers: {
     setWords: (state, action) => {
       const { word, target, amount } = action.payload;
-      const newState = { ...state };
-      if (!newState[word]) newState[word] = { ...defaultWordState };
-      newState[word][target] += amount;
-      saveState(saveName, newState);
+      if (!state[word]) state[word] = { ...defaultWordState };
+      state[word][target] += amount;
+      saveState(saveName, state);
     },
   },
 });

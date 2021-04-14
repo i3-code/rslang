@@ -17,7 +17,6 @@ const removeFromState = (state, array, groupNum, pageNum, id) => {
   const wordsArr = state[array][groupNum][pageNum];
   if (wordsArr && wordsArr.includes(id)) {
     wordsArr.splice(wordsArr.indexOf(id), 1);
-    console.log('found!');
   }
 };
 
