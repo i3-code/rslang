@@ -24,14 +24,14 @@ export default function About() {
       name: 'Кристина Кашевар',
       img: './images/team/kris.jpg',
       position: 'Front-end developer',
-      description: 'Электронный учебник, Оформление статистики, Игра "Картинки", Игра "Аудиовызов"',
+      description: 'Электронный учебник, Оформление статистики, Игра "Картинки"',
       git: 'christina-kashevar',
     },
     {
       name: 'Ольга Хмыль',
       img: './images/team/ol.jpeg',
       position: 'Front-end developer',
-      description: 'Игра "Сортировка", Unit-tests, Оформление приложения',
+      description: 'Игра "Сортировка", Unit-tests, Запись видео для приложения, Оформление приложения',
       git: 'volha010892',
     },
     {
