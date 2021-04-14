@@ -42,6 +42,8 @@ const Sprint = ({ fullScreenHandler, words }) => {
         setShuffledWords(shuffle(res.data));
         setGameState('game');
       });
+    } else {
+      setGameState('game');
     }
   };
   const startComponent = (
