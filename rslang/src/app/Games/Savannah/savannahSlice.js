@@ -212,13 +212,13 @@ export const setAnswer = (answer, questionNumber, index) => async (dispatch, get
     const isLogged = store.getState().user.value;
     if (getRightAnswer) {
       dispatch(setWords({ word, target: WORD_STATS.CORRECT, amount: 1 }));
-      if(isLogged) {
-        WordsService.addWordStat(word, WORD_STATS.CORRECT)
+      if (isLogged) {
+        WordsService.addWordStat(word, WORD_STATS.CORRECT);
       }
     } else {
       dispatch(setWords({ word, target: WORD_STATS.WRONG, amount: 1 }));
-      if(isLogged) {
-        WordsService.addWordStat(word, WORD_STATS.WRONG)
+      if (isLogged) {
+        WordsService.addWordStat(word, WORD_STATS.WRONG);
       }
     }
   } catch (e) {

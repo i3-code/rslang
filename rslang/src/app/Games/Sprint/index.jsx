@@ -12,8 +12,8 @@ import { shuffle } from '../../../functions/math';
 import './styles.css';
 
 const Sprint = ({ fullScreenHandler, words }) => {
-  const [shuffledWords, setShuffledWords] = useState(words.length > 0 ? shuffle(words) : null);
-  const [shouldLoadWords] = useState(words.length === 0);
+  const [shuffledWords, setShuffledWords] = useState(words?.length ? shuffle(words) : null);
+  const [shouldLoadWords] = useState(!words?.length);
   const [gameState, setGameState] = useState('start');
   const [answersResults, setAnswersResults] = useState({ right: [], wrong: [] });
   const [result, setResult] = useState(null);
