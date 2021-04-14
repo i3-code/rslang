@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
 import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
-import {setWords} from "../../../redux/wordsSlice";
+import { setWords } from '../../../redux/wordsSlice';
+import store from '../../store';
+import { WordsService } from '../../../services/words.service';
+import { WORD_STATS } from '../../../constants';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
@@ -168,7 +171,7 @@ export const {
   resetData,
   setLevel,
   setPageNum,
-  setDataFromBook
+  setDataFromBook,
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
@@ -200,15 +203,23 @@ export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
   }
 };
 
-export const setAnswer = (answer, questionNumber, index)=> async (dispatch, getState) => {
+export const setAnswer = (answer, questionNumber, index) => async (dispatch, getState) => {
   try {
-    dispatch(setAnswerReducer({answer, questionNumber, index}))
+    dispatch(setAnswerReducer({ answer, questionNumber, index }));
     const getRightAnswer = getState().savannahGame.getRightAnswer;
     const quiz = getState().savannahGame.quiz;
-    if ( getRightAnswer ) {
-      dispatch(setWords({word: quiz[questionNumber], target: 'correct', amount: 1}))
+    const word = quiz[questionNumber].id;
+    const isLogged = store.getState().user.value;
+    if (getRightAnswer) {
+      dispatch(setWords({ word, target: WORD_STATS.CORRECT, amount: 1 }));
+      if(isLogged) {
+        WordsService.addWordStat(word, WORD_STATS.CORRECT)
+      }
     } else {
-      dispatch(setWords({word: quiz[questionNumber], target: 'wrong', amount: 1}))
+      dispatch(setWords({ word, target: WORD_STATS.WRONG, amount: 1 }));
+      if(isLogged) {
+        WordsService.addWordStat(word, WORD_STATS.WRONG)
+      }
     }
   } catch (e) {
     console.log(e);

@@ -6,6 +6,7 @@ import { getUser } from '../../../../../redux/userSlice';
 import { setHardWords, setDeletedWords, hardWords } from '../../../../../redux/appSlice';
 import { getWords } from '../../../../../redux/wordsSlice';
 import { translate, controls } from '../../../bookSlice';
+import {DEFAULT_WORD_STAT, WORD_STATS} from '../../../../../constants';
 
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
@@ -47,7 +48,7 @@ export default function Word({ currentWord, canPlay, setCanPlay }) {
   const user = useSelector(getUser);
   const showControls = useSelector(controls);
   const words = useSelector(getWords);
-  const wordStats = words[id] || { correct: 0, wrong: 0 };
+  const wordStats = words[id] || { ...DEFAULT_WORD_STAT };
 
   const classes = useStyles();
 
@@ -168,8 +169,8 @@ export default function Word({ currentWord, canPlay, setCanPlay }) {
               </Tooltip>
             </CardActions>
           )}
-          <Typography>Верно: {wordStats.correct}</Typography>
-          <Typography>Неверно: {wordStats.wrong}</Typography>
+          <Typography>Верно: {wordStats[WORD_STATS.CORRECT]}</Typography>
+          <Typography>Неверно: {wordStats[WORD_STATS.WRONG]}</Typography>
           </div>
       </div>
     </Card>
