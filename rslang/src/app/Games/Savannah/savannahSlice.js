@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
 import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
-import {setWords} from "../../../redux/wordsSlice";
+import { setWords } from '../../../redux/wordsSlice';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
@@ -168,7 +168,7 @@ export const {
   resetData,
   setLevel,
   setPageNum,
-  setDataFromBook
+  setDataFromBook,
 } = savannahSlice.actions;
 
 export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
@@ -200,15 +200,15 @@ export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
   }
 };
 
-export const setAnswer = (answer, questionNumber, index)=> async (dispatch, getState) => {
+export const setAnswer = (answer, questionNumber, index) => async (dispatch, getState) => {
   try {
-    dispatch(setAnswerReducer({answer, questionNumber, index}))
+    dispatch(setAnswerReducer({ answer, questionNumber, index }));
     const getRightAnswer = getState().savannahGame.getRightAnswer;
     const quiz = getState().savannahGame.quiz;
-    if ( getRightAnswer ) {
-      dispatch(setWords({word: quiz[questionNumber], target: 'correct', amount: 1}))
+    if (getRightAnswer) {
+      dispatch(setWords({ id: quiz[questionNumber].id, target: 'correct', amount: 1 }));
     } else {
-      dispatch(setWords({word: quiz[questionNumber], target: 'wrong', amount: 1}))
+      dispatch(setWords({ id: quiz[questionNumber].id, target: 'wrong', amount: 1 }));
     }
   } catch (e) {
     console.log(e);

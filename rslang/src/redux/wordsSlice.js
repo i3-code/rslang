@@ -14,10 +14,10 @@ export const wordsSlice = createSlice({
   initialState,
   reducers: {
     setWords: (state, action) => {
-      const { word, target, amount } = action.payload;
+      const { id, target, amount } = action.payload;
       const newState = { ...state };
-      if (!newState[word]) newState[word] = { ...defaultWordState };
-      newState[word][target] += amount;
+      if (!newState[id]) newState[id] = { ...defaultWordState };
+      newState[id][target] += amount;
       saveState(saveName, newState);
     },
   },
