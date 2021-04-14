@@ -81,13 +81,14 @@ export default function Games(props) {
   const history = useHistory();
   const params = new URLSearchParams(history.location.search);
   const group = params.get('groupNum');
-  const page = params.get('pageNum');
+  const [page, setPage] = useState(params.get('pageNum'));
 
   const { game } = props?.match?.params;
   const fullScreenHandler = useFullScreenHandle();
 
   const [loading, setLoading] = useState(true);
   const [crawledPage, setCrawledPage] = useState(Number(page));
+  const [crawlerNextPage, setCrawlerNextPage] = useState(-1);
   const [words, setWords] = useState([]);
   const dispatch = useDispatch();
 
@@ -99,7 +100,12 @@ export default function Games(props) {
   }, [deletedWordsList, group]);
 
   const nextRoundFromBook = () => {
-    console.log('NEXT Round Crawler')
+    const nextPage = Number(page) + 1;
+    setWords([]);
+    setCrawlerNextPage(1);
+    setPage(nextPage);
+    setCrawledPage(nextPage);
+    setLoading(true);
   }
 
   useEffect(() => {
@@ -109,7 +115,7 @@ export default function Games(props) {
         const cWords = reqWords.filter((word) => filterFunc(crawledPage, word.id));
         const newWords = words.concat(cWords).slice(0, WORDS_ON_PAGE);
         setWords(newWords);
-        setCrawledPage(crawledPage - 1);
+        setCrawledPage(crawledPage + crawlerNextPage);
       } else {
         words.forEach(word => {
           const {group, page, id} = word;
@@ -121,12 +127,10 @@ export default function Games(props) {
 
     if (loading) asyncCrawler();
 
-    return ()=>{
+    return () => {
       let currentPath = history.location.pathname.split('/');
       currentPath = currentPath[currentPath.length - 2];
-      if (currentPath !== 'games') {
-        setWords([])
-      }
+      if (currentPath !== 'games') setWords([]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, crawledPage]);
