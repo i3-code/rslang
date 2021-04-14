@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { useDispatch } from 'react-redux';
 import { playAnswerSound } from '../../../../functions/games/answerSound';
 import { Button } from '@material-ui/core';
 import LinearDeterminate from '../../components/LinearDeterminate/LinearDeterminate';
@@ -7,6 +8,9 @@ import Circular from '../../components/Circular/Circular';
 import Timer from '../../components/Timer';
 import { calculatePercentResult } from '../../../../functions/math';
 import './styles.css';
+import { setWords } from '../../../../redux/wordsSlice';
+import { WORD_STATS } from '../../../../constants';
+import { saveWordStat } from '../../../../redux/saveSlice';
 
 const Streak = ({ streak, scoreMultiplier }) => {
   const streakClass = streak >= 12 ? 'streak-03' : streak >= 8 ? 'streak-02' : streak >= 4 ? 'streak-01' : '';
@@ -42,6 +46,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState, wor
   const [end, setEnd] = useState(false);
   const [lockInteraction, setLockInteraction] = useState(true);
   const [progress, setProgress] = useState(0);
+  const dispatch = useDispatch();
   const generateNewWord = useCallback(
     (index) => {
       let newWord;
@@ -92,6 +97,12 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState, wor
           rightAnswer: words[counter].wordTranslate,
           question: words[counter].word,
         };
+
+        const wordId = words[counter].id;
+        const target = userWasCorrect ? WORD_STATS.CORRECT : WORD_STATS.WRONG;
+        dispatch(setWords({ word: wordId, target, amount: 1 }));
+        dispatch(saveWordStat(wordId, target));
+
         userWasCorrect
           ? setCorrectAnswers([...correctAnswers, editedWord])
           : setWrongAnswers([...wrongAnswers, editedWord]);
@@ -100,7 +111,7 @@ const SprintGame = ({ setGameState, setAnswersResults, setResult, gameState, wor
         playAnswerSound(userWasCorrect);
       }
     },
-    [correctAnswers, counter, updateStreak, word, wrongAnswers, lockInteraction, highlightBody, words],
+    [correctAnswers, counter, updateStreak, word, wrongAnswers, lockInteraction, highlightBody, words, dispatch],
   );
 
   const keyboardEvents = useCallback(

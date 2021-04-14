@@ -2,6 +2,9 @@ import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle} from '../../../functions/math';
 import { playAnswerSound } from '../../../functions/games/answerSound';
+import { WORD_STATS } from '../../../constants';
+import { setWords } from '../../../redux/wordsSlice';
+import { saveWordStat } from '../../../redux/saveSlice';
 
 export const myGameSlice = createSlice({
   name: 'myGame',
@@ -83,10 +86,13 @@ state.level=action.payload;
           (state.rightAnswers.length / (state.rightAnswers.length + state.wrongAnswers.length)) * 100;
       },
     setAnswer: (state, action) => {
-      if (state.sentences[action.payload.count].textExample === action.payload.answer){
+      
+      const { textExample } = state.sentences[action.payload.count];
+      const isCorrectAnswer = textExample === action.payload.answer;
+
+      if (isCorrectAnswer){        
         playAnswerSound(true);
         state.answer=true;
-        console.log(state.sentences[action.payload.count])
         state.rightAnswers.push(state.sentences[action.payload.count]
           );
         }
@@ -189,6 +195,20 @@ export const {
   setDataFromBook,
 } = myGameSlice.actions;
 
+export const checkAnswer = ({count, answer}) => async (dispatch, getState) => {
+  try {
+    const { wordId, textExample } = getState().myGame.sentences[count];
+    const isCorrectAnswer = textExample === answer;
+      
+    const target = isCorrectAnswer ? WORD_STATS.CORRECT : WORD_STATS.WRONG;
+    dispatch(setWords({ word: wordId, target, amount: 1 }));
+    dispatch(saveWordStat(wordId, target));
+    dispatch(setAnswer({count, answer}));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export const fetchSentences = (url) => async (dispatch, getState) => {
   try {
     let group = getState().savannahGame.level;
@@ -201,6 +221,7 @@ export const fetchSentences = (url) => async (dispatch, getState) => {
       newPrepare.push({
         id: index + 1,
         question: sentence.word,
+        wordId: sentence.id,
         rightAnswer: sentence.wordTranslate,
         audio: sentence.audio,
         textExample: sentence.textExample.replace(/<\/?[^>]+(>|$)/g, ''),
