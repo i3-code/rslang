@@ -21,7 +21,7 @@ export default function CardTeam({ name, img, position, description, git}) {
           <CardMedia
             className={classes.media}
             image={img}
-            title="Contemplative Reptile"
+            title={name}
           />
           <CardContent>
             <Typography gutterBottom className={classes.name}>
