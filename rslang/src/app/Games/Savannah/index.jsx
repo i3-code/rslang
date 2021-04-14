@@ -26,12 +26,11 @@ import {
   resetData,
   selectDataFromBook,
   setLevel,
-  setPageNum,
   setDataFromBook,
 } from './savannahSlice';
 import ButtonFullScreen from '../components/ButtonFullScreen/ButtonFullScreen';
 
-export default function Savannah({ fullScreenHandler }) {
+export default function Savannah({ fullScreenHandler, words, nextRoundFromBook }) {
   const dispatch = useDispatch();
   const TIMER_LIMIT = 7;
 
@@ -47,22 +46,24 @@ export default function Savannah({ fullScreenHandler }) {
   const setLevelDifficult = (value) => {
     dispatch(setLevel(value));
   };
-
   let history = useHistory();
 
+  let nextRoundStart = () => {
+    dispatch(restartGame());
+  };
+
   useEffect(() => {
-    const params = new URLSearchParams(history.location.search);
-    const groupNum = params.get('groupNum');
-    const pageNum = params.get('pageNum');
-    if (groupNum && pageNum) {
-      dispatch(setLevel(groupNum));
-      dispatch(setPageNum(pageNum));
+    if (words.length) {
       dispatch(setDataFromBook(true));
-      history.replace(history.location.pathname);
+      // eslint-disable-next-line
+      nextRoundStart = () => {
+        dispatch(restartGame());
+        nextRoundFromBook();
+      };
     }
     if (start) {
       (async () => {
-        await dispatch(fetchWordsForQuiz(urls.words.all));
+        await dispatch(fetchWordsForQuiz(urls.words.all, words));
       })();
     }
 
@@ -113,7 +114,7 @@ export default function Savannah({ fullScreenHandler }) {
             <ResultGame
               rightAnswers={rightAnswers}
               wrongAnswers={wrongAnswers}
-              restartGame={() => dispatch(restartGame())}
+              restartGame={() => nextRoundStart()}
               result={result}
             />
           ) : (

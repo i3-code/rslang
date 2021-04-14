@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { calculatePercentResult, shuffle, getRandomAnswers } from '../../../functions/math';
 import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
-import {  setWords } from '../../../redux/wordsSlice';
+import { setWords } from '../../../redux/wordsSlice';
 import { WORD_STATS } from '../../../constants';
 import { saveWordStat } from '../../../redux/saveSlice';
 
@@ -173,13 +173,18 @@ export const {
   setDataFromBook,
 } = savannahSlice.actions;
 
-export const fetchWordsForQuiz = (url) => async (dispatch, getState) => {
+export const fetchWordsForQuiz = (url, wordsFromBook) => async (dispatch, getState) => {
   try {
     dispatch(startLoading());
-    let group = getState().savannahGame.level;
-    let page = getState().savannahGame.pageNum;
-    const fetchedData = await axios.get(`${url}?group=${group}&page=${page}`);
-    let words = fetchedData.data;
+    let words;
+    if (!wordsFromBook.length) {
+      let group = getState().savannahGame.level;
+      let page = getState().savannahGame.pageNum;
+      const fetchedData = await axios.get(`${url}?group=${group}&page=${page}`);
+      words = fetchedData.data;
+    } else {
+      words = wordsFromBook;
+    }
     const answerVariations = words.map((word) => word.wordTranslate);
     shuffle(words);
     const quizWords = words.slice(0, 5);

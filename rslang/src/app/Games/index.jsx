@@ -52,18 +52,18 @@ const cardsArray = [
   },
 ];
 
-const games = (game, words, fullScreenHandler) => {
+const games = (game, words, fullScreenHandler, nextRoundFromBook) => {
   switch(game) {
     case('savannah'):
-      return <Savannah words={words} fullScreenHandler={fullScreenHandler} />
+      return <Savannah words={words} fullScreenHandler={fullScreenHandler} nextRoundFromBook={nextRoundFromBook} />
     case('sprint'):
-      return <Sprint words={words} fullScreenHandler={fullScreenHandler} />
+      return <Sprint words={words} fullScreenHandler={fullScreenHandler} nextRoundFromBook={nextRoundFromBook} />
     case('audiocall'):
-      return <AudioCall words={words} fullScreenHandler={fullScreenHandler} />
+      return <AudioCall words={words} fullScreenHandler={fullScreenHandler} nextRoundFromBook={nextRoundFromBook} />
     case('sort'):
-      return <MyGame words={words} fullScreenHandler={fullScreenHandler} />
+      return <MyGame words={words} fullScreenHandler={fullScreenHandler} nextRoundFromBook={nextRoundFromBook} />
     case('pictures'):
-      return <AdditionalGame words={words} fullScreenHandler={fullScreenHandler} />
+      return <AdditionalGame words={words} fullScreenHandler={fullScreenHandler} nextRoundFromBook={nextRoundFromBook} />
     default:
       return (
         <Container>
@@ -98,6 +98,10 @@ export default function Games(props) {
     return !deletedArray.includes(id);
   }, [deletedWordsList, group]);
 
+  const nextRoundFromBook = () => {
+    console.log('NEXT Round Crawler')
+  }
+
   useEffect(() => {
     const asyncCrawler = async () => {
       if (group && words.length < WORDS_ON_PAGE && crawledPage >= 0) {
@@ -116,8 +120,16 @@ export default function Games(props) {
     };
 
     if (loading) asyncCrawler();
+
+    return ()=>{
+      let currentPath = history.location.pathname.split('/');
+      currentPath = currentPath[currentPath.length - 2];
+      if (currentPath !== 'games') {
+        setWords([])
+      }
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, crawledPage]);
 
-  return (loading) ? <Loading /> :  <FullScreen handle={fullScreenHandler}>{games(game, words, fullScreenHandler)}</FullScreen>;
+  return (loading) ? <Loading /> :  <FullScreen handle={fullScreenHandler}>{games(game, words, fullScreenHandler, nextRoundFromBook)}</FullScreen>;
 }
