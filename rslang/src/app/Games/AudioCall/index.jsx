@@ -15,7 +15,6 @@ import {
   selectWrongAnswers,
   setDataFromBook,
   setLevel,
-  setPageNum,
   startGame,
 } from '../Savannah/savannahSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +25,7 @@ import AudioCallQuiz from './AudioCallQuiz/AudioCallQuiz';
 import LevelDifficult from '../components/LevelDifficult/LevelDifficult';
 import ButtonFullScreen from '../components/ButtonFullScreen/ButtonFullScreen';
 
-export default function AudioCall({ fullScreenHandler }) {
+export default function AudioCall({ fullScreenHandler, words, nextRoundFromBook }) {
   const dispatch = useDispatch();
   const start = useSelector(selectStart);
   const statistics = useSelector(selectStatistics);
@@ -41,19 +40,22 @@ export default function AudioCall({ fullScreenHandler }) {
   };
   let history = useHistory();
 
+  let nextRoundStart = () => {
+    dispatch(restartGame());
+  };
+
   useEffect(() => {
-    const params = new URLSearchParams(history.location.search);
-    const groupNum = params.get('groupNum');
-    const pageNum = params.get('pageNum');
-    if (groupNum && pageNum) {
-      dispatch(setLevel(groupNum));
-      dispatch(setPageNum(pageNum));
+    if (words.length) {
       dispatch(setDataFromBook(true));
-      history.replace(history.location.pathname);
+      // eslint-disable-next-line
+      nextRoundStart = () => {
+        dispatch(restartGame());
+        nextRoundFromBook();
+      };
     }
     if (start) {
       (async () => {
-        await dispatch(fetchWordsForQuiz(urls.words.all));
+        await dispatch(fetchWordsForQuiz(urls.words.all, words));
       })();
     }
 
@@ -87,7 +89,7 @@ export default function AudioCall({ fullScreenHandler }) {
             <ResultGame
               rightAnswers={rightAnswers}
               wrongAnswers={wrongAnswers}
-              restartGame={() => dispatch(restartGame())}
+              restartGame={() => nextRoundStart()}
               result={result}
             />
           ) : (
