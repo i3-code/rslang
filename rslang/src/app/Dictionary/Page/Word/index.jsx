@@ -12,6 +12,7 @@ import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 
 import urls from '../../../../constants/urls';
+import { DEFAULT_WORD_STAT, WORD_STATS } from '../../../../constants';
 
 const borderColor = {
   0: 'blue',
@@ -32,7 +33,7 @@ export default function Word({currentWord, removeWord, canPlay, setCanPlay}) {
   const showTranslate = useSelector(translate);
   const showControls = useSelector(controls);
   const words = useSelector(getWords);
-  const wordStats = words[id] || { correct: 0, wrong: 0 };
+  const wordStats = words[id] || { ...DEFAULT_WORD_STAT };
 
   const classes = useStyles();
 
@@ -151,8 +152,8 @@ export default function Word({currentWord, removeWord, canPlay, setCanPlay}) {
             </Tooltip>
             }
           </CardActions>}
-          <Typography>Верно: {wordStats.correct}</Typography>
-          <Typography>Неверно: {wordStats.wrong}</Typography>
+          <Typography>Верно: {wordStats[WORD_STATS.CORRECT]}</Typography>
+          <Typography>Неверно: {wordStats[WORD_STATS.WRONG]}</Typography>
           </div>
       </div>
     </Card>

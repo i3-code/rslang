@@ -5,7 +5,8 @@ import { playAnswerSound } from '../../../functions/games/answerSound';
 import { checkContainAnswerArray } from '../../../functions/games/answerContain';
 import { setWords } from '../../../redux/wordsSlice';
 import store from '../../store';
-import { WordsService, WORD_STATS } from '../../../services/words.service';
+import { WordsService } from '../../../services/words.service';
+import { WORD_STATS } from '../../../constants';
 
 export const savannahSlice = createSlice({
   name: 'savannahGame',
@@ -210,14 +211,14 @@ export const setAnswer = (answer, questionNumber, index) => async (dispatch, get
     const word = quiz[questionNumber].id;
     const isLogged = store.getState().user.value;
     if (getRightAnswer) {
-      dispatch(setWords({ word, target: 'correct', amount: 1 }));
+      dispatch(setWords({ word, target: WORD_STATS.CORRECT, amount: 1 }));
       if(isLogged) {
-        WordsService.addWordStat(word, WORD_STATS.SUCCESS)
+        WordsService.addWordStat(word, WORD_STATS.CORRECT)
       }
     } else {
-      dispatch(setWords({ word, target: 'wrong', amount: 1 }));
+      dispatch(setWords({ word, target: WORD_STATS.WRONG, amount: 1 }));
       if(isLogged) {
-        WordsService.addWordStat(word, WORD_STATS.FAIL)
+        WordsService.addWordStat(word, WORD_STATS.WRONG)
       }
     }
   } catch (e) {

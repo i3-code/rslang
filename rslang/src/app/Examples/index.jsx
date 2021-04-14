@@ -3,9 +3,10 @@ import { Button, FormControl, Grid, IconButton, MenuItem, Select, TextField, Typ
 import AddIcon from '@material-ui/icons/Add';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../redux/userSlice';
-import { WordsService, WORD_STATS } from '../../services/words.service';
+import { WordsService } from '../../services/words.service';
 import useStyles from './styles';
 import { UserService } from '../../services/user.service';
+import { WORD_STATS } from '../../constants';
 
 export const Examples = () => {
   const classes = useStyles();
@@ -110,11 +111,11 @@ export const Examples = () => {
               <Grid container className={classes.wordStat} alignItems="center">
                 <Typography>Difficulty: {word.userWord.difficulty}</Typography>
                 <Typography>Fail: {word.userWord.optional.fail || 0}</Typography>
-                <IconButton onClick={() => handleAddStat(word._id, WORD_STATS.FAIL)}>
+                <IconButton onClick={() => handleAddStat(word._id, WORD_STATS.WRONG)}>
                   <AddIcon />
                 </IconButton>
                 <Typography>Success: {word.userWord.optional.success || 0}</Typography>
-                <IconButton onClick={() => handleAddStat(word._id, WORD_STATS.SUCCESS)}>
+                <IconButton onClick={() => handleAddStat(word._id, WORD_STATS.CORRECT)}>
                   <AddIcon />
                 </IconButton>
               </Grid>

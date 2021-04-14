@@ -3,11 +3,7 @@ import { setDeletedWords, setHardWords, setLearnedWords } from '../redux/appSlic
 import { RequestService } from './request.service';
 import store from '../app/store';
 import { setWords } from '../redux/wordsSlice';
-
-export const WORD_STATS = {
-  FAIL: 'fail',
-  SUCCESS: 'success',
-};
+import { WORD_STATS } from '../constants';
 
 const WORD = {
   optional: {
@@ -38,8 +34,8 @@ export class WordsService {
           store.dispatch(setHardWords({ groupNum: word.group, pageNum: word.page, id: word._id }));
         }
         if (word.userWord?.optional?.fail || word.userWord?.optional?.success) {
-          store.dispatch(setWords({ word: word._id, target: 'correct', amount: word.userWord?.optional?.success || 0 }));
-          store.dispatch(setWords({ word: word._id, target: 'wrong', amount: word.userWord?.optional?.fail || 0 }));
+          store.dispatch(setWords({ word: word._id, target: WORD_STATS.CORRECT, amount: word.userWord?.optional?.success || 0 }));
+          store.dispatch(setWords({ word: word._id, target: WORD_STATS.WRONG, amount: word.userWord?.optional?.fail || 0 }));
           store.dispatch(setLearnedWords({ groupNum: word.group, pageNum: word.page, id: word._id }));
         }
         if (word.userWord?.optional?.deleted) {
