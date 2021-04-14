@@ -19,7 +19,7 @@ export const myGameSlice = createSlice({
     sentences : null,
     answer : false,
     level : 0,
-    pageNum :1,
+    pageNum :0,
     finish : false,
     count : 0,
     currentSentences : null,
@@ -86,11 +86,11 @@ state.level=action.payload;
           (state.rightAnswers.length / (state.rightAnswers.length + state.wrongAnswers.length)) * 100;
       },
     setAnswer: (state, action) => {
-      
+
       const { textExample } = state.sentences[action.payload.count];
       const isCorrectAnswer = textExample === action.payload.answer;
 
-      if (isCorrectAnswer){        
+      if (isCorrectAnswer){
         playAnswerSound(true);
         state.answer=true;
         state.rightAnswers.push(state.sentences[action.payload.count]
@@ -111,6 +111,11 @@ state.level=action.payload;
 state.result=calculatePercentResult(state.rightAnswers.length, state.sentences.length)
     },
     restartGame: (state) => {
+      state.rightAnswers=[];
+      state.wrongAnswers=[];
+      state.check=false;
+      state.result= 0;
+      state.percentRightAnswers=0;
     state.game=true;
     state.count= 0;
     state.currentSentences=null;
@@ -199,7 +204,7 @@ export const checkAnswer = ({count, answer}) => async (dispatch, getState) => {
   try {
     const { wordId, textExample } = getState().myGame.sentences[count];
     const isCorrectAnswer = textExample === answer;
-      
+
     const target = isCorrectAnswer ? WORD_STATS.CORRECT : WORD_STATS.WRONG;
     dispatch(setWords({ word: wordId, target, amount: 1 }));
     dispatch(saveWordStat(wordId, target));
@@ -211,8 +216,8 @@ export const checkAnswer = ({count, answer}) => async (dispatch, getState) => {
 
 export const fetchSentences = (url) => async (dispatch, getState) => {
   try {
-    let group = getState().savannahGame.level;
-    let page = getState().savannahGame.pageNum;
+    let group = getState().myGame.level;
+    let page = getState().myGame.pageNum;
     const fetchedData =  await axios.get(`${url}?group=${group}&page=${page}`);
     const sentences = fetchedData.data;
     shuffle(sentences);
