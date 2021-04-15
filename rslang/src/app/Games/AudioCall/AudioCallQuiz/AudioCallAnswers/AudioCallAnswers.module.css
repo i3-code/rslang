@@ -1,0 +1,89 @@
+.answerWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 150px;
+}
+
+.gameAnswer {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 300;
+    max-width: 270px;
+    text-align: left;
+    position: relative;
+    padding: 20px;
+    color: #fff;
+    transition: all 0.15s ease;
+    border-radius: 2px;
+    cursor: pointer;
+    margin: 0 20px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.gameAnswer:hover {
+    background: hsla(0,0%,100%,.1);
+    border-radius: 7px;
+}
+
+.gameAnswer.rightAnswer {
+    background: hsla(120,100%,50%,0.3);
+    border-radius: 7px;
+}
+
+.gameAnswer.wrongAnswer {
+    background: hsla(0,0%,100%,.3);
+    border-radius: 7px;
+}
+
+.nextButtonWrapper {
+    margin-top: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.nextButton {
+    height: 48px;
+    width: 200px;
+    border-radius: 3px;
+    background: #deb887;
+    cursor: pointer;
+    transition: all .15s ease;
+    border: 1px solid #deb887;
+}
+
+.nextButton:before {
+    content: "";
+    position: absolute;
+    width: 42px;
+    height: 20px;
+    left: 50%;
+    top: 50%;
+    margin: -10px 0 0 -21px;
+    background: url(data:image/svg+xml;base64,PHN2ZyAgdmlld0JveD0iMCAwIDQyIDIwIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgPgogICAgICAgIDxnIGlkPSJJbmNvcnJlY3QiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC01NzkuMDAwMDAwLCAtNDk0LjAwMDAwMCkiIGZpbGw9IiNGRkZGRkYiPgogICAgICAgICAgICA8cGF0aCBkPSJNNTc5LDUwMyBMNTc5LDUwNSBMNjE2LjYwMjA2Myw1MDUgTDYwOS4yOTI4OTMsNTEyLjI5Mjg5MyBMNjEwLjcwNzEwNyw1MTMuNzA3MTA3IEw2MjAuNDE0MjE0LDUwNCBMNjEwLjcwNzEwNyw0OTQuMjkyODkzIEw2MDkuMjkyODkzLDQ5NS43MDcxMDcgTDYxNi42MDIwNjMsNTAzIEw1NzksNTAzIFoiIGlkPSJDb21iaW5lZC1TaGFwZSI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+) no-repeat;
+    opacity: .6;
+    transition: all .15s ease;
+}
+
+.nextButton:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.nextButton:hover::before {
+    opacity: 1;
+    margin-left: -15px;
+    transition: all .3s ease;
+}
+
+@media (max-width: 1100px) {
+    .answerWrapper {
+        flex-direction: column;
+    }
+}

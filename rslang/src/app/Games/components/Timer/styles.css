@@ -1,0 +1,24 @@
+.slide-vertical-enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+.slide-vertical-enter-active {
+  transform: translateY(0%);
+  opacity: 1;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.slide-vertical-exit {
+  transform: translateY(0%);
+  opacity: 1;
+}
+.slide-vertical-exit-active {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.timer {
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 30px;
+}

@@ -1,0 +1,32 @@
+.savannahBackground {
+  width: 100%;
+  min-height: 85vh;
+  background: no-repeat center center;
+}
+
+.savannahWrapper {
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  min-height: 85vh;
+  position: relative;
+  padding: 0 2px;
+}
+
+.savannah {
+  max-width: 1320px;
+  height: 100%;
+  padding-top: 10px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+
+@media (max-width: 1100px) {
+  .savannah {
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 50px;
+  }
+}
