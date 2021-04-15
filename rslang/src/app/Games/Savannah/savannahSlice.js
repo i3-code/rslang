@@ -187,7 +187,7 @@ export const fetchWordsForQuiz = (url, wordsFromBook) => async (dispatch, getSta
     }
     const answerVariations = words.map((word) => word.wordTranslate);
     shuffle(words);
-    const quizWords = words.slice(0, 5);
+    const quizWords = words.slice(0, 20);
     const quizPrepare = [];
     quizWords.forEach((word) => {
       quizPrepare.push({

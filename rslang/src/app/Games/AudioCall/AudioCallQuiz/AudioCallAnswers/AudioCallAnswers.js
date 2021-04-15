@@ -38,7 +38,7 @@ const AudioCallAnswers = () => {
           let number = event.code[event.code.length - 1];
           let index = number - 1;
           let answer = quiz[questionNumber].answers[index];
-          dispatch(setAnswer({ answer, questionNumber, index }));
+          dispatch(setAnswer( answer, questionNumber, index ));
           break;
       }
     }
